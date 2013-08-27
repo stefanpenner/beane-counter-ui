@@ -1,0 +1,70 @@
+.headerBar {
+  background: #CCC;
+  padding: 10px 10px 10px 10px;
+  margin-bottom: 5px;
+}
+
+.openIcon {
+  background-image: url("../img/tableOpen.png");
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.closedIcon {
+  background-image: url("../img/tableClosed.png");
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.dataTable {
+  border: 1px solid black;
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.dataHeadings {
+}
+
+.dataHeading {
+  border: 1px solid black;
+  height: 1.5em;
+}
+
+.dataRow {
+}
+
+.dataItem {
+  border: 1px solid black;
+  height: 1.5em;
+}
+
+.yft {
+    -webkit-animation: target-fade 3s 1;
+    -moz-animation: target-fade 3s 1;
+}
+
+@-webkit-keyframes target-fade {
+    0% { background-color: rgba(245,245,29,.1); }
+    100% { background-color: rgba(245,245,29,0); }
+}
+@-moz-keyframes target-fade {
+    0% { background-color: rgba(245,245,29,.1); }
+    100% { background-color: rgba(245,245,29,0); }
+}
+
+#tab-nav li.active > a {
+  background-color: #00f; 
+  color: #ddd; 
+}
+
+#tab-nav li > a {
+  background-color: #ddd;
+  color: #222;
+  margin-top: 7px;
+  margin-right: 5px;
+}

@@ -1,0 +1,21 @@
+<nav>
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner" style="height: 60px">
+      <div class="container-fluid">
+        <div class="row">  
+          <div class="span6">  
+            <div style="color: #ddd; font-size: 39pt; float:left; margin-top: 16px; margin-right: 20px">Ziggrid</div>
+            <div style="display: inline-block;">
+              <ul id="tab-nav" class="nav nav-pills">
+                {{#each seasons}}
+                  <li><a href="#" {{action 'showSeason'}}>{{this}}</a></li>
+                {{/each}}
+              </ul> 
+            </div>  
+          </div>  
+        </div> 
+      </div>
+    </div>
+  </div>
+</nav>
+

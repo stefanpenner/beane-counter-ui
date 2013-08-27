@@ -1,0 +1,37 @@
+
+<div id="pageSelector" class="span12">
+  <div id="page-Options" style="display: none;"></div>
+  <div id="page-Demo" style="display: block;">
+    <div class="btn-group" style="margin-bottom: 5px">
+      <button id="startButton" class="btn">Start</button>
+      <button id="stopButton" class="btn">Stop</button>
+      <button id="delay0" class="btn">0ms</button>
+      <button id="delay25" class="btn">25ms</button>
+      <button id="delay50" class="btn">50ms</button>
+    </div>
+    <div id="tables">
+      <div id="summaryTable-HittingLeaders">
+        <div class="headerBar">
+          <div class="openIcon" {{action 'openHeader'}}></div>
+          HittingLeaders</div>
+        <table class="dataTable">
+          <tbody>
+            <tr class="dataHeadings">
+              <th class="dataHeading">Season</th>
+              <th class="dataHeading">Player</th>
+              <th class="dataHeading">Average</th>
+            </tr>
+            {{#each}}
+              <tr class="dataRow">
+                <td class="dataItem">2006</td>
+                <td class="dataItem">{{id}}</td>
+                <td class="dataItem">{{value}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>  
+
