@@ -139,15 +139,6 @@ table.metrics tbody tr td.value {
   color: #929639;
 }
 
-.page {
-  position: relative;
-  width: 700px;
-  height: 500px;
-
-  /*temporary*/
-  border: 1px solid white;
-}
-
 .player {
   position: absolute;
   bottom: 0;
