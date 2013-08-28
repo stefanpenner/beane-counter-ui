@@ -3,11 +3,8 @@ import Watcher from 'appkit/ziggrid/watcher';
 var IndexRoute = Ember.Route.extend({
   model: function() {
 
-
-    debugger;
-
     // TODO: move this elsewhere, at least up to ApplicationRoute
-    var watcher = new Watcher(this.container);
+    var watcher = new Watcher(App);
 
     //var dataClass = this.container.lookupFactory('');
     var leaderboard = watcher.watch('Leaderboard_average_groupedBy_season', {"season":"2006"});

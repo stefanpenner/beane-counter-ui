@@ -19,7 +19,7 @@ function Loader(type, entryType, id, opts) {
 
 function Watcher(_namespace) {
   namespace = _namespace;
-  container = namespace.container;
+  container = namespace.__container__;
 
   this.watch = function(typeName, opts) {
 
@@ -31,10 +31,8 @@ function Watcher(_namespace) {
     var ret = store.find(type, handle);
     var hash = $.extend({"watch": typeName, "unique": handle}, opts);
 
-    var entryType = container.lookupFactory('model:' + typeName+"Entry");
-
+    var entryType = namespace[typeName + "Entry"];
     demux[handle] = new Loader(type, entryType, ret.get('id'), opts);
-
 
     var connectionManager = container.lookupFactory("connection_manager:main");
     connectionManager.send(JSON.stringify(hash));
