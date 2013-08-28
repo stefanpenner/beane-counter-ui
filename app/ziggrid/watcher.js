@@ -1,7 +1,8 @@
 import demux from 'appkit/ziggrid/demux';
 
 var unique = 1,
-    container; // TODO: better way to share this container with Loader
+    namespace, // TODO: better way to share this container with Loader
+    container;
 
 function Loader(type, entryType, id, opts) {
   var store = container.lookup('store:main');
@@ -16,12 +17,13 @@ function Loader(type, entryType, id, opts) {
   };
 }
 
-function Watcher(_container) {
-  container = _container;
+function Watcher(_namespace) {
+  namespace = _namespace;
+  container = namespace.container;
 
   this.watch = function(typeName, opts) {
 
-    var type = container.lookupFactory('model:' + typeName);
+    var type = App[typeName];
     var handle = unique;
     var store = container.lookup('store:main');
     unique++;

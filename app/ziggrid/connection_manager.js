@@ -3,12 +3,12 @@ import Observer from 'appkit/ziggrid/observer';
 import demux from 'appkit/ziggrid/demux';
 
 
-var ConnectionManager = function(url, container) {
+var ConnectionManager = function(url, namespace /* container in the future */) {
 
   var self = this;
 
-
-  this.container = container;
+  this.namespace = namespace;
+  // this.container = container;
   this.generators = {};
   this.observers = {};
   //this.models = {};
@@ -34,8 +34,9 @@ var ConnectionManager = function(url, container) {
         if (body["deliveryFor"]) {
           // TODO: shouldn't this be in observer.js?
           var h = demux[body["deliveryFor"]];
-          if (h && h.update)
+          if (h && h.update) {
             h.update(body["table"]);
+          }
         } else if (body["error"]) {
           console.error(body['error']);
           //if (callback && callback.error)
@@ -47,16 +48,19 @@ var ConnectionManager = function(url, container) {
           for (var p in model)
             if (model.hasOwnProperty(p)) {
               var type = model[p];
-              if (type.rel === "attr")
+              if (type.rel === "attr") {
                 attrs[p] = DS.attr(type.name);
-              else if (type.rel === "hasMany")
-                attrs[p] = DS.hasMany("App."+type.name);
-              else
+              } else if (type.rel === "hasMany") {
+                attrs[p] = DS.hasMany("App." + type.name);
+              } else {
                 console.log("Unknown type:", type);
+              }
             }
 
             var newClass = DS.Model.extend(attrs);
-            container.register('model:' + name, newClass);
+
+            namespace[name] = newClass;
+            //namespace.register('model:' + name, newClass);
 
             //invModels[newClass] = name;
         } else if (body["server"]) {

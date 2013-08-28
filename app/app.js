@@ -10,8 +10,6 @@ var App = Ember.Application.create({
   Resolver: Resolver
 });
 
-var container = App.__container__;
-
 import routes from 'appkit/routes';
 App.Router.map(routes); // TODO: just resolve the router
 
@@ -22,9 +20,9 @@ var url = "http://couchconf.ziggrid.org:8088/ziggrid/";
 import ConnectionManager from 'appkit/ziggrid/connection_manager';
 
 
-var connectionManager = new ConnectionManager(url, container);
+var connectionManager = new ConnectionManager(url, App);
 
-container.register("connection_manager:main", connectionManager);
+App.register("connection_manager:main", connectionManager);
 
 
 export default App;
