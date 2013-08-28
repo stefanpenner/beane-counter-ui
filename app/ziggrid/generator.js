@@ -1,5 +1,4 @@
 function Generator(url, callback) {
-  var conn = null;
   var open = {
     url: url + "generator",
     transport: 'websocket',
@@ -28,7 +27,8 @@ function Generator(url, callback) {
       }
     }
   };
-  conn = jQuery.atmosphere.subscribe(open);
+
+  var conn = jQuery.atmosphere.subscribe(open);
 
   function send(msg) {
     //if (conn != null) {

@@ -56,6 +56,6 @@ Watcher.prototype = {
     //if (handle)
       //send(JSON.stringify({'unwatch': handle}));
   }
-}
+};
 
 export default Watcher;
