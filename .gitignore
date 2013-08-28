@@ -6,8 +6,6 @@
 
 # dependencies
 /node_modules
-/vendor
-!/vendor/resolver.js
 
 # misc
 /.sass-cache
