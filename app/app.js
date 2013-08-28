@@ -13,16 +13,17 @@ var App = Ember.Application.create({
 import routes from 'appkit/routes';
 App.Router.map(routes); // TODO: just resolve the router
 
-App.deferReadiness();
+// TODO: move this elsewhere, at least up to ApplicationRoute
+import Watcher from 'appkit/ziggrid/watcher';
+var watcher = new Watcher(App);
+App.register('watcher:main', Watcher, { instantiate: false})
+
+App.deferReadiness(); // defering to allow sync boot with Ziggrid
 
 var url = "http://couchconf.ziggrid.org:8088/ziggrid/";
 
 import ConnectionManager from 'appkit/ziggrid/connection_manager';
-
-
 var connectionManager = new ConnectionManager(url, App);
-
-App.register("connection_manager:main", connectionManager);
-
+App.register("connection_manager:main", connectionManager, { instantiate: false});
 
 export default App;

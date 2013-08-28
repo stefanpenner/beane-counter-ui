@@ -34,7 +34,7 @@ function Watcher(_namespace) {
     var entryType = namespace[typeName + "Entry"];
     demux[handle] = new Loader(type, entryType, ret.get('id'), opts);
 
-    var connectionManager = container.lookupFactory("connection_manager:main");
+    var connectionManager = container.lookup("connection_manager:main");
     connectionManager.send(JSON.stringify(hash));
     return ret;
   };
