@@ -14,7 +14,7 @@ function Generator(url, callback) {
 
     // and then handle each incoming message
     onMessage: function(msg) {
-      if (msg.status == 200) {
+      if (msg.status === 200) {
         console.log(msg.responseBody);
         var body = JSON.parse(msg.responseBody);
         //if (body["error"]) {
@@ -42,11 +42,11 @@ function Generator(url, callback) {
   */
 
   function send(msg) {
-    if (conn != null) {
-      console.log(msg);
-      conn.push(msg);
-    } else
-      delayed.push(msg);
+    //if (conn != null) {
+    console.log(msg);
+    conn.push(msg);
+    //} else
+      //delayed.push(msg);
   }
 
   this.start = function() {
@@ -60,7 +60,7 @@ function Generator(url, callback) {
   this.setDelay = function(ms) {
     send(JSON.stringify({"action":"delay","size":ms}));
   };
-};
+}
 
 Generator.create = function(url, callback) {
   return new Generator(url, callback);

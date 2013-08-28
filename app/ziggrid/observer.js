@@ -1,3 +1,5 @@
+import demux from 'appkit/ziggrid/demux';
+
 function Observer(url, callback) {
 
   console.log("Observer connecting at " + url);
@@ -5,8 +7,15 @@ function Observer(url, callback) {
   var conn = jQuery.atmosphere.subscribe({
     url: url + 'updates',
 
+    transport: 'websocket',
+    fallbackTransport: 'long-polling',
+
+    onOpen: function(response) {
+      callback(conn);
+    },
+
     onMessage: function(msg) {
-      if (msg.status == 200) {
+      if (msg.status === 200) {
         console.log("Received message " + msg.responseBody);
         var body = JSON.parse(msg.responseBody);
         if (body["deliveryFor"]) {
@@ -21,14 +30,10 @@ function Observer(url, callback) {
       }
     }
   });
-};
+}
 
 Observer.create = function(url, callback) {
   return new Observer(url, callback);
 };
 
-
-
 export default Observer;
-
-

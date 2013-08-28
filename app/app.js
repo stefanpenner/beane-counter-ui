@@ -1,5 +1,6 @@
 import Resolver from 'resolver';
 import Store from 'appkit/store';
+import demux from 'appkit/ziggrid/demux';
 
 var App = Ember.Application.create({
   LOG_ACTIVE_GENERATION: true,
@@ -24,7 +25,13 @@ var observers = {},
     invModels = {},
     namespace = App,
     initNeeded = 1,
-    initCompleted = 0;
+    initCompleted = 0,
+    season = "2006",
+    leaderboard = null,
+    tables = {},
+    unique = 1,
+    store = null,
+    currentTable = null;
 
 
 import Generator from 'appkit/ziggrid/generator';
@@ -42,12 +49,19 @@ var conn = jQuery.atmosphere.subscribe({
 
   // and then handle each incoming message
   onMessage: function(msg) {
-    if (msg.status == 200) {
+    if (msg.status === 200) {
       console.log("Received message " + msg.responseBody);
       var body = JSON.parse(msg.responseBody);
-      if (body["error"]) {
-        if (callback && callback.error)
-          callback.error(body["error"]);
+
+      if (body["deliveryFor"]) {
+        // TODO: shouldn't this be in observer.js?
+        var h = demux[body["deliveryFor"]];
+        if (h && h.update)
+          h.update(body["table"]);
+      } else if (body["error"]) {
+        console.error(body['error']);
+        //if (callback && callback.error)
+          //callback.error(body["error"]);
       } else if (body["modelName"]) {
         var name = body["modelName"];
         var model = body["model"];
@@ -55,10 +69,10 @@ var conn = jQuery.atmosphere.subscribe({
         for (var p in model)
           if (model.hasOwnProperty(p)) {
             var type = model[p];
-            if (type.rel == "attr")
+            if (type.rel === "attr")
               attrs[p] = DS.attr(type.name);
-            else if (type.rel == "hasMany")
-              attrs[p] = DS.hasMany("Demo."+type.name);
+            else if (type.rel === "hasMany")
+              attrs[p] = DS.hasMany("App."+type.name);
             else
               console.log("Unknown type:", type);
           }
@@ -74,7 +88,7 @@ var conn = jQuery.atmosphere.subscribe({
 
       } else if (body["status"]) {
         var stat = body["status"];
-        if (stat == "initdone") {
+        if (stat === "initdone") {
           initDone();
         } else
           console.log("Do not recognize " + stat);
@@ -82,24 +96,33 @@ var conn = jQuery.atmosphere.subscribe({
         console.log("could not understand " + msg.responseBody);
     } else {
       console.log("HTTP Error:", msg.status);
-      if (callback && callback.error)
-        callback.error("HTTP Error: " + msg.status);
+      //if (callback && callback.error)
+        //callback.error("HTTP Error: " + msg.status);
     }
   }
 });
 
 var watcher = new Watcher();
 
+function send(msg) {
+  console.log("sending ", msg, "to", observers);
+  for (var u in observers) {
+    if (observers.hasOwnProperty(u))
+      observers[u].push(msg);
+  }
+}
+
 function initDone() {
   ++initCompleted;
-  if (initCompleted == initNeeded) {
+  if (initCompleted === initNeeded) {
+    App.advanceReadiness();
     doload();
   }
 }
 
 function doload() {
   // TODO: we should have some notion of "unwatch"
-  leaderboard = watcher.watch(Demo.Leaderboard_average_groupedBy_season,{"season":season});
+  leaderboard = watcher.watch(App.Leaderboard_average_groupedBy_season,{"season":season});
   leaderboard.get('entries').addArrayObserver({
     arrayWillChange: function() {},
     arrayDidChange: function(array, params) {
@@ -107,6 +130,7 @@ function doload() {
       //handleLoading();
     }
   });
+  App.leaderboardEntries = leaderboard.get('entries');
 }
 
 function registerServer(server, addr) {
@@ -115,10 +139,14 @@ function registerServer(server, addr) {
       generators[addr] = Generator.create(addr);
     }
   } else if (server === "ziggrid") {
+    //return;
     if (!observers[addr]) {
       initNeeded++;
 
-      observers[addr] = Observer.create(addr);
+      observers[addr] = Observer.create(addr, function() {
+        observers[addr] = conn;
+        initDone();
+      });
     }
   }
 }
@@ -133,11 +161,12 @@ function Loader(type, entryType, id, opts) {
     }
     store.load(type, id, {entries: players});
   };
-};
+}
 
 function Watcher() {
   this.watch = function(type, opts) {
     var handle = unique;
+    store = App.__container__.lookup('store:main');
     unique++;
     store.load(type, handle, {});
     var ret = store.find(type, handle);

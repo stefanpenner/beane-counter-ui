@@ -1,10 +1,12 @@
 {
   "predef": [
+    "jQuery",
     "document",
     "window",
     "location",
     "setTimeout",
     "Ember",
+    "DS",
     "$",
     "define",
     "console",

@@ -1,27 +1,9 @@
-
-
-var TABLE_DATA = [
-  {"deliveryFor":1,"table":[["1","hairj002"],["1","faheb001"],["1","willb002"],["0.75","rodra001"],["0.75","posaj001"],["0.75","canor001"],["0.75","inglj001"],["0.7142857142857143","boona001"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"]]},
-    {"deliveryFor":1,"table":[["1","hairj002"],["1","faheb001"],["1","willb002"],["0.75","rodra001"],["0.75","posaj001"],["0.75","canor001"],["0.75","inglj001"],["0.7142857142857143","boona001"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"]]},
-    {"deliveryFor":1,"table":[["1","hairj002"],["1","faheb001"],["1","willb002"],["0.75","rodra001"],["0.75","posaj001"],["0.75","canor001"],["0.75","inglj001"],["0.7142857142857143","boona001"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"]]},
-    {"deliveryFor":1,"table":[["1","hairj002"],["1","faheb001"],["1","willb002"],["0.75","rodra001"],["0.75","posaj001"],["0.75","canor001"],["0.75","inglj001"],["0.7142857142857143","boona001"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"]]},
-    {"deliveryFor":1,"table":[["1","hairj002"],["1","faheb001"],["1","willb002"],["0.75","rodra001"],["0.75","posaj001"],["0.75","canor001"],["0.75","inglj001"],["0.7142857142857143","boona001"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"]]},
-    {"deliveryFor":1,"table":[["1","hairj002"],["1","faheb001"],["1","willb002"],["0.75","rodra001"],["0.75","posaj001"],["0.75","canor001"],["0.75","inglj001"],["0.7142857142857143","boona001"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"]]},
-    {"deliveryFor":1,"table":[["1","hairj002"],["1","faheb001"],["1","willb002"],["0.75","rodra001"],["0.75","posaj001"],["0.75","canor001"],["0.75","inglj001"],["0.7142857142857143","boona001"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"]]},
-    {"deliveryFor":1,"table":[["1","hairj002"],["1","faheb001"],["1","willb002"],["0.75","rodra001"],["0.75","posaj001"],["0.75","canor001"],["0.75","inglj001"],["0.7142857142857143","boona001"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"]]},
-    {"deliveryFor":1,"table":[["1","hairj002"],["1","faheb001"],["1","willb002"],["0.75","rodra001"],["0.75","posaj001"],["0.75","canor001"],["0.75","inglj001"],["0.7142857142857143","boona001"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"]]},
-    {"deliveryFor":1,"table":[["1","hairj002"],["1","faheb001"],["1","willb002"],["0.75","rodra001"],["0.75","posaj001"],["0.75","canor001"],["0.75","inglj001"],["0.7142857142857143","boona001"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"]]},
-    {"deliveryFor":1,"table":[["1","hairj002"],["1","faheb001"],["1","willb002"],["0.75","rodra001"],["0.75","posaj001"],["0.75","canor001"],["0.75","inglj001"],["0.7142857142857143","boona001"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"]]}
-];
-
 var IndexRoute = Ember.Route.extend({
   model: function() {
-    return Ember.EnumerableUtils.map(TABLE_DATA[0].table, function(obj) {
-      return {
-        id: obj[1],
-        value: obj[0]
-      };
-    });
+    // TODO: more legit promise solution? isLoading never becomes true,
+    // probably due to the weird way we load stuff.
+    App.leaderboardEntries.then = null;
+    return App.leaderboardEntries;
   }
 });
 
