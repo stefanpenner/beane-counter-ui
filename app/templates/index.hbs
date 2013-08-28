@@ -1,7 +1,12 @@
 <div class="page" id="grid-page">
-  {{render "standings" this}}
-  {{render "statistics" this}}
-
+  <div class="grid">
+    <div class="box grid-33">
+      {{render "standings" this}}
+    </div>
+    <div class="box grid-33">
+      {{render "statistics" this}}
+    </div>
+  </div>
   {{bean-player}}
 </div>
 

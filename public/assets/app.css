@@ -54,10 +54,13 @@ html {
   color: white;
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 300;
+  min-width: 700px;
 }
+
 #logo-large {
   background: url(/assets/logo.png) no-repeat;
 }
+
 #logo-container h1 {
   background-image: url(/assets/logo.png);
   background-repeat: no-repeat;
@@ -66,13 +69,51 @@ html {
   min-height: 188px;
   text-indent: 200px;
   line-height: 188px;
+  font-size: 48px;
 }
 
 #logo-container h1 .ziggrid-text {
+  font-size: 38px;
   color: #C96C31;
 }
 
 #logo-container h1 .bean-counter-text {
   color: #2D7195
+}
 
+.grid {
+  overflow: hidden;
+}
+
+.grid-50 {
+  float: left;
+  width: 50%;
+}
+
+.grid-33 {
+  float: left;
+  width: 32%;
+}
+
+.box {
+  background: #161616;
+  border: 1px solid #434444;
+  padding: 1em 2em;
+  margin: 0.5em;
+  font-size: 16px;
+  line-height: 1.51em;
+}
+
+table.metrics thead {
+  border-bottom: 1px solid  #5A5A5A;
+  line-height: 2em;
+  font-size: 14px;
+}
+
+table.metrics thead tr th{
+  color: #5A5A5A;
+}
+
+table.metrics tbody tr td.value {
+  color: #929639;
 }
