@@ -2,7 +2,6 @@ import Generator from 'appkit/ziggrid/generator';
 import Observer from 'appkit/ziggrid/observer';
 import demux from 'appkit/ziggrid/demux';
 
-
 var ConnectionManager = function(url, namespace /* container in the future */) {
 
   var self = this;

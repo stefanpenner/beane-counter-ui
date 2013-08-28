@@ -30,17 +30,6 @@ function Generator(url, callback) {
   };
   conn = jQuery.atmosphere.subscribe(open);
 
-  /*
-    return Generator.create(endpoint, {
-      ready: function() {
-        console.log("ZG ready, enable buttons");
-      },
-      error: function(msg) {
-        console.log("ZG: Error detected: ",  msg);
-      }
-    });
-  */
-
   function send(msg) {
     //if (conn != null) {
     console.log(msg);

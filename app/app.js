@@ -16,7 +16,7 @@ App.Router.map(routes); // TODO: just resolve the router
 // TODO: move this elsewhere, at least up to ApplicationRoute
 import Watcher from 'appkit/ziggrid/watcher';
 var watcher = new Watcher(App);
-App.register('watcher:main', Watcher, { instantiate: false})
+App.register('watcher:main', watcher, { instantiate: false})
 
 App.deferReadiness(); // defering to allow sync boot with Ziggrid
 
