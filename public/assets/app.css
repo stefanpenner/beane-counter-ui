@@ -57,18 +57,26 @@ html {
   min-width: 700px;
 }
 
+.container {
+  width: 960px;
+  margin: 0 auto;
+}
+
 #logo-large {
   background: url(/assets/logo.png) no-repeat;
+}
+
+#logo-container {
+  padding: 2em 0;
 }
 
 #logo-container h1 {
   background-image: url(/assets/logo.png);
   background-repeat: no-repeat;
-  background-size 173px 188px;
   display: block;
-  min-height: 188px;
-  text-indent: 200px;
-  line-height: 188px;
+  min-height: 50px;
+  text-indent: 84px;
+  line-height: 73px;
   font-size: 48px;
 }
 
@@ -95,13 +103,26 @@ html {
   width: 32%;
 }
 
+.box:first-child {
+  margin-left: 0;
+}
+
+.box:last-child {
+  margin-right: 0;
+}
+
 .box {
   background: #161616;
   border: 1px solid #434444;
   padding: 1em 2em;
-  margin: 0.5em;
+  margin: 0.75em;
   font-size: 16px;
   line-height: 1.51em;
+}
+
+.box h1 {
+  font-size: 18px;
+  line-height: 1.75em;
 }
 
 table.metrics thead {
