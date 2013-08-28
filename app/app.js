@@ -25,5 +25,4 @@ var url = "http://couchconf.ziggrid.org:8088/ziggrid/";
 import ConnectionManager from 'appkit/ziggrid/connection_manager';
 var connectionManager = new ConnectionManager(url, App);
 App.register("connection_manager:main", connectionManager, { instantiate: false});
-
 export default App;
