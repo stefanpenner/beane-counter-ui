@@ -138,3 +138,97 @@ table.metrics thead tr th{
 table.metrics tbody tr td.value {
   color: #929639;
 }
+
+.page {
+  position: relative;
+  width: 700px;
+  height: 500px;
+
+  /*temporary*/
+  border: 1px solid white;
+}
+
+.player {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #444544;
+  border-top: 1px solid #5f6060;
+  height: 50px;
+}
+
+.player-range-input {
+  position: absolute;
+  display: block;
+  left: 120px;
+  right: 160px;
+  top: 13px;
+}
+
+input[type='range'].player-range-input {
+  -webkit-appearance: none;
+}
+
+input[type='range'].player-range-input::-webkit-slider-runnable-track {
+  -webkit-appearance: none;  
+  background-color: #cfc34d;
+  height: 20px;
+}
+
+input[type='range'].player-range-input::-webkit-slider-thumb,
+input[type='range']::-webkit-slider-thumb {  
+  -webkit-appearance: none;  
+  background-color: #eceded;
+  width: 10px;  
+  height: 36px;  
+  border-radius: 5px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  position: relative;
+  top: -8px;
+}  
+
+
+.play-button, .pause-button {
+  -webkit-appearance: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  font-size: 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: center;
+  background: white;
+  display: block;
+  position: absolute;
+  top: 8px;
+}
+
+.play-button {
+  left: 30px;
+  line-height: 30px;
+  text-indent: 3px;
+}
+
+.pause-button {
+  left: 75px;
+}
+
+.play-button.inactive, .pause-button.inactive {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.player .label {
+  position: absolute;
+  right: 12px;
+  display: block;
+  top: 15px;
+  color: #aaaaaa;
+  font-size: 18px;
+}
+
+.player .label span.count {
+  color: white;
+}
