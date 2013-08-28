@@ -35,15 +35,20 @@ Watcher.prototype = {
     unique++;
     store.load(type, handle, {});
 
-    var ret = store.find(type, handle);
-    var hash = $.extend({'watch': typeName, 'unique': handle}, opts);
+    var model = store.find(type, handle);
+    var hash = $.extend({
+      watch: typeName,
+      unique: handle
+    }, opts);
 
     var entryType = this.namespace[typeName + 'Entry'];
-    demux[handle] = new Loader(type, entryType, ret.get('id'), opts);
+    demux[handle] = new Loader(type, entryType, model.get('id'), opts);
 
-    var connectionManager = container.lookup('connection_manager:main');
-    connectionManager.send(JSON.stringify(hash));
-    return ret;
+    var stringified = JSON.stringify(hash);
+
+    container.lookup('connection_manager:main').send(stringified);
+
+    return model;
   },
 
   unwatch: function(handle) {
