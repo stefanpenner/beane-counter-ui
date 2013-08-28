@@ -1,8 +1,8 @@
 import demux from 'appkit/ziggrid/demux';
-// window.App;
 
 var unique = 1;
-var container ;
+var container;
+
 function Loader(type, entryType, id, opts) {
   var store = container.lookup('store:main');
 
