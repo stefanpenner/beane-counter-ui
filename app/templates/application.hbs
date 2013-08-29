@@ -6,5 +6,16 @@
     </h1>
   </div>
 
-  {{outlet}}
+  <div id="page-container" {{bind-attr style="pageContainerStyle"}}>
+    {{outlet}}
+  </div>
 </div>
+
+
+{{#unless currentPage}}
+  <div class="nav-button right" {{action 'togglePage'}}>&#9658;</div>
+{{/unless}}
+
+{{#if currentPage}}
+  <div class="nav-button left" {{action 'togglePage'}}>&#9664;</div>
+{{/if}}

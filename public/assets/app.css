@@ -57,9 +57,14 @@ html {
   min-width: 700px;
 }
 
+html, body {
+  height: 100%;
+}
+
 .container {
   width: 960px;
   margin: 0 auto;
+  overflow: hidden;
 }
 
 #logo-large {
@@ -246,3 +251,40 @@ input[type='range']::-webkit-slider-thumb {
 .player .label span.count {
   color: white;
 }
+
+#page-container {
+  width: 200%;
+  transition: margin-left 0.5s;
+}
+
+.page {
+  overflow: hidden;
+  width: 960px;
+  float: left;
+}
+
+.nav-button {
+  position: absolute;
+  top: 50%;
+  height: 160px;
+  margin-top: -80px;
+  background: black;
+  border-radius: 10px;
+  border: 1px solid #888888;
+  color: #888888;
+  width: 60px;
+  text-align: center;
+  line-height: 160px;
+  cursor: pointer;
+  font-size: 26px;
+  z-index: 5;
+}
+
+.nav-button.left {
+  left: -10px;
+}
+
+.nav-button.right {
+  right: -10px;
+}
+
