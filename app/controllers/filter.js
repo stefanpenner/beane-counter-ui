@@ -3,13 +3,7 @@ var FilterController = Ember.Controller.extend({
 
   years: Ember.computed.alias('controllers.application.years'),
 
-  selectedFilter: 2006,
-
-  actions: {
-    selectFilter: function(filter) {
-      this.set('selectedFilter', filter);
-    }
-  }
+  selectedFilter: null
 });
 
 export default FilterController;

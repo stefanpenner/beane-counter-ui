@@ -25,6 +25,31 @@ var ApplicationRoute = Ember.Route.extend({
         headers: Ember.keys(namespace[otherThing.constructor.model.entries.name.capitalize()].model)
       }
     });
+
+    this.updateQuadrantPlayers(2006);
+  },
+
+  updateQuadrantPlayers: function(filter) {
+
+    var filterController = this.controllerFor('filter');
+    filterController.set('selectedFilter', filter);
+
+    var players = [];
+    for(var i = 0, len = 10; i < len; ++i) {
+      players.push({
+        name: "Borf McGee",
+        hotness: Math.random(),
+        goodness: Math.random()
+      });
+    }
+
+    this.controllerFor('quadrant').set('players', players);
+  },
+
+  actions: {
+    selectFilter: function(filter) {
+      this.updateQuadrantPlayers(filter);
+    }
   }
 });
 

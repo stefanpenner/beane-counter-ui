@@ -4,6 +4,13 @@
     <div> The Quadrant {{foo}}</div>
 
     {{render 'filter'}}
+
+    <ul>
+      {{#each players}}
+        <li>{{name}}: hotness: {{hotness}}, goodness: {{goodness}}</li>
+      {{/each}}
+    </ul>
+
   </div>
 
   {{bean-player}}
