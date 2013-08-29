@@ -1,6 +1,7 @@
 var ApplicationController = Ember.Controller.extend({
 
-  currentPage: 0,
+  // TODO: should be 0
+  currentPage: 1,
 
   // TODO: move to ApplicationView when it works
   pageContainerStyle: function() {

@@ -7,10 +7,10 @@
   </div>
 
   <div id="page-container" {{bind-attr style="pageContainerStyle"}}>
-    {{outlet}}
+    {{partial 'grid'}}
+    {{partial 'quadrant'}}
   </div>
 </div>
-
 
 {{#unless currentPage}}
   <div class="nav-button right" {{action 'togglePage'}}>&#9658;</div>
