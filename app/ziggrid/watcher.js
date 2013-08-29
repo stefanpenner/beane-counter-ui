@@ -46,6 +46,7 @@ Watcher.prototype = {
 
     var stringified = JSON.stringify(hash);
 
+    // TODO: Change this to forward to observer.
     container.lookup('connection_manager:main').send(stringified);
 
     return model;

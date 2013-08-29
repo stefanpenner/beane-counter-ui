@@ -1,5 +1,7 @@
 var Player = Ember.Component.extend({
 
+  progress: 0,
+
   generator: Ember.computed.alias('connectionManager.generator'),
 
   isPlaying: false,
@@ -12,6 +14,10 @@ var Player = Ember.Component.extend({
   }.observes('progress'),
 
   count: 12345,
+
+  progressBarStyle: function() {
+    return "width: " + this.get('progress') + "%;";
+  }.property('progress'),
 
   actions: {
     play: function() {
