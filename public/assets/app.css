@@ -73,6 +73,7 @@ html, body {
 
 #logo-container {
   padding: 2em 0;
+  position: relative;
 }
 
 #logo-container h1 {
@@ -286,5 +287,19 @@ input[type='range']::-webkit-slider-thumb {
 
 .nav-button.right {
   right: -10px;
+}
+
+#year-select {
+  -webkit-appearance: none;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 300;
+  font-size: 48px;
+  display: block;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background: transparent;
+  color: #dddddd;
+  border: none;
 }
 

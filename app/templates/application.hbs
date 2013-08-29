@@ -4,6 +4,8 @@
       <span class="ziggrid-text">Ziggrid</span>
       <span class="bean-counter-text">- Bean Counter</span>
     </h1>
+
+    {{view Ember.Select id="year-select" contentBinding="years" valueBinding="selectedYear"}}
   </div>
 
   <div id="page-container" {{bind-attr style="pageContainerStyle"}}>
