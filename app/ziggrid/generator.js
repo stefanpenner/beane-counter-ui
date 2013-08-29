@@ -4,11 +4,8 @@ function Generator(url, callback) {
     transport: 'websocket',
     fallbackTransport: 'long-polling',
 
-    // handle the "open" message
     onOpen: function(response) {
       console.log("opened generator connection with response", response);
-      //if (callback && callback.ready)
-        //callback.ready();
     },
 
     // and then handle each incoming message
@@ -16,40 +13,42 @@ function Generator(url, callback) {
       if (msg.status === 200) {
         console.log(msg.responseBody);
         var body = JSON.parse(msg.responseBody);
-        //if (body["error"]) {
-          //if (callback && callback.error)
-            //onError(body["error"]);
-        //}
       } else {
-        //console.log("HTTP Error:", msg.status);
-        //if (callback && callback.error)
-          //onError("HTTP Error: " + msg.status);
+        console.log("Generator HTTP Error:", msg.status);
       }
     }
   };
 
-  var conn = jQuery.atmosphere.subscribe(open);
-
-  function send(msg) {
-    //if (conn != null) {
-    console.log(msg);
-    conn.push(msg);
-    //} else
-      //delayed.push(msg);
-  }
-
-  this.start = function() {
-    send(JSON.stringify({"action":"start"}));
-  };
-
-  this.stop = function() {
-    send(JSON.stringify({"action":"stop"}));
-  };
-
-  this.setDelay = function(ms) {
-    send(JSON.stringify({"action":"delay","size":ms}));
-  };
+  var conn = this.conn = jQuery.atmosphere.subscribe(open);
 }
+
+Generator.prototype = {
+
+  hasSetDelay: false,
+
+  send: function(msg) {
+    console.log("Sending generator message", msg);
+    this.conn.push(msg);
+  },
+
+  start: function() {
+    if (!this.hasSetDelay) {
+      // Don't overload the generator; give it a moderate delay the first time.
+      this.setDelay(25);
+      this.hasSetDelay = true;
+    }
+
+    this.send(JSON.stringify({"action":"start"}));
+  },
+
+  stop: function() {
+    this.send(JSON.stringify({"action":"stop"}));
+  },
+
+  setDelay: function(ms) {
+    this.send(JSON.stringify({"action":"delay","size":ms}));
+  }
+};
 
 Generator.create = function(url, callback) {
   return new Generator(url, callback);
