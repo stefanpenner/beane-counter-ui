@@ -56,25 +56,7 @@ var ConnectionManager = Ember.Object.extend({
         //if (callback && callback.error)
         //callback.error(body["error"]);
       } else if (body["modelName"]) {
-        var name = body["modelName"];
-        var model = body["model"];
-        var attrs = {};
-        for (var p in model)
-          if (model.hasOwnProperty(p)) {
-            var type = model[p],
-                typeName
-            if (type.rel === "attr") {
-              attrs[p] = DS.attr(type.name);
-            } else if (type.rel === "hasMany") {
-              attrs[p] = DS.hasMany("App." + type.name.capitalize());
-            } else {
-              console.log("Unknown type:", type);
-            }
-          }
-
-          var newClass = DS.Model.extend(attrs);
-
-          this.namespace[name] = newClass;
+        this.registerModel(body.modelName, body.model);
       } else if (body["server"]) {
         var endpoint = body.endpoint,
         addr = "http://" + endpoint + "/ziggrid/",
@@ -97,6 +79,30 @@ var ConnectionManager = Ember.Object.extend({
       //if (callback && callback.error)
       //callback.error("HTTP Error: " + msg.status);
     }
+  },
+
+  registerModel: function(name, model) {
+
+    var attrs = {};
+    for (var p in model) {
+      if (!model.hasOwnProperty(p)) { continue; }
+
+      var type = model[p];
+      if (type.rel === "attr") {
+        attrs[p] = DS.attr(type.name);
+      } else if (type.rel === "hasMany") {
+        attrs[p] = DS.hasMany("App." + type.name.capitalize());
+      } else {
+        console.log("Unknown type:", type);
+      }
+    }
+
+    var newClass = DS.Model.extend(attrs);
+    newClass.reopenClass({
+      model: model
+    });
+
+    this.namespace[name] = newClass;
   },
 
   registerServer: function(server, addr) {

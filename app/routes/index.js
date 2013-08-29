@@ -11,9 +11,19 @@ var IndexRoute = Ember.Route.extend({
                                    'LeaderboardEntry_average_groupedBy_season',
                                    { "season": "2006" });
 
+
+
+    //var model = this.container.lookup('application:main')[leaderboard.constructor.model.entries.name.capitalize()].model;
+    var namespace = this.container.lookup('application:main');
     controller.setProperties({
-      leaderboard: leaderboard.get('entries'),
-      otherThing: otherThing.get('entries')
+      leaderboard: {
+        entries: leaderboard.get('entries'),
+        headers: Ember.keys(namespace[leaderboard.constructor.model.entries.name.capitalize()].model)
+      },
+      otherThing: {
+        entries: otherThing.get('entries'),
+        headers: Ember.keys(namespace[otherThing.constructor.model.entries.name.capitalize()].model)
+      }
     });
   }
 });

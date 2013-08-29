@@ -1,0 +1,19 @@
+<h1>Standings</h1>
+<table class="metrics">
+  <thead>
+    <tr>
+      {{#each headers}}
+        <th>{{this}}</th>
+      {{/each}}
+    </tr>
+  </thead>
+  <tbody>
+    {{#each entries}}
+      <tr>
+        <td>2006</td>
+        <td>{{id}}</td>
+        <td class="value">{{f1}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
