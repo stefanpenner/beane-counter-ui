@@ -259,7 +259,6 @@ input[type='range']::-webkit-slider-thumb {
 }
 
 .page {
-  overflow: hidden;
   width: 960px;
   float: left;
 }
@@ -301,5 +300,48 @@ input[type='range']::-webkit-slider-thumb {
   background: transparent;
   color: #dddddd;
   border: none;
+}
+
+.page-content {
+  position: relative;
+}
+
+#filter-view {
+  position: absolute;
+  right: 0;
+  width: 160px;
+  top: 0;
+  color: #777777;
+}
+
+#filter-view h2 {
+  font-size: 18px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+#filter-view h3 {
+  font-size: 26px;
+  color: white;
+  font-weight: 300;
+  margin-bottom: 12px;
+}
+
+#filter-view ul {
+  font-size: 22px;
+}
+
+#filter-view li {
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+#filter-view li:hover {
+  color: #bbbbbb;
+}
+
+#filter-view li.is-selected {
+  color: #cec45c !important;
+  cursor: default;
 }
 
