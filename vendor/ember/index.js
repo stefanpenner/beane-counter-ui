@@ -1,5 +1,5 @@
-// Version: v1.0.0-rc.7-166-g325eb44
-// Last commit: 325eb44 (2013-08-28 01:53:10 -0400)
+// Version: v1.0.0-rc.8
+// Last commit: 6f952f4 (2013-08-28 22:40:31 -0700)
 
 
 (function() {
@@ -158,8 +158,8 @@ Ember.deprecateFunc = function(message, func) {
 
 })();
 
-// Version: v1.0.0-rc.7-166-g325eb44
-// Last commit: 325eb44 (2013-08-28 01:53:10 -0400)
+// Version: v1.0.0-rc.8
+// Last commit: 6f952f4 (2013-08-28 22:40:31 -0700)
 
 
 (function() {
@@ -225,7 +225,7 @@ var define, requireModule;
 
   @class Ember
   @static
-  @version 1.0.0-rc.7
+  @version 1.0.0-rc.8
 */
 
 if ('undefined' === typeof Ember) {
@@ -252,10 +252,10 @@ Ember.toString = function() { return "Ember"; };
 /**
   @property VERSION
   @type String
-  @default '1.0.0-rc.7'
+  @default '1.0.0-rc.8'
   @final
 */
-Ember.VERSION = '1.0.0-rc.7';
+Ember.VERSION = '1.0.0-rc.8';
 
 /**
   Standard environmental variables. You can define these in a global `ENV`
@@ -2503,7 +2503,7 @@ var metaFor = Ember.meta,
   @param {String} keyName The property key (or path) that will change.
   @return {void}
 */
-var propertyWillChange = Ember.propertyWillChange = function(obj, keyName) {
+function propertyWillChange(obj, keyName) {
   var m = metaFor(obj, false),
       watching = m.watching[keyName] > 0 || keyName === 'length',
       proto = m.proto,
@@ -2515,7 +2515,8 @@ var propertyWillChange = Ember.propertyWillChange = function(obj, keyName) {
   dependentKeysWillChange(obj, keyName, m);
   chainsWillChange(obj, keyName, m);
   notifyBeforeObservers(obj, keyName);
-};
+}
+Ember.propertyWillChange = propertyWillChange;
 
 /**
   This function is called just after an object property has changed.
@@ -2523,7 +2524,7 @@ var propertyWillChange = Ember.propertyWillChange = function(obj, keyName) {
 
   Normally you will not need to call this method directly but if for some
   reason you can't directly watch a property you can invoke this method
-  manually along with `Ember.propertyWilLChange()` which you should call just
+  manually along with `Ember.propertyWillChange()` which you should call just
   before the property value changes.
 
   @method propertyDidChange
@@ -2532,7 +2533,7 @@ var propertyWillChange = Ember.propertyWillChange = function(obj, keyName) {
   @param {String} keyName The property key (or path) that will change.
   @return {void}
 */
-var propertyDidChange = Ember.propertyDidChange = function(obj, keyName) {
+function propertyDidChange(obj, keyName) {
   var m = metaFor(obj, false),
       watching = m.watching[keyName] > 0 || keyName === 'length',
       proto = m.proto,
@@ -2545,9 +2546,10 @@ var propertyDidChange = Ember.propertyDidChange = function(obj, keyName) {
   if (!watching && keyName !== 'length') { return; }
 
   dependentKeysDidChange(obj, keyName, m);
-  chainsDidChange(obj, keyName, m);
+  chainsDidChange(obj, keyName, m, false);
   notifyObservers(obj, keyName);
-};
+}
+Ember.propertyDidChange = propertyDidChange;
 
 var WILL_SEEN, DID_SEEN;
 
@@ -2588,35 +2590,47 @@ function iterDeps(method, obj, depKey, seen, meta) {
   }
 }
 
-var chainsWillChange = function(obj, keyName, m, arg) {
-  if (!m.hasOwnProperty('chainWatchers')) { return; } // nothing to do
-
-  var nodes = m.chainWatchers;
-
-  nodes = nodes[keyName];
-  if (!nodes) { return; }
-
-  nodes = nodes.slice();
-
-  for(var i = 0, l = nodes.length; i < l; i++) {
-    nodes[i].willChange(arg);
+function chainsWillChange(obj, keyName, m) {
+  if (!(m.hasOwnProperty('chainWatchers') &&
+        m.chainWatchers[keyName])) {
+    return;
   }
-};
 
-var chainsDidChange = function(obj, keyName, m, arg) {
-  if (!m.hasOwnProperty('chainWatchers')) { return; } // nothing to do
+  var nodes = m.chainWatchers[keyName],
+      events = [],
+      i, l;
 
-  var nodes = m.chainWatchers;
-
-  nodes = nodes[keyName];
-  if (!nodes) { return; }
-
-  nodes = nodes.slice();
-
-  for(var i = 0, l = nodes.length; i < l; i++) {
-    nodes[i].didChange(arg);
+  for(i = 0, l = nodes.length; i < l; i++) {
+    nodes[i].willChange(events);
   }
-};
+
+  for (i = 0, l = events.length; i < l; i += 2) {
+    propertyWillChange(events[i], events[i+1]);
+  }
+}
+
+function chainsDidChange(obj, keyName, m, suppressEvents) {
+  if (!(m.hasOwnProperty('chainWatchers') &&
+        m.chainWatchers[keyName])) {
+    return;
+  }
+
+  var nodes = m.chainWatchers[keyName],
+      events = suppressEvents ? null : [],
+      i, l;
+
+  for(i = 0, l = nodes.length; i < l; i++) {
+    nodes[i].didChange(events);
+  }
+
+  if (suppressEvents) {
+    return;
+  }
+
+  for (i = 0, l = events.length; i < l; i += 2) {
+    propertyDidChange(events[i], events[i+1]);
+  }
+}
 
 Ember.overrideChains = function(obj, keyName, m) {
   chainsDidChange(obj, keyName, m, true);
@@ -2626,20 +2640,24 @@ Ember.overrideChains = function(obj, keyName, m) {
   @method beginPropertyChanges
   @chainable
 */
-var beginPropertyChanges = Ember.beginPropertyChanges = function() {
+function beginPropertyChanges() {
   deferred++;
-};
+}
+
+Ember.beginPropertyChanges = beginPropertyChanges;
 
 /**
   @method endPropertyChanges
 */
-var endPropertyChanges = Ember.endPropertyChanges = function() {
+function endPropertyChanges() {
   deferred--;
   if (deferred<=0) {
     beforeObserverSet.clear();
     observerSet.flush();
   }
-};
+}
+
+Ember.endPropertyChanges = endPropertyChanges;
 
 /**
   Make a series of property changes together in an
@@ -2661,7 +2679,7 @@ Ember.changeProperties = function(cb, binding) {
   tryFinally(cb, endPropertyChanges, binding);
 };
 
-var notifyBeforeObservers = function(obj, keyName) {
+function notifyBeforeObservers(obj, keyName) {
   if (obj.isDestroying) { return; }
 
   var eventName = keyName + ':before', listeners, diff;
@@ -2672,9 +2690,9 @@ var notifyBeforeObservers = function(obj, keyName) {
   } else {
     sendEvent(obj, eventName, [obj, keyName]);
   }
-};
+}
 
-var notifyObservers = function(obj, keyName) {
+function notifyObservers(obj, keyName) {
   if (obj.isDestroying) { return; }
 
   var eventName = keyName + ':change', listeners;
@@ -2684,7 +2702,7 @@ var notifyObservers = function(obj, keyName) {
   } else {
     sendEvent(obj, eventName, [obj, keyName]);
   }
-};
+}
 
 })();
 
@@ -3519,8 +3537,6 @@ var metaFor = Ember.meta, // utils.js
     warn = Ember.warn,
     watchKey = Ember.watchKey,
     unwatchKey = Ember.unwatchKey,
-    propertyWillChange = Ember.propertyWillChange,
-    propertyDidChange = Ember.propertyDidChange,
     FIRST_KEY = /^([^\.\*]+)/;
 
 function firstKey(path) {
@@ -3754,42 +3770,50 @@ ChainNodePrototype.unchain = function(key, path) {
 
 };
 
-ChainNodePrototype.willChange = function() {
+ChainNodePrototype.willChange = function(events) {
   var chains = this._chains;
   if (chains) {
     for(var key in chains) {
       if (!chains.hasOwnProperty(key)) { continue; }
-      chains[key].willChange();
+      chains[key].willChange(events);
     }
   }
 
-  if (this._parent) { this._parent.chainWillChange(this, this._key, 1); }
+  if (this._parent) { this._parent.chainWillChange(this, this._key, 1, events); }
 };
 
-ChainNodePrototype.chainWillChange = function(chain, path, depth) {
+ChainNodePrototype.chainWillChange = function(chain, path, depth, events) {
   if (this._key) { path = this._key + '.' + path; }
 
   if (this._parent) {
-    this._parent.chainWillChange(this, path, depth+1);
+    this._parent.chainWillChange(this, path, depth+1, events);
   } else {
-    if (depth > 1) { propertyWillChange(this.value(), path); }
+    if (depth > 1) {
+      events.push(this.value(), path);
+    }
     path = 'this.' + path;
-    if (this._paths[path] > 0) { propertyWillChange(this.value(), path); }
+    if (this._paths[path] > 0) {
+      events.push(this.value(), path);
+    }
   }
 };
 
-ChainNodePrototype.chainDidChange = function(chain, path, depth) {
+ChainNodePrototype.chainDidChange = function(chain, path, depth, events) {
   if (this._key) { path = this._key + '.' + path; }
   if (this._parent) {
-    this._parent.chainDidChange(this, path, depth+1);
+    this._parent.chainDidChange(this, path, depth+1, events);
   } else {
-    if (depth > 1) { propertyDidChange(this.value(), path); }
+    if (depth > 1) {
+      events.push(this.value(), path);
+    }
     path = 'this.' + path;
-    if (this._paths[path] > 0) { propertyDidChange(this.value(), path); }
+    if (this._paths[path] > 0) {
+      events.push(this.value(), path);
+    }
   }
 };
 
-ChainNodePrototype.didChange = function(suppressEvent) {
+ChainNodePrototype.didChange = function(events) {
   // invalidate my own value first.
   if (this._watching) {
     var obj = this._parent.value();
@@ -3811,14 +3835,15 @@ ChainNodePrototype.didChange = function(suppressEvent) {
   if (chains) {
     for(var key in chains) {
       if (!chains.hasOwnProperty(key)) { continue; }
-      chains[key].didChange(suppressEvent);
+      chains[key].didChange(events);
     }
   }
 
-  if (suppressEvent) { return; }
+  // if no events are passed in then we only care about the above wiring update
+  if (events === null) { return; }
 
   // and finally tell parent about my path changing...
-  if (this._parent) { this._parent.chainDidChange(this, this._key, 1); }
+  if (this._parent) { this._parent.chainDidChange(this, this._key, 1, events); }
 };
 
 Ember.finishChains = function(obj) {
@@ -3827,9 +3852,10 @@ Ember.finishChains = function(obj) {
     if (chains.value() !== obj) {
       m.chains = chains = chains.copy(obj);
     }
-    chains.didChange(true);
+    chains.didChange(null);
   }
 };
+
 })();
 
 
@@ -4345,7 +4371,7 @@ ComputedPropertyPrototype.didChange = function(obj, keyName) {
 function finishChains(chainNodes)
 {
   for (var i=0, l=chainNodes.length; i<l; i++) {
-    chainNodes[i].didChange(true);
+    chainNodes[i].didChange(null);
   }
 }
 
@@ -4710,7 +4736,7 @@ registerComputed('bool', function(dependentKey) {
 });
 
 /**
-  A computed property which matches the original value for the 
+  A computed property which matches the original value for the
   dependent property against a given RegExp, returning `true`
   if they values matches the RegExp and `false` if it does not.
 
@@ -7014,6 +7040,7 @@ function mergeMixins(mixins, m, descs, values, base, keys) {
 
     if (props) {
       meta = Ember.meta(base);
+      if (base.willMergeMixin) { base.willMergeMixin(props); }
       concats = concatenatedMixinProperties('concatenatedProperties', props, values, base);
       mergings = concatenatedMixinProperties('mergedProperties', props, values, base);
 
@@ -13820,6 +13847,73 @@ Ember.DeferredMixin = Ember.Mixin.create({
 
 
 (function() {
+/**
+@module ember
+@submodule ember-runtime
+*/
+
+var get = Ember.get;
+
+/**
+  The `Ember.ActionHandler` mixin implements support for moving an `actions`
+  property to an `_actions` property at extend time, and adding `_actions`
+  to the object's mergedProperties list.
+
+  `Ember.ActionHandler` is used internally by Ember in  `Ember.View`,
+  `Ember.Controller`, and `Ember.Route`.
+
+  @class ActionHandler
+  @namespace Ember
+*/
+Ember.ActionHandler = Ember.Mixin.create({
+  mergedProperties: ['_actions'],
+
+  /**
+    @private
+
+    Moves `actions` to `_actions` at extend time. Note that this currently
+    modifies the mixin themselves, which is technically dubious but
+    is practically of little consequence. This may change in the future.
+
+    @method willMergeMixin
+  */
+  willMergeMixin: function(props) {
+    if (props.actions && !props._actions) {
+      props._actions = Ember.merge(props._actions || {}, props.actions);
+      delete props.actions;
+    }
+  },
+
+  send: function(actionName) {
+    var args = [].slice.call(arguments, 1), target;
+
+    if (this._actions && this._actions[actionName]) {
+      if (this._actions[actionName].apply(this, args) === true) {
+        // handler returned true, so this action will bubble
+      } else {
+        return;
+      }
+    } else if (this.deprecatedSend && this.deprecatedSendHandles && this.deprecatedSendHandles(actionName)) {
+      if (this.deprecatedSend.apply(this, [].slice.call(arguments)) === true) {
+        // handler return true, so this action will bubble
+      } else {
+        return;
+      }
+    }
+
+    if (target = get(this, 'target')) {
+      Ember.assert("The `target` for " + this + " (" + target + ") does not have a `send` method", typeof target.send === 'function');
+      target.send.apply(target, arguments);
+    }
+  }
+
+});
+
+})();
+
+
+
+(function() {
 
 })();
 
@@ -13862,6 +13956,10 @@ Ember.TrackedArray.prototype = {
 
   /**
     Track that `newItems` were added to the tracked array at `index`.
+
+    @method addItems
+    @param index
+    @param newItems
   */
   addItems: function (index, newItems) {
     var count = get(newItems, 'length'),
@@ -13897,6 +13995,10 @@ Ember.TrackedArray.prototype = {
 
   /**
     Track that `count` items were removed at `index`.
+
+    @method removeItems
+    @param index
+    @param count
   */
   removeItems: function (index, count) {
     var match = this._findArrayOperation(index),
@@ -13930,7 +14032,9 @@ Ember.TrackedArray.prototype = {
     - {string} operation The type of the operation.  One of
     `Ember.TrackedArray.{RETAIN, DELETE, INSERT}`
 
-    @param {function} callback 
+    @method apply
+
+    @param {function} callback
   */
   apply: function (callback) {
     var items = [],
@@ -13950,6 +14054,8 @@ Ember.TrackedArray.prototype = {
 
   /**
     Return an ArrayOperationMatch for the operation that contains the item at `index`.
+
+    @method _findArrayOperation
 
     @param {number} index the index of the item whose operation information
     should be returned.
@@ -14095,7 +14201,9 @@ function ArrayOperation (operation, count, items) {
 /**
   Internal data structure used to include information when looking up operations
   by item index.
- 
+
+  @method ArrayOperationMatch
+  @private
   @property {ArrayOperation} operation
   @property {number} index The index of `operation` in the array of operations.
   @property {boolean} split Whether or not the item index searched for would
@@ -14148,6 +14256,8 @@ Ember.SubArray.prototype = {
   /**
     Track that an item was added to the tracked array.
 
+    @method addItem
+
     @param {number} index The index of the item in the tracked array.
     @param {boolean} match `true` iff the item is included in the subarray.
 
@@ -14198,6 +14308,8 @@ Ember.SubArray.prototype = {
 
   /**
     Track that an item was removed from the tracked array.
+
+    @method removeItem
 
     @param {number} index The index of the item in the tracked array.
 
@@ -14381,6 +14493,7 @@ function makeCtor() {
 
           Ember.assert("Ember.Object.create no longer supports defining computed properties.", !(value instanceof Ember.ComputedProperty));
           Ember.assert("Ember.Object.create no longer supports defining methods that call _super.", !(typeof value === 'function' && value.toString().indexOf('._super') !== -1));
+          Ember.assert("`actions` must be provided at extend time, not at create time, when Ember.ActionHandler is used (i.e. views, controllers & routes).", !((keyName === 'actions') && Ember.ActionHandler.detect(this)));
 
           if (concatenatedProperties && indexOf(concatenatedProperties, keyName) >= 0) {
             var baseValue = this[keyName];
@@ -16606,15 +16719,15 @@ var get = Ember.get;
   @class ControllerMixin
   @namespace Ember
 */
-Ember.ControllerMixin = Ember.Mixin.create({
+Ember.ControllerMixin = Ember.Mixin.create(Ember.ActionHandler, {
   /* ducktype as a controller */
   isController: true,
 
   /**
-    The object to which events from the view should be sent.
+    The object to which actions from the view should be sent.
 
     For example, when a Handlebars template uses the `{{action}}` helper,
-    it will attempt to send the event to the view's controller's `target`.
+    it will attempt to send the action to the view's controller's `target`.
 
     By default, a controller's `target` is set to the router after it is
     instantiated by `Ember.Application#initialize`.
@@ -16632,16 +16745,16 @@ Ember.ControllerMixin = Ember.Mixin.create({
 
   model: Ember.computed.alias('content'),
 
-  send: function(actionName) {
-    var args = [].slice.call(arguments, 1), target;
+  deprecatedSendHandles: function(actionName) {
+    return !!this[actionName];
+  },
 
-    if (this[actionName]) {
-      Ember.assert("The controller " + this + " does not have the action " + actionName, typeof this[actionName] === 'function');
-      this[actionName].apply(this, args);
-    } else if (target = get(this, 'target')) {
-      Ember.assert("The target for controller " + this + " (" + target + ") did not define a `send` method", typeof target.send === 'function');
-      target.send.apply(target, arguments);
-    }
+  deprecatedSend: function(actionName) {
+    var args = [].slice.call(arguments, 1);
+    Ember.assert('' + this + " has the action " + actionName + " but it is not a function", typeof this[actionName] === 'function');
+    Ember.deprecate('Action handlers implemented directly on controllers are deprecated in favor of action handlers on an `actions` object', false);
+    this[actionName].apply(this, args);
+    return;
   }
 });
 
@@ -18259,12 +18372,12 @@ Ember.TEMPLATES = {};
 
 /**
   `Ember.CoreView` is an abstract class that exists to give view-like behavior
-  to both Ember's main view class `Ember.View` and other classes like 
+  to both Ember's main view class `Ember.View` and other classes like
   `Ember._SimpleMetamorphView` that don't need the fully functionaltiy of
   `Ember.View`.
 
   Unless you have specific needs for `CoreView`, you will use `Ember.View`
-  in your applications. 
+  in your applications.
 
   @class CoreView
   @namespace Ember
@@ -18272,7 +18385,7 @@ Ember.TEMPLATES = {};
   @uses Ember.Evented
 */
 
-Ember.CoreView = Ember.Object.extend(Ember.Evented, {
+Ember.CoreView = Ember.Object.extend(Ember.Evented, Ember.ActionHandler, {
   isView: true,
 
   states: states,
@@ -18385,6 +18498,18 @@ Ember.CoreView = Ember.Object.extend(Ember.Evented, {
       }
       return method.apply(this, args);
     }
+  },
+
+  deprecatedSendHandles: function(actionName) {
+    return !!this[actionName];
+  },
+
+  deprecatedSend: function(actionName) {
+    var args = [].slice.call(arguments, 1);
+    Ember.assert('' + this + " has the action " + actionName + " but it is not a function", typeof this[actionName] === 'function');
+    Ember.deprecate('Action handlers implemented directly on views are deprecated in favor of action handlers on an `actions` object', false);
+    this[actionName].apply(this, args);
+    return;
   },
 
   has: function(name) {
@@ -26293,50 +26418,16 @@ Ember.Button = Ember.View.extend(Ember.TargetActionSupport, {
 var get = Ember.get, set = Ember.set;
 
 /**
-  The `Ember.TextArea` view class renders a
-  [textarea](https://developer.mozilla.org/en/HTML/Element/textarea) element.
-  It allows for binding Ember properties to the text area contents (`value`),
-  live-updating as the user inputs text:
+  The internal class used to create textarea element when the `{{textarea}}`
+  helper is used.
 
-  ```javascript
-  App.ApplicationController = Ember.Controller.extend({
-    writtenWords: 'hello'
-  });
-  ```
+  See handlebars.helpers.textarea for usage details.
 
-  ```handlebars
-  {{view Ember.TextArea valueBinding="writtenWords"}}
-  ```
-
-  Would result in the following HTML:
-
-  ```html
-  <textarea class="ember-text-area"> 
-    written words
-  </textarea>
-  ```
-  
   ## Layout and LayoutName properties
 
   Because HTML `textarea` elements do not contain inner HTML the `layout` and
   `layoutName` properties will not be applied. See [Ember.View](/api/classes/Ember.View.html)'s
   layout section for more information.
-
-  ## HTML Attributes
-
-  By default `Ember.TextArea` provides support for `rows`, `cols`,
-  `placeholder`, `disabled`, `maxlength` and `tabindex` attributes on a
-  textarea. If you need to support  more attributes have a look at the
-  `attributeBindings` property in `Ember.View`'s HTML Attributes section.
-
-  To globally add support for additional attributes you can reopen
-  `Ember.TextArea` or `Ember.TextSupport`.
-
-  ```javascript
-  Ember.TextSupport.reopen({
-    attributeBindings: ["required"]
-  })
-  ```
 
   @class TextArea
   @namespace Ember
@@ -27069,7 +27160,7 @@ function normalizeHash(hash, hashTypes) {
   ## Use as text field
   An `{{input}}` with no `type` or a `type` of `text` will render an HTML text input.
   The following HTML attributes can be set via the helper:
-    
+
     * `value`
     * `size`
     * `name`
@@ -27082,7 +27173,7 @@ function normalizeHash(hash, hashTypes) {
   When set to a quoted string, these values will be directly applied to the HTML
   element. When left unquoted, these values will be bound to a property on the
   template's current rendering context (most typically a controller instance).
-  
+
   Unbound:
 
   ```handlebars
@@ -27101,7 +27192,7 @@ function normalizeHash(hash, hashTypes) {
     entryNotAllowed: true
   });
   ```
-  
+
   ```handlebars
   {{input type="text" value=firstName disabled=entryNotAllowed size="50"}}
   ```
@@ -27109,7 +27200,7 @@ function normalizeHash(hash, hashTypes) {
   ```html
   <input type="text" value="Stanley" disabled="disabled" size="50"/>
   ```
-  
+
   ### Extension
   Internally, `{{input type="text"}}` creates an instance of `Ember.TextField`, passing
   arguments from the helper to `Ember.TextField`'s `create` method. You can extend the
@@ -27121,11 +27212,12 @@ function normalizeHash(hash, hashTypes) {
   Ember.TextField.reopen({
     attributeBindings: ['required']
   });
+  ```
 
   ## Use as checkbox
   An `{{input}}` with a `type` of `checkbox` will render an HTML checkbox input.
   The following HTML attributes can be set via the helper:
-    
+
     * `checked`
     * `disabled`
     * `tabindex`
@@ -27172,7 +27264,7 @@ function normalizeHash(hash, hashTypes) {
   Ember.Checkbox.reopen({
     classNames: ['my-app-checkbox']
   });
-
+  ```
 
   @method input
   @for Ember.Handlebars.helpers
@@ -27201,22 +27293,140 @@ Ember.Handlebars.registerHelper('input', function(options) {
 });
 
 /**
-  `{{textarea}}` inserts a new instance of `Ember.TextArea` into the template.
-  
+  `{{textarea}}` inserts a new instance of `<textarea>` tag into the template.
+  The attributes of `{{textarea}}` match those of the native HTML tags as
+  closely as possible.
+
+  The following HTML attributes can be set:
+
+    * `value`
+    * `name`
+    * `rows`
+    * `cols`
+    * `placeholder`
+    * `disabled`
+    * `maxlength`
+    * `tabindex`
+
+  When set to a quoted string, these value will be directly applied to the HTML
+  element. When left unquoted, these values will be bound to a property on the
+  template's current rendering context (most typically a controller instance).
+
+  Unbound:
+
+  ```handlebars
+  {{textarea value="Lots of static text that ISN'T bound"}}
+  ```
+
+  Would result in the following HTML:
+
+  ```html
+  <textarea class="ember-text-area">
+    Lots of static text that ISN'T bound
+  </textarea>
+  ```
+
+  Bound:
+
+  In the following example, the `writtenWords` property on `App.ApplicationController`
+  will be updated live as the user types 'Lots of text that IS bound' into
+  the text area of their browser's window.
+
   ```javascript
   App.ApplicationController = Ember.Controller.extend({
-    writtenWords: "lorem ipsum dolor sit amet"
+    writtenWords: "Lots of text that IS bound"
   });
   ```
 
   ```handlebars
-  {{textarea value="writtenWords"}}
+  {{textarea value=writtenWords}}
   ```
-  
+
+   Would result in the following HTML:
+
   ```html
-  <textarea class="ember-text-area"> 
-    written words
+  <textarea class="ember-text-area">
+    Lots of text that IS bound
   </textarea>
+  ```
+
+  If you wanted a one way binding between the text area and a div tag
+  somewhere else on your screen, you could use `Ember.computed.oneWay`:
+
+  ```javascript
+  App.ApplicationController = Ember.Controller.extend({
+    writtenWords: "Lots of text that IS bound",
+    outputWrittenWords: Ember.computed.oneWay("writtenWords")
+  });
+  ```
+
+  ```handlebars
+  {{textarea value=writtenWords}}
+
+  <div>
+    {{outputWrittenWords}}
+  </div>
+  ```
+
+  Would result in the following HTML:
+
+  ```html
+  <textarea class="ember-text-area">
+    Lots of text that IS bound
+  </textarea>
+
+  <-- the following div will be updated in real time as you type -->
+
+  <div>
+    Lots of text that IS bound
+  </div>
+  ```
+
+  Finally, this example really shows the power and ease of Ember when two
+  properties are bound to eachother via `Ember.computed.alias`. Type into
+  either text area box and they'll both stay in sync. Note that
+  `Ember.computed.alias` costs more in terms of performance, so only use it when
+  your really binding in both directions:
+
+  ```javascript
+  App.ApplicationController = Ember.Controller.extend({
+    writtenWords: "Lots of text that IS bound",
+    twoWayWrittenWords: Ember.computed.alias("writtenWords")
+  });
+  ```
+
+  ```handlebars
+  {{textarea value=writtenWords}}
+  {{textarea value=twoWayWrittenWords}}
+  ```
+
+  ```html
+  <textarea id="ember1" class="ember-text-area">
+    Lots of text that IS bound
+  </textarea>
+
+  <-- both updated in real time -->
+
+  <textarea id="ember2" class="ember-text-area">
+    Lots of text that IS bound
+  </textarea>
+  ```
+
+  ### Extension
+
+  Internally, `{{textarea}}` creates an instance of `Ember.TextArea`, passing
+  arguments from the helper to `Ember.TextArea`'s `create` method. You can
+  extend the capabilities of text areas in your application by reopening this
+  class. For example, if you are deploying to browsers where the `required`
+  attribute is used, you can globally add support for the `required` attribute
+  on all {{textarea}}'s' in your app by reopening `Ember.TextArea` or
+  `Ember.TextSupport` and adding it to the `attributeBindings` concatenated
+  property:
+
+  ```javascript
+  Ember.TextArea.reopen({
+    attributeBindings: ['required']
+  });
   ```
 
   @method textarea
@@ -28214,7 +28424,7 @@ define("router",
 
       trigger: function(name) {
         var args = slice.call(arguments);
-        trigger(this.currentHandlerInfos, false, args);
+        trigger(this, this.currentHandlerInfos, false, args);
       },
 
       /**
@@ -28481,7 +28691,7 @@ define("router",
       } catch(e) {
         if (!(e instanceof Router.TransitionAborted)) {
           // Trigger the `error` event starting from this failed handler.
-          trigger(currentHandlerInfos.concat(handlerInfo), true, ['error', e, transition]);
+          trigger(transition.router, currentHandlerInfos.concat(handlerInfo), true, ['error', e, transition]);
         }
 
         // Propagate the error so that the transition promise will reject.
@@ -28583,7 +28793,11 @@ define("router",
       return handlers;
     }
 
-    function trigger(handlerInfos, ignoreFailure, args) {
+    function trigger(router, handlerInfos, ignoreFailure, args) {
+      if (router.triggerEvent) {
+        router.triggerEvent(handlerInfos, ignoreFailure, args);
+        return;
+      }
 
       var name = args.shift();
 
@@ -28653,7 +28867,7 @@ define("router",
       // Fire 'willTransition' event on current handlers, but don't fire it
       // if a transition was already underway.
       if (!wasTransitioning) {
-        trigger(currentHandlerInfos, true, ['willTransition', transition]);
+        trigger(router, currentHandlerInfos, true, ['willTransition', transition]);
       }
 
       log(router, transition.sequence, "Beginning validation for transition to " + transition.targetName);
@@ -28845,7 +29059,7 @@ define("router",
 
         // An error was thrown / promise rejected, so fire an
         // `error` event from this handler info up to root.
-        trigger(handlerInfos.slice(0, index + 1), true, ['error', reason, transition]);
+        trigger(router, handlerInfos.slice(0, index + 1), true, ['error', reason, transition]);
 
         // Propagate the original error.
         return RSVP.reject(reason);
@@ -29437,6 +29651,41 @@ Ember.Router = Ember.Object.extend({
   }
 });
 
+function triggerEvent(handlerInfos, ignoreFailure, args) {
+  var name = args.shift();
+
+  if (!handlerInfos) {
+    if (ignoreFailure) { return; }
+    throw new Error("Could not trigger event '" + name + "'. There are no active handlers");
+  }
+
+  var eventWasHandled = false;
+
+  for (var i=handlerInfos.length-1; i>=0; i--) {
+    var handlerInfo = handlerInfos[i],
+        handler = handlerInfo.handler;
+
+    if (handler._actions && handler._actions[name]) {
+      if (handler._actions[name].apply(handler, args) === true) {
+        eventWasHandled = true;
+      } else {
+        return;
+      }
+    } else if (handler.events && handler.events[name]) {
+      Ember.deprecate('Action handlers contained in an `events` object are deprecated in favor of putting them in an `actions` object', false);
+      if (handler.events[name].apply(handler, args) === true) {
+        eventWasHandled = true;
+      } else {
+        return;
+      }
+    }
+  }
+
+  if (!eventWasHandled && !ignoreFailure) {
+    throw new Error("Nothing handled the event '" + name + "'.");
+  }
+}
+
 Ember.Router.reopenClass({
   router: null,
   map: function(callback) {
@@ -29444,6 +29693,7 @@ Ember.Router.reopenClass({
     if (!router) {
       router = new Router();
       router.callbacks = [];
+      router.triggerEvent = triggerEvent;
       this.reopenClass({ router: router });
     }
 
@@ -29512,7 +29762,7 @@ var get = Ember.get, set = Ember.set,
   @namespace Ember
   @extends Ember.Object
 */
-Ember.Route = Ember.Object.extend({
+Ember.Route = Ember.Object.extend(Ember.ActionHandler, {
   /**
     @private
 
@@ -29539,16 +29789,16 @@ Ember.Route = Ember.Object.extend({
     These functions will be invoked when a matching `{{action}}` is triggered
     from within a template and the application's current route is this route.
 
-    Events can also be invoked from other parts of your application via `Route#send`
+    Actions can also be invoked from other parts of your application via `Route#send`
     or `Controller#send`.
 
-    The `events` hash will inherit event handlers from
-    the `events` hash defined on extended Route parent classes
+    The `actions` hash will inherit action handlers from
+    the `actions` hash defined on extended Route parent classes
     or mixins rather than just replace the entire hash, e.g.:
 
     ```js
     App.CanDisplayBanner = Ember.Mixin.create({
-      events: {
+      actions: {
         displayBanner: function(msg) {
           // ...
         }
@@ -29556,7 +29806,7 @@ Ember.Route = Ember.Object.extend({
     });
 
     App.WelcomeRoute = Ember.Route.extend(App.CanDisplayBanner, {
-      events: {
+      actions: {
         playMusic: function() {
           // ...
         }
@@ -29564,36 +29814,36 @@ Ember.Route = Ember.Object.extend({
     });
 
     // `WelcomeRoute`, when active, will be able to respond
-    // to both events, since the events hash is merged rather
+    // to both actions, since the actions hash is merged rather
     // then replaced when extending mixins / parent classes.
     this.send('displayBanner');
     this.send('playMusic');
     ```
 
     It is also possible to call `this._super()` from within an
-    event handler if it overrides a handle defined on a parent
+    action handler if it overrides a handle defined on a parent
     class or mixin.
 
-    Within a route's event handler, the value of the `this` context
+    Within a route's action handler, the value of the `this` context
     is the Route object.
 
     ## Bubbling
 
-    By default, an event will stop bubbling once a handler defined
-    on the `events` hash handles it. To continue bubbling the event,
+    By default, an action will stop bubbling once a handler defined
+    on the `actions` hash handles it. To continue bubbling the action,
     you must return `true` from the handler.
 
-    ## Built-in events
+    ## Built-in actions
 
-    There are a few built-in events pertaining to transitions that you
+    There are a few built-in actions pertaining to transitions that you
     can use to customize transition behavior: `willTransition` and
     `error`.
 
     ### `willTransition`
 
-    The `willTransition` event is fired at the beginning of any
+    The `willTransition` action is fired at the beginning of any
     attempted transition with a `Transition` object as the sole
-    argument. This event can be used for aborting, redirecting,
+    argument. This action can be used for aborting, redirecting,
     or decorating the transition from the currently active routes.
 
     A good example is preventing navigation when a form is
@@ -29601,7 +29851,7 @@ Ember.Route = Ember.Object.extend({
 
     ```js
     App.ContactFormRoute = Ember.Route.extend({
-      events: {
+      actions: {
         willTransition: function(transition) {
           if (this.controller.get('userHasEnteredData')) {
             this.controller.displayNavigationConfirm();
@@ -29617,7 +29867,7 @@ Ember.Route = Ember.Object.extend({
     Note that `willTransition` will not be fired for the
     redirecting `transitionTo`, since `willTransition` doesn't
     fire when there is already a transition underway. If you want
-    subsequent `willTransition` events to fire for the redirecting
+    subsequent `willTransition` actions to fire for the redirecting
     transition, you must first explicitly call
     `transition.abort()`.
 
@@ -29625,7 +29875,7 @@ Ember.Route = Ember.Object.extend({
 
     When attempting to transition into a route, any of the hooks
     may throw an error, or return a promise that rejects, at which
-    point an `error` event will be fired on the partially-entered
+    point an `error` action will be fired on the partially-entered
     routes, allowing for per-route error handling logic, or shared
     error handling logic defined on a parent route.
 
@@ -29642,7 +29892,7 @@ Ember.Route = Ember.Object.extend({
         return Ember.RSVP.reject("bad things!");
       },
 
-      events: {
+      actions: {
         error: function(error, transition) {
           // Assuming we got here due to the error in `beforeModel`,
           // we can expect that error === "bad things!",
@@ -29660,14 +29910,14 @@ Ember.Route = Ember.Object.extend({
     });
     ```
 
-    `error` events that bubble up all the way to `ApplicationRoute`
+    `error` actions that bubble up all the way to `ApplicationRoute`
     will fire a default error handler that logs the error. You can
     specify your own global default error handler by overriding the
     `error` handler on `ApplicationRoute`:
 
     ```js
     App.ApplicationRoute = Ember.Route.extend({
-      events: {
+      actions: {
         error: function(error, transition) {
           this.controllerFor('banner').displayError(error.message);
         }
@@ -29678,9 +29928,16 @@ Ember.Route = Ember.Object.extend({
     @see {Ember.Route#send}
     @see {Handlebars.helpers.action}
 
-    @property events
+    @property actions
     @type Hash
     @default null
+  */
+  actions: null,
+
+  /**
+    @deprecated
+
+    Please use `actions` instead.
   */
   events: null,
 
@@ -29717,7 +29974,7 @@ Ember.Route = Ember.Object.extend({
     });
 
     App.IndexRoute = Ember.Route.extend({
-      events: {
+      actions: {
         moveToSecret: function(context){
           if (authorized()){
             this.transitionTo('secret', context);
@@ -29768,7 +30025,8 @@ Ember.Route = Ember.Object.extend({
   },
 
   /**
-    Triggers and event on a parent route.
+    Sends an action to the router, which will delegate it to the currently
+    active route hierarchy per the bubbling rules explained under `actions`.
 
     Example
 
@@ -29778,7 +30036,7 @@ Ember.Route = Ember.Object.extend({
     });
 
     App.ApplicationRoute = Ember.Route.extend({
-      events: {
+      actions: {
         track: function(arg) {
           console.log(arg, 'was clicked');
         }
@@ -29786,7 +30044,7 @@ Ember.Route = Ember.Object.extend({
     });
 
     App.IndexRoute = Ember.Route.extend({
-      events: {
+      actions: {
         trackIfDebug: function(arg) {
           if (debug) {
             this.send('track', arg);
@@ -29797,7 +30055,7 @@ Ember.Route = Ember.Object.extend({
     ```
 
     @method send
-    @param {String} name the name of the event to trigger
+    @param {String} name the name of the action to trigger
     @param {...*} args
   */
   send: function() {
@@ -29819,7 +30077,7 @@ Ember.Route = Ember.Object.extend({
     }
 
     // Assign the route's controller so that it can more easily be
-    // referenced in event handlers
+    // referenced in action handlers
     this.controller = controller;
 
     if (this.setupControllers) {
@@ -30041,7 +30299,7 @@ Ember.Route = Ember.Object.extend({
     if (!name && sawParams) { return params; }
     else if (!name) { return; }
 
-    var modelClass = this.container.lookupFactory('model:' + name);
+    var modelClass = this.container.lookupFactory('model:' + name).superclass;
     var namespace = get(this, 'router.namespace');
 
     Ember.assert("You used the dynamic segment " + name + "_id in your router, but " + namespace + "." + classify(name) + " did not exist and you did not override your route's `model` hook.", modelClass);
@@ -30391,7 +30649,7 @@ Ember.Route = Ember.Object.extend({
 
     ```js
     App.ApplicationRoute = App.Route.extend({
-      events: {
+      actions: {
         showModal: function(evt) {
           this.render(evt.modalName, {
             outlet: 'modal',
@@ -30720,6 +30978,7 @@ Ember.onLoad('Ember.Handlebars', function(Handlebars) {
       `title` attributes. It's discourage that you override these defaults,
       however you can push onto the array if needed.
 
+      @property attributeBindings
       @type Array | String
       @default ['href', 'title', 'rel']
      **/
@@ -30729,6 +30988,7 @@ Ember.onLoad('Ember.Handlebars', function(Handlebars) {
       By default the `{{link-to}}` helper will bind to the `active`, `loading`, and
       `disabled` classes. It is discouraged to override these directly.
 
+      @property classNameBindings
       @type Array
       @default ['active', 'loading', 'disabled']
      **/
@@ -34693,7 +34953,7 @@ var sendEvent = function(eventName, sendRecursiveArguments, isUnhandledPass) {
 
   ## The Initial State
 
-  When created a StateManager instance will immediately enter into the state
+  When created, a StateManager instance will immediately enter into the state
   defined as its `start` property or the state referenced by name in its
   `initialState` property:
 
