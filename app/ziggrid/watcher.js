@@ -27,7 +27,7 @@ function Watcher(_namespace) {
 }
 
 Watcher.prototype = {
-  watch: function(typeName, opts) {
+  watch: function(typeName, entryTypeName, opts) {
     var type = this.namespace[typeName]; // ED limitation
     var handle = unique;
     var store = container.lookup('store:main');
@@ -41,7 +41,7 @@ Watcher.prototype = {
       unique: handle
     }, opts);
 
-    var entryType = this.namespace[typeName + 'Entry'];
+    var entryType = this.namespace[entryTypeName];
     demux[handle] = new Loader(type, entryType, model.get('id'), opts);
 
     var stringified = JSON.stringify(hash);

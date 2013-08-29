@@ -21,6 +21,11 @@ App.deferReadiness(); // defering to allow sync boot with Ziggrid
 var url = "http://couchconf.ziggrid.org:8088/ziggrid/";
 
 import ConnectionManager from 'appkit/ziggrid/connection_manager';
-var connectionManager = new ConnectionManager(url, App);
+var connectionManager = ConnectionManager.create({ url: url, namespace: App });
 App.register("connection_manager:main", connectionManager, { instantiate: false});
+
+App.inject('component:bean-player', 'connectionManager', 'connection_manager:main');
+
 export default App;
+
+

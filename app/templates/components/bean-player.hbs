@@ -1,8 +1,12 @@
 <div class="player">
-  <button {{bindAttr class=':play-button isPlaying:inactive'}} {{action 'play'}}>&#9658;</button>
-  <button {{bindAttr class=':pause-button isPlaying::inactive'}} {{action 'pause'}}>&#10074;&#10074;</button>
-  {{input value=progress type="range" class="player-range-input"}}
-  <div class="label">
-    <span class="count">{{count}}</span> Documents
-  </div>
+  {{#if generator}}
+    <button {{bindAttr class=':play-button isPlaying:inactive'}} {{action 'play'}}>&#9658;</button>
+    <button {{bindAttr class=':pause-button isPlaying::inactive'}} {{action 'pause'}}>&#10074;&#10074;</button>
+    {{input value=progress type="range" class="player-range-input"}}
+    <div class="label">
+      <span class="count">{{count}}</span> Documents
+    </div>
+  {{else}}
+    <p>Waiting for generator...</p>
+  {{/if}}
 </div>

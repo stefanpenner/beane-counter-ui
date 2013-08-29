@@ -1,7 +1,8 @@
 var IndexRoute = Ember.Route.extend({
   model: function() {
     var watcher = this.container.lookup('watcher:main');
-    var leaderboard = watcher.watch('Leaderboard_average_groupedBy_season', {
+    var leaderboard = watcher.watch('Leaderboard_average_groupedBy_season',
+                                    'LeaderboardEntry_average_groupedBy_season', {
       "season": "2006"
     });
 

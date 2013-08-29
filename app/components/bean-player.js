@@ -1,5 +1,7 @@
 var Player = Ember.Component.extend({
 
+  generator: Ember.computed.alias('connectionManager.generator'),
+
   isPlaying: false,
 
   play: function() {
