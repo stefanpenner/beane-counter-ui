@@ -2,10 +2,11 @@ import demux from 'appkit/ziggrid/demux';
 
 function Observer(url, callback) {
 
+  url = url + 'updates';
   console.log("Observer connecting at " + url);
 
   var conn = jQuery.atmosphere.subscribe({
-    url: url + 'updates',
+    url: url,
 
     transport: 'websocket',
     fallbackTransport: 'long-polling',
@@ -16,6 +17,7 @@ function Observer(url, callback) {
 
     onMessage: function(msg) {
       if (msg.status === 200) {
+        // TODO: why are we still getting deliveryFor messages in connectionManager?
         console.log("Received message " + msg.responseBody);
         var body = JSON.parse(msg.responseBody);
         if (body["deliveryFor"]) {

@@ -4,14 +4,6 @@ var Player = Ember.Component.extend({
 
   isPlaying: false,
 
-  play: function() {
-    this.set('isPlaying', true);
-  },
-
-  pause: function() {
-    this.set('isPlaying', false);
-  },
-
   progressChanged: function() {
 
     var oldProgress = this.get('progress');
@@ -19,8 +11,21 @@ var Player = Ember.Component.extend({
     // TODO: things
   }.observes('progress'),
 
-  count: 12345
+  count: 12345,
 
+  actions: {
+    play: function() {
+      if (this.get('isPlaying')) { return; }
+      this.get('generator').start();
+      this.set('isPlaying', true);
+    },
+
+    pause: function() {
+      if (!this.get('isPlaying')) { return; }
+      this.get('generator').stop();
+      this.set('isPlaying', false);
+    }
+  }
 });
 
 export default Player;
