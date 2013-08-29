@@ -1,17 +1,20 @@
 var IndexRoute = Ember.Route.extend({
-  model: function() {
-    var watcher = this.container.lookup('watcher:main');
+  setupController: function() {
+    var controller = this.controllerFor('index'),
+        watcher = this.container.lookup('watcher:main');
+
     var leaderboard = watcher.watch('Leaderboard_average_groupedBy_season',
-                                    'LeaderboardEntry_average_groupedBy_season', {
-      "season": "2006"
+                                'LeaderboardEntry_average_groupedBy_season',
+                                { "season": "2006" });
+
+    var otherThing = watcher.watch('Leaderboard_average_groupedBy_season',
+                                   'LeaderboardEntry_average_groupedBy_season',
+                                   { "season": "2006" });
+
+    controller.setProperties({
+      leaderboard: leaderboard.get('entries'),
+      otherThing: otherThing.get('entries')
     });
-
-    // TODO: more legit promise solution? isLoading never becomes true,
-    // probably due to the weird way we load stuff.
-    var entries = leaderboard.get('entries');
-    entries.then = null;
-
-    return entries;
   }
 });
 

@@ -56,7 +56,23 @@ Watcher.prototype = {
       status: 200
     };
 
-    Ember.run.later(connectionManager, 'handleMessage', stubbedPayload, 1500);
+    Ember.run.later(connectionManager, 'handleMessage', stubbedPayload, 500);
+
+    var stubbedPayload2 = {
+      responseBody: '{"deliveryFor":1,"payload":{"id":"leaderboard_average_groupedBy_season-874C43B53873E641E8503936AEB3F104269ED750","ziggridType":"leaderboard_average_groupedBy_season","season":"2006","table":[["0.9","hairj002"],["0.9","hattj001"],["0.5","inglj001"],["0.7","boona001"],["0.69","willb002"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"],["0.6666666666666666","linda001"],["0.6666666666666666","lugoj001"],["0.6666666666666666","mauej001"]]}}',
+      status: 200
+    };
+
+    Ember.run.later(connectionManager, 'handleMessage', stubbedPayload2, 1000);
+
+
+    var stubbedPayload2 = {
+      responseBody: '{"deliveryFor":2,"payload":{"id":"leaderboard_average_groupedBy_season-874C43B53873E641E8503936AEB3F104269ED750","ziggridType":"leaderboard_average_groupedBy_season","season":"2006","table":[["0.9","hairj002"],["0.9","hattj001"],["0.5","inglj001"],["0.7","boona001"],["0.69","willb002"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"],["0.6666666666666666","linda001"],["0.6666666666666666","lugoj001"],["0.6666666666666666","mauej001"]]}}',
+      status: 200
+    };
+
+    Ember.run.later(connectionManager, 'handleMessage', stubbedPayload2, 1500);
+
 
     return model;
   },
