@@ -13,16 +13,16 @@ var ApplicationRoute = Ember.Route.extend({
 
 
 
-    //var model = this.container.lookup('application:main')[leaderboard.constructor.model.entries.name.capitalize()].model;
+    //var model = this.container.lookup('application:main')[leaderboard.constructor.model.table.name.capitalize()].model;
     var namespace = this.container.lookup('application:main');
     controller.setProperties({
       leaderboard: {
-        entries: leaderboard.get('entries'),
-        headers: Ember.keys(namespace[leaderboard.constructor.model.entries.name.capitalize()].model)
+        table: leaderboard.get('table'),
+        headers: Ember.keys(namespace[leaderboard.constructor.model.table.name.capitalize()].model)
       },
       otherThing: {
-        entries: otherThing.get('entries'),
-        headers: Ember.keys(namespace[otherThing.constructor.model.entries.name.capitalize()].model)
+        table: otherThing.get('table'),
+        headers: Ember.keys(namespace[otherThing.constructor.model.table.name.capitalize()].model)
       }
     });
 
