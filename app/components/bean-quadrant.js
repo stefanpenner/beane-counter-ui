@@ -67,7 +67,7 @@ var Quadrant = Ember.Component.extend({
     names.transition().
       attr("y", function(d){ return d.hotness * h + radius/2; }).
       attr("x", function(d){ return d.goodness * w + radius + 10; }).
-      duration(500).ease("linear");
+      duration(2500).ease("linear");
 
     circles.transition().
       attr("cy", function(d){ return d.hotness * h; }).
@@ -89,7 +89,7 @@ var Quadrant = Ember.Component.extend({
         };
       }).
 
-      duration(500).ease("linear");
+      duration(2500).ease("linear");
 
     circles.exit().remove();
     names.exit().remove();

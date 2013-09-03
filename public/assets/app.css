@@ -375,6 +375,7 @@ circle.player.selected {
   display: none;
   margin-left: 45px;
   margin-top: -37px;
+  opacity: 0.8;
 }
 
 .quadrant-popup.player-present {
@@ -382,6 +383,7 @@ circle.player.selected {
 }
 
 .quadrant-popup::before {
+  /*this is the triangle*/
   content: ' ';
   position: absolute;
   top: 25px;

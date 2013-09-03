@@ -11,6 +11,8 @@ var ApplicationRoute = Ember.Route.extend({
                                    'LeaderboardEntry_average_groupedBy_season',
                                    { "season": "2006" });
 
+    var profile = watcher.watch('Profile', 'Profile', {player:'mccab002'});
+
     //var model = this.container.lookup('application:main')[leaderboard.constructor.model.table.name.capitalize()].model;
     var namespace = this.container.lookup('application:main');
     controller.setProperties({
