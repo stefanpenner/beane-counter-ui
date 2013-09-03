@@ -5,12 +5,7 @@
 
     {{render 'filter'}}
 
-    <ul>
-      {{#each players}}
-        <li>{{name}}: hotness: {{hotness}}, goodness: {{goodness}}</li>
-      {{/each}}
-    </ul>
-
+    {{bean-quadrant players=players}}
   </div>
 
   {{bean-player}}

@@ -11,8 +11,6 @@ var ApplicationRoute = Ember.Route.extend({
                                    'LeaderboardEntry_average_groupedBy_season',
                                    { "season": "2006" });
 
-
-
     //var model = this.container.lookup('application:main')[leaderboard.constructor.model.table.name.capitalize()].model;
     var namespace = this.container.lookup('application:main');
     controller.setProperties({
@@ -37,7 +35,7 @@ var ApplicationRoute = Ember.Route.extend({
     var players = [];
     for(var i = 0, len = 10; i < len; ++i) {
       players.push({
-        name: "Borf McGee",
+        name: "PlayerName" + (i+1),
         hotness: Math.random(),
         goodness: Math.random()
       });

@@ -16,7 +16,7 @@ function Loader(type, entryType, id, opts) {
     }
 
     store.load(type, id, {
-      entries: players
+      table: players
     });
   };
 }

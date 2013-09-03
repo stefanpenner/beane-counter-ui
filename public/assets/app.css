@@ -345,3 +345,24 @@ input[type='range']::-webkit-slider-thumb {
   cursor: default;
 }
 
+text {
+  fill: #b3b3b3;
+  font-family: "Source Sans Pro";
+}
+
+html {
+  background: #212121;
+}
+
+circle.player {
+  fill-opacity: 0;
+  stroke-width: 4;
+  stroke: #CDCE53;
+}
+
+circle.player.selected {
+  fill: #00A70C;
+  fill-opacity: 1;
+  stroke-width: 4;
+  stroke: white;
+}
