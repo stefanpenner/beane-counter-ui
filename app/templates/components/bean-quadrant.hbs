@@ -3,3 +3,8 @@
     <li>{{name}}: hotness: {{hotness}}, goodness: {{goodness}}</li>
   {{/each}}
 </ul>
+
+<div class="quadrant-container">
+  {{ render quadrant_player selectedPlayer }}
+  {{! svg element gets rendered here in didInsertElement }}
+</div>

@@ -312,6 +312,7 @@ input[type='range']::-webkit-slider-thumb {
   width: 160px;
   top: 0;
   color: #777777;
+  z-index: 6;
 }
 
 #filter-view h2 {
@@ -350,10 +351,6 @@ text {
   font-family: "Source Sans Pro";
 }
 
-html {
-  background: #212121;
-}
-
 circle.player {
   fill-opacity: 0;
   stroke-width: 4;
@@ -361,8 +358,50 @@ circle.player {
 }
 
 circle.player.selected {
-  fill: #00A70C;
+  fill: #0a9e55;
   fill-opacity: 1;
   stroke-width: 4;
   stroke: white;
 }
+
+.quadrant-popup {
+  z-index: 20;
+  position: absolute;
+  width: 350px;
+  height: 250px;
+  background: white;
+  left: 100px;
+  color: black;
+  display: none;
+  margin-left: 45px;
+  margin-top: -37px;
+}
+
+.quadrant-popup.player-present {
+  display: block;
+}
+
+.quadrant-popup::before {
+  content: ' ';
+  position: absolute;
+  top: 25px;
+  left: -15px;
+
+  border-right: 15px solid white;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}
+
+.quadrant-popup .footer {
+  background: #0a9e55;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+}
+
+.quadrant-container {
+  position: relative;
+}
+
