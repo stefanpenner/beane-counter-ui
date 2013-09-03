@@ -1,9 +1,10 @@
 var w = 960,
-    h = 500;
+    h = 500,
+    keyFunc = function(d) { return d.id; };
 
 function sync(data) {
-  var circles = d3.select("svg").selectAll("circle").data(data);
-  var names = d3.select("svg").selectAll("text").data(data);
+  var circles = d3.select("svg").selectAll("circle").data(data, keyFunc);
+  var names = d3.select("svg").selectAll("text").data(data, keyFunc);
   var radius = 10;
 
   circles.enter().append("circle").
@@ -38,20 +39,20 @@ function sync(data) {
   names.exit().remove();
 }
 
-var data = [4, 8, 15, 16, 23, 42, 15].map(by(100));
-
 function by(value) {
   return function(entry) {
     return value * entry;
   }
 }
 
-function Player() {
 
+var lastId = 1;
+function Player() {
+  this.id = lastId++;
 }
 
 Player.tick = function() {
-  players().forEach(function(player){
+  players(true).forEach(function(player){
     player.tick();
   });
 };
@@ -62,17 +63,11 @@ Player.prototype = {
     this.goodness = Math.random() * w;
   },
   name: function() {
-    return "Players Name";
+    return "Players Name (" + this.id + ")";
   }
 };
 
-var _players= [
-  new Player(),
-  new Player(),
-  new Player(),
-  new Player(),
-  new Player(),
-  new Player(),
+var _players = [
   new Player(),
   new Player(),
   new Player(),
@@ -80,7 +75,13 @@ var _players= [
   new Player()
 ];
 
-function players() {
+function players(mutate) {
+  if (mutate) {
+    _players.push(new Player());
+
+    _players.splice(3, 1);
+    //_players.shift();
+  }
   return _players;
 }
 
@@ -136,18 +137,14 @@ svg.append("svg:rect").
     style("fill", "url(#background-radial-gradient)");
 // \gradient
 
-function animate() {
-  setTimeout(function first(){
-    Player.tick();
-    sync(players());
-    animate();
-  }, 1000);
-}
-
 function random(collection){
   return collection[Math.floor(Math.random()*collection.length)]
 }
 
-Player.tick();
-sync(players());
+function animate() {
+  Player.tick();
+  sync(players());
+  setTimeout(animate, 1000);
+}
+
 animate();
