@@ -1,10 +1,25 @@
+<div class="quadrant-container">
+  {{ render quadrant_player selectedPlayer }}
+  {{! svg element gets rendered here in didInsertElement }}
+
+  <div class="labels y-labels">
+    <label class="min">&#9664; Streak</label>
+    <label class="max">Slump &#9658;</label>
+    <label class="label">Hotness</label>
+  </div>
+</div>
+
+<div class="labels x-labels">
+  <label class="min">&#9664; Chump</label>
+  <label class="max">Champ &#9658;</label>
+  <label class="label">Goodness</label>
+</div>
+
 <ul>
   {{#each players}}
     <li>{{name}}: hotness: {{hotness}}, goodness: {{goodness}}</li>
   {{/each}}
 </ul>
 
-<div class="quadrant-container">
-  {{ render quadrant_player selectedPlayer }}
-  {{! svg element gets rendered here in didInsertElement }}
-</div>
+
+

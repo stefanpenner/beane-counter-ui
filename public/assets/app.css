@@ -64,7 +64,7 @@ html, body {
 .container {
   width: 960px;
   margin: 0 auto;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 #logo-large {
@@ -411,18 +411,64 @@ circle.player.selected {
 
 g.player {
   pointer-events: all;
+  cursor: pointer;
 }
 
 circle.player {
   fill-opacity: 0;
-  stroke-width: 4;
+  stroke-width: 2;
   stroke: #CDCE53;
 }
 
 g.player.selected circle.player {
   fill: #00A70C;
   fill-opacity: 1;
-  stroke-width: 4;
+  stroke-width: 3;
   stroke: white;
+}
+
+.labels label {
+  display: block;
+  line-height: 42px;
+}
+
+.labels .min, .labels .max{
+  font-size: 18px;
+}
+
+.labels .min {
+  float: left;
+  color: #2D7195;
+}
+
+.labels .max {
+  float: right;
+  color: #C96C31;
+}
+
+.labels .label {
+  font-size: 28px;
+  text-align: center;
+}
+
+.y-labels {
+  width: 500px;
+  position: absolute;
+  -webkit-transform: rotateZ(-90deg);
+  -webkit-transform-origin: top right;
+  z-index: 60;
+  left: -545px;
+}
+
+.x-labels {
+  width: 750px;
+}
+
+
+#quadrant-page h1 {
+  font-size: 32px;
+  line-height: 1.3em;
+  color: white;
+  margin-bottom: 20px;
 }
 

@@ -1,19 +1,19 @@
 var w = 750,
     h = 500,
-    radius = 10,
+    radius = 5,
     get = Ember.get;
 
 function playerKey(player) {
   return get(player, 'name');
 }
 
-function appendPlayers(players, component){
+function appendPlayers(players, component) {
 
   players.
     append('text').
       classed('name', true).
-      attr('x', radius * 1.5).
-      attr('y', radius / 2).
+      attr('x', radius * 1.5 + 5).
+      attr('y', radius / 1).
       text(function(player) { return player.name; });
 
   players.
@@ -27,10 +27,10 @@ function appendPlayers(players, component){
   });
 }
 
-function clickPlayer(playerData, component){
+function clickPlayer(playerData, component) {
   var player = d3.select(this);
   var circle = player.select('circle');
-  var text   = player.select('text');
+  var text = player.select('text');
 
   if (player.classed('selected')) {
     // Deselect
@@ -39,13 +39,13 @@ function clickPlayer(playerData, component){
 
     player.classed('selected', false);
     circle.transition().attr('r', radius);
-    text.transition().attr('x', radius * 1.5);
+    text.transition().attr('x', radius * 1.5 + 5);
   } else {
     // Select
     var selected = d3.selectAll('g.selected');
 
     selected.select('circle').transition().delay(100).attr('r', radius);
-    selected.select('text').transition().attr('x', radius * 1.5);
+    selected.select('text').transition().attr('x', radius * 1.5 + 5);
     selected.classed('selected', false);
 
     player.classed('selected', true);
@@ -142,56 +142,56 @@ var Quadrant = Ember.Component.extend({
 });
 
 function createSVG(parentElement) {
-  var svg = d3.select(parentElement).append("svg:svg")
-      .attr("width", w)
-      .attr("height", h);
+  var svg = d3.select(parentElement).append('svg:svg')
+      .attr('width', w)
+      .attr('height', h);
 
   // gradient
-  var defs = svg.append("svg:defs");
+  var defs = svg.append('svg:defs');
 
-  var backgroundLinearGradient = defs.append("svg:linearGradient").
-    attr("id", "background-linear-gradient").
-    attr("x1", "0%").
-    attr("y1", "100%").
-    attr("x2", "100%").
-    attr("y2", "0%");
+  var backgroundLinearGradient = defs.append('svg:linearGradient').
+    attr('id', 'background-linear-gradient').
+    attr('x1', '0%').
+    attr('y1', '100%').
+    attr('x2', '100%').
+    attr('y2', '0%');
 
-  backgroundLinearGradient.append("svg:stop").
-      attr("offset", "20%").
-      attr("stop-color", "#0A4D65").
-      attr("stop-opacity", 1);
+  backgroundLinearGradient.append('svg:stop').
+      attr('offset', '20%').
+      attr('stop-color', '#0A4D65').
+      attr('stop-opacity', 1);
 
-  backgroundLinearGradient.append("svg:stop").
-      attr("offset", "80%").
-      attr("stop-color", "#8D470B").
-      attr("stop-opacity", 1);
+  backgroundLinearGradient.append('svg:stop').
+      attr('offset', '80%').
+      attr('stop-color', '#8D470B').
+      attr('stop-opacity', 1);
 
-  var backgroundRadialGradient = defs.append("svg:radialGradient").
-    attr("id", "background-radial-gradient").
-    attr("cx", "50%").
-    attr("cy", "50%").
-    attr("r",  "50%").
-    attr("fx", "50%").
-    attr("fy", "50%");
+  var backgroundRadialGradient = defs.append('svg:radialGradient').
+    attr('id', 'background-radial-gradient').
+    attr('cx', '50%').
+    attr('cy', '50%').
+    attr('r',  '50%').
+    attr('fx', '50%').
+    attr('fy', '50%');
 
-  backgroundRadialGradient.append("svg:stop").
-      attr("offset", "0%").
-      attr("stop-color", "black").
-      attr("stop-opacity", 0.8);
+  backgroundRadialGradient.append('svg:stop').
+      attr('offset', '0%').
+      attr('stop-color', 'black').
+      attr('stop-opacity', 0.8);
 
-  backgroundRadialGradient.append("svg:stop").
-      attr("offset", "100%").
-      attr("stop-opacity", 0);
+  backgroundRadialGradient.append('svg:stop').
+      attr('offset', '100%').
+      attr('stop-opacity', 0);
 
-  svg.append("svg:rect").
-      attr("width", w).
-      attr("height", h).
-      style("fill", "url(#background-linear-gradient)");
+  svg.append('svg:rect').
+      attr('width', w).
+      attr('height', h).
+      style('fill', 'url(#background-linear-gradient)');
 
-  svg.append("svg:rect").
-      attr("width", w).
-      attr("height", h).
-      style("fill", "url(#background-radial-gradient)");
+  svg.append('svg:rect').
+      attr('width', w).
+      attr('height', h).
+      style('fill', 'url(#background-radial-gradient)');
   // \gradient
 }
 
