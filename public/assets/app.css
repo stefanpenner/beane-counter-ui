@@ -407,3 +407,20 @@ circle.player.selected {
   position: relative;
 }
 
+g.player {
+  pointer-events: all;
+}
+
+circle.player {
+  fill-opacity: 0;
+  stroke-width: 4;
+  stroke: #CDCE53;
+}
+
+g.player.selected circle.player {
+  fill: #00A70C;
+  fill-opacity: 1;
+  stroke-width: 4;
+  stroke: white;
+}
+
