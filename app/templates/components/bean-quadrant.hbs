@@ -15,11 +15,13 @@
   <label class="label">Goodness</label>
 </div>
 
+<h2>Watched Quadrant Players</h2>
 <ul>
-  {{#each players}}
-    <li>{{name}}: hotness: {{hotness}}, goodness: {{goodness}}</li>
+  {{#each watchedQuadrantPlayers}}
+    <li>{{player}}: goodness: {{average}}, this: {{this}}</li>
   {{/each}}
 </ul>
+
 
 
 

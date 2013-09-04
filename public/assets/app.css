@@ -277,7 +277,7 @@ input[type='range']::-webkit-slider-thumb {
   line-height: 160px;
   cursor: pointer;
   font-size: 26px;
-  z-index: 5;
+  z-index: 50;
 }
 
 .nav-button.left {
@@ -368,7 +368,6 @@ circle.player.selected {
   z-index: 20;
   position: absolute;
   width: 350px;
-  height: 250px;
   background: white;
   left: 100px;
   color: black;
@@ -377,6 +376,8 @@ circle.player.selected {
   margin-top: -40px;
   top: 0;
   left: 0;
+  min-height: 190px;
+  padding-bottom: 30px;
 }
 
 .quadrant-popup.player-present {
@@ -388,7 +389,9 @@ circle.player.selected {
   content: ' ';
   position: absolute;
   top: 25px;
-  left: -15px;
+
+  /*intentionally imperfect to handle 3d artifact line*/
+  left: -13px; 
 
   border-right: 15px solid white;
   border-top: 15px solid transparent;
@@ -401,7 +404,17 @@ circle.player.selected {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 20px;
+  color: white;
+  font-size: 18px;
+  padding: 3px 15px;
+}
+
+.quadrant-popup img {
+  display: block;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  max-height: 180px;
 }
 
 .quadrant-container {
@@ -464,7 +477,7 @@ g.player.selected circle.player {
 }
 
 
-#quadrant-page h1 {
+h1#quadrant-page-header {
   font-size: 32px;
   line-height: 1.3em;
   color: white;

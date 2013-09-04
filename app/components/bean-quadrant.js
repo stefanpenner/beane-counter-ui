@@ -138,6 +138,13 @@ var Quadrant = Ember.Component.extend({
         pixeledTransform = transform.replace(',', 'px,').replace(')', 'px)');
 
     this.$popup.css('transform', pixeledTransform);
+  },
+
+  click: function(e) {
+    // hacks?
+    if (e.target.tagName === 'rect') {
+      alert('deselect');
+    }
   }
 });
 

@@ -48,8 +48,12 @@ var ConnectionManager = Ember.Object.extend({
         // TODO: shouldn't this be in observer.js?
         var h = demux[body["deliveryFor"]];
         if (h && h.update) {
-          h.update(body.payload.table);
-          //h.update(body["table"]);
+          if (body.payload.table) {
+            // Assume tabular data
+            h.update(body.payload.table);
+          } else {
+            h.update(body.payload);
+          }
         }
       } else if (body["error"]) {
         console.error(body['error']);

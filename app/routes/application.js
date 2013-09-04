@@ -19,11 +19,11 @@ var ApplicationRoute = Ember.Route.extend({
     watcher.watch('GameDate', 'GameDate');
 
     var watchedQuadrantPlayers = quadrantPlayers.map(function(name) {
-      watcher.watch('Snapshot_playerSeasonToDate',
-                           'Snapshot_playerSeasonToDate',
-                           { player: name, season: "2006" });
-      return watcher.watch('Snapshot_clutchnessSeasonToDate',
+      watcher.watch('Snapshot_clutchnessSeasonToDate',
                            'Snapshot_clutchnessSeasonToDate',
+                           { player: name, season: "2006" });
+      return watcher.watch('Snapshot_playerSeasonToDate',
+                           'Snapshot_playerSeasonToDate',
                            { player: name, season: "2006" });
     });
     //Snapshot_playerSeasonToDate

@@ -3,22 +3,29 @@ import demux from 'appkit/ziggrid/demux';
 var unique = 1;
 var container;
 
-function Loader(type, entryType, id, opts) {
+function Loader(type, entryType, id) {
   var store = container.lookup('store:main');
 
-  this.update = function(body) {
-    var players = [];
+  this.update = type === entryType ? updateIndividualThing : updateTabularData;
 
-    for (var i=0;i<body.length;i++) {
+  function updateTabularData(body) {
+    var rows = [];
+
+    for (var i = 0; i < body.length; i++) {
       var item = body[i];
       store.load(entryType, item[1], {f1: item[0]});
-      players.push(item[1]);
+      rows.push(item[1]);
     }
 
     store.load(type, id, {
-      table: players
+      table: rows
     });
-  };
+  }
+
+  function updateIndividualThing(body) {
+    debugger;
+    store.load(type, id, body);
+  }
 }
 
 function Watcher(_namespace) {
@@ -48,11 +55,15 @@ Watcher.prototype = {
 
     // TODO: Change this to forward to ZiggridObserver.
 
+
+    // Send the JSON message to the server to begin observing.
     var connectionManager = container.lookup('connection_manager:main');
     connectionManager.send(stringified);
 
+    return model;
 
-    if (typeName !== 'Leaderboard_average_groupedBy_season') { return; }
+    /*
+    if (typeName !== 'Leaderboard_average_groupedBy_season') { return model; }
     // Begin Temporary stubbed out code.
 
     var stubbedPayload = {
@@ -79,6 +90,7 @@ Watcher.prototype = {
 
 
     return model;
+    */
   },
 
   unwatch: function(handle) {
