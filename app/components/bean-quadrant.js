@@ -28,6 +28,8 @@ function appendPlayers(players, component) {
 }
 
 function clickPlayer(playerData, component) {
+  // TODO: less truth in DOM...
+  // maybe use events to decouple "component" from this callback.
   var player = d3.select(this);
   var circle = player.select('circle');
   var text = player.select('text');
@@ -110,9 +112,7 @@ var Quadrant = Ember.Component.extend({
       append('g').
       classed('player', true).
         attr('y', 0).
-        attr('x', 0).call(function(d) {
-          appendPlayers.call(this, d, component);
-    });
+        attr('x', 0).call(appendPlayers, component);
 
     players.transition().
       duration(1000).
