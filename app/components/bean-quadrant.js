@@ -78,6 +78,13 @@ var Quadrant = Ember.Component.extend({
     createSVG($container.get(0));
 
     this.$popup = this.$().find('.quadrant-popup');
+    this.xscale = d3.scale.linear().
+      domain([0, 1]).
+      range([0, w]);
+
+    this.yscale = d3.scale.linear().
+      domain([0, 1]).
+      range([h, 0]);
 
     this.dataChanged();
   },
@@ -85,6 +92,9 @@ var Quadrant = Ember.Component.extend({
   dataChanged: function() {
     var svg = d3.select(this.$('svg')[0]);
     var data = this.get('players');
+
+    var xscale = this.xscale;
+    var yscale = this.yscale;
 
     var players = svg.
       selectAll('g.player').
@@ -103,7 +113,7 @@ var Quadrant = Ember.Component.extend({
       duration(1000).
       attr('data-id', function(d) { return d.name; }).
       attr('transform', function(player, index ){
-        return 'translate(' + (player.goodness * w) + ', ' + (player.hotness * h) + ')';
+        return 'translate(' + xscale(player.goodness) + ', ' + yscale(player.hotness) + ')';
     });
 
     /*
