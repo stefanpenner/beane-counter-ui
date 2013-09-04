@@ -22,6 +22,14 @@ var Quadrant = Ember.Component.extend({
 
     this.$popup = this.$().find('.quadrant-popup');
 
+    var self = this;
+
+    function step(t) {
+      self.updatePopupLocation();
+      window.requestAnimationFrame(step);
+    }
+    window.requestAnimationFrame(step);
+
     this.dataChanged();
   },
 
@@ -29,6 +37,7 @@ var Quadrant = Ember.Component.extend({
     var svg = this.$().find('svg').get(0),
         data = this.get('players');
 
+    var quadrantComponent = this;
 
     var players = d3.
       select('svg').
@@ -79,17 +88,23 @@ var Quadrant = Ember.Component.extend({
 
 
     players.
-      on('click', function(a,b,c){
+      on('click', function(playerData,b,c){
         var player = d3.select(this);
         var circle = player.select('circle');
         var text   = player.select('text');
 
         if (player.classed('selected')) {
           // Deselect
+          quadrantComponent.selectedSvgGroup = null;
+          quadrantComponent.set('selectedPlayer', null);
+
           player.classed('selected', false);
           circle.transition().attr('r', radius);
           text.transition().attr('x', radius * 1.5);
         } else {
+          quadrantComponent.selectedSvgGroup = this;
+          quadrantComponent.set('selectedPlayer', playerData);
+
           var selected = d3.selectAll('g.selected');
 
           selected.select('circle').transition().delay(100).attr('r', radius);
@@ -199,9 +214,18 @@ var Quadrant = Ember.Component.extend({
     // TODO: what kind of teardown does d3 need?
   }.on('willDestroyElement'),
 
-  updatePopupLocation: function(x, y) {
-    this.$popup.css('left', Math.floor(x) + 'px');
-    this.$popup.css('top', Math.floor(y) + 'px');
+  updatePopupLocation: function() {
+    var selectedSvgGroup = this.selectedSvgGroup;
+    if (!selectedSvgGroup) { return; }
+
+    var transform = d3.select(selectedSvgGroup).attr('transform'),
+        pixeledTransform = transform.replace(',', 'px,').replace(')', 'px)');
+
+    this.$popup.css('transform', pixeledTransform);
+
+    // Get position of $selectedGroup
+    //this.$popup.css('left', Math.floor(x) + 'px');
+    //this.$popup.css('top', Math.floor(y) + 'px');
   }
 });
 
