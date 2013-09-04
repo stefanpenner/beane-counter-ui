@@ -11,7 +11,24 @@ var ApplicationRoute = Ember.Route.extend({
                                    'LeaderboardEntry_average_groupedBy_season',
                                    { "season": "2006" });
 
-    var profile = watcher.watch('Profile', 'Profile', {player:'mccab002'});
+
+    // TODO: grab this dynamically from leaderboard.
+    var quadrantPlayers = ["hairj002", "hattj001", "inglj001", "boona001", "willb002", "widgc001", "matsh001", "linda001", "lugoj001", "mauej001"];
+
+
+    watcher.watch('GameDate', 'GameDate');
+
+    var watchedQuadrantPlayers = quadrantPlayers.map(function(name) {
+      watcher.watch('Snapshot_playerSeasonToDate',
+                           'Snapshot_playerSeasonToDate',
+                           { player: name, season: "2006" });
+      return watcher.watch('Snapshot_clutchnessSeasonToDate',
+                           'Snapshot_clutchnessSeasonToDate',
+                           { player: name, season: "2006" });
+    });
+    //Snapshot_playerSeasonToDate
+
+    //var profile = watcher.watch('Profile', 'Profile', {player:'mccab002'});
 
     //var model = this.container.lookup('application:main')[leaderboard.constructor.model.table.name.capitalize()].model;
     var namespace = this.container.lookup('application:main');
@@ -23,7 +40,8 @@ var ApplicationRoute = Ember.Route.extend({
       otherThing: {
         table: otherThing.get('table'),
         headers: Ember.keys(namespace[otherThing.constructor.model.table.name.capitalize()].model)
-      }
+      },
+      watchedQuadrantPlayers: watchedQuadrantPlayers
     });
 
     this.updateQuadrantPlayers(2006);
