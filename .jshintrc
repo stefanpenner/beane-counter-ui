@@ -1,5 +1,6 @@
 {
   "predef": [
+    "d3",
     "jQuery",
     "document",
     "window",
