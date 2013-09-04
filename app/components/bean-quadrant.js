@@ -7,6 +7,63 @@ function playerKey(player) {
   return get(player, 'name');
 }
 
+function appendPlayers(players){
+  players.
+    append('text').
+      classed('name', true).
+      attr('x', radius * 1.5).
+      attr('y', radius / 2).
+      text(function(player) { return player.name; });
+
+  players.
+    append('circle').
+      classed('player', true).
+      attr('r', radius);
+
+  players.
+    on('click', clickPlayer);
+}
+
+function clickPlayer(a,b,c){
+  var player = d3.select(this);
+  var circle = player.select('circle');
+  var text   = player.select('text');
+
+  if (player.classed('selected')) {
+    // Deselect
+    player.classed('selected', false);
+    circle.transition().attr('r', radius);
+    text.transition().attr('x', radius * 1.5);
+  } else {
+    var selected = d3.selectAll('g.selected');
+
+    selected.select('circle').transition().delay(100).attr('r', radius);
+    selected.select('text').transition().attr('x', radius * 1.5);
+    selected.classed('selected', false);
+
+    player.classed('selected', true);
+    circle.transition().attr('r', radius * 1.5);
+    player.select('text').transition().attr('x', radius * 1.5 + 10);
+
+    /*
+       if (self.get('selectedPlayer') === clickedPlayer) {
+    // Deselect
+    self.set('selectedPlayer', null);
+    return;
+    }
+
+    var circle = d3.select(this);
+
+    circle.classed("selected", true);
+    circle.transition().attr("r", radius * 1.5);
+
+    self.set('selectedPlayer', clickedPlayer);
+    self.updatePopupLocation(d3.select(this).attr('cx'),
+    d3.select(this).attr('cy'));
+    */
+  }
+}
+
 var Quadrant = Ember.Component.extend({
 
   selectedPlayer: null,
@@ -26,24 +83,22 @@ var Quadrant = Ember.Component.extend({
   },
 
   dataChanged: function() {
-    var svg = this.$().find('svg').get(0),
-        data = this.get('players');
+    var svg = d3.select(this.$('svg')[0]);
+    var data = this.get('players');
 
-
-    var players = d3.
-      select('svg').
+    var players = svg.
       selectAll('g.player').
       data(data, function(player, index){
         return player.name;
     });
 
+    players.exit().remove();
     players.enter().
       append('g').
       classed('player', true).
         attr('y', 0).
-        attr('x', 0);
+        attr('x', 0).call(appendPlayers);
 
-    players.exit().remove();
     players.transition().
       duration(1000).
       attr('data-id', function(d) { return d.name; }).
@@ -51,82 +106,8 @@ var Quadrant = Ember.Component.extend({
         return 'translate(' + (player.goodness * w) + ', ' + (player.hotness * h) + ')';
     });
 
-    // name subselection
-    var names = players.
-      selectAll('text.name').
-      data(function(player, index){
-        return [player];
-    });
-
-    // person subselection
-    var circles = players.
-      selectAll('circle.player').
-      data(function(player, index){
-        return [player];
-    });
-
-    names.enter().append('text').
-      classed('name', true).
-      attr('x', radius * 1.5).
-      attr('y', radius / 2).
-      text(function(d) {
-        return d.name;
-    });
-
-    circles.enter().append('circle').
-      attr('class', 'player').
-      attr('r', radius);
-
-
-    players.
-      on('click', function(a,b,c){
-        var player = d3.select(this);
-        var circle = player.select('circle');
-        var text   = player.select('text');
-
-        if (player.classed('selected')) {
-          // Deselect
-          player.classed('selected', false);
-          circle.transition().attr('r', radius);
-          text.transition().attr('x', radius * 1.5);
-        } else {
-          var selected = d3.selectAll('g.selected');
-
-          selected.select('circle').transition().delay(100).attr('r', radius);
-          selected.select('text').transition().attr('x', radius * 1.5);
-          selected.classed('selected', false);
-
-          player.classed('selected', true);
-          circle.transition().attr('r', radius * 1.5);
-          player.select('text').transition().attr('x', radius * 1.5 + 10);
-
-
-
-
-          /*
-          if (self.get('selectedPlayer') === clickedPlayer) {
-            // Deselect
-            self.set('selectedPlayer', null);
-            return;
-          }
-
-          var circle = d3.select(this);
-
-          circle.classed("selected", true);
-          circle.transition().attr("r", radius * 1.5);
-
-          self.set('selectedPlayer', clickedPlayer);
-          self.updatePopupLocation(d3.select(this).attr('cx'),
-                                   d3.select(this).attr('cy'));
-                                   */
-        }
-    });
-
     /*
     return;
-
-
-
 
     var circles = d3.select(svg).selectAll("circle").data(data, playerKey);
     var names = d3.select(svg).selectAll("text").data(data, playerKey);
