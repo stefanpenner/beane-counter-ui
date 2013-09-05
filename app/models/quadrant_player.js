@@ -5,6 +5,12 @@ var QuadrantPlayer = Ember.Object.extend({
   hotness: 0,
   goodness: 0,
 
+  init: function() {
+    this._super();
+    if (!this.hotness)  { this.set('hotness',  Math.random()); }
+    if (!this.goodness) { this.set('goodness', Math.random()); }
+  },
+
   watching: Ember.computed.notEmpty('watchHandle'),
 
   watchHandle: null,
@@ -65,24 +71,29 @@ QuadrantPlayer.reopenClass({
       demux[handle] = {
         update: function(data) {
 
-          var attrs = {};
-
-          if (data.ziggridType === 'snapshot_playerSeasonToDate') {
-            attrs.goodness = data.average;
-          } else if (data.ziggridType === 'snapshot_clutchnessSeasonToDate') {
-            // TODO: use actually values.
-            attrs.hotness = Math.random();
-          } else {
-            console.log("WAT");
-          }
-
-          var player = watchedPlayers.findProperty('name', data.player);
+          var attrs = { goodness: data.average },
+              player = watchedPlayers.findProperty('name', data.player);
           if (player) {
-
-            attrs.hotness = Math.random(); // TODO get rid of this
             player.setProperties(attrs);
           } else {
-            attrs = $.extend({ hotness: Math.random(), goodness: Math.random() }, attrs);
+            attrs.name = data.player;
+            watchedPlayers.pushObject(QuadrantPlayer.create(attrs));
+          }
+        }
+      };
+
+      handle = demux.lastId++;
+      demux[handle] = {
+        update: function(data) {
+
+          console.log("OMGOMGOMG");
+          debugger;
+
+          var attrs = { hotness: Math.random() },
+              player = watchedPlayers.findProperty('name', data.player);
+          if (player) {
+            player.setProperties(attrs);
+          } else {
             attrs.name = data.player;
             watchedPlayers.pushObject(QuadrantPlayer.create(attrs));
           }

@@ -26,17 +26,17 @@ function appendPlayers(players, component) {
 function clickPlayer(playerData, component) {
   d3.select('.selected').classed('selected', false);
   var selectedPlayer = component.get('selectedPlayer');
-  
+
   var selected = d3.select(this);
-  
-  if (selectedPlayer && Ember.get(selectedPlayer, 'name') === Ember.get(playerData, 'name')) {
+
+  if (selectedPlayer == playerData) {
     component.set('selectedPlayer', null);
     selected.classed('selected', false);
   } else {
     component.set('selectedPlayer', playerData);
     selected.classed('selected', true);
-  }  
-  
+  }
+
   component.updatePopupLocation();
 }
 
@@ -90,7 +90,7 @@ var Quadrant = Ember.Component.extend({
         left: function(player) { return xscale(player.goodness) + 'px'; },
         top: function(player) { return yscale(player.hotness) + 'px'; }
       });
-      
+
     this.updatePopupLocation(true);
   },
 
@@ -105,13 +105,13 @@ var Quadrant = Ember.Component.extend({
   updatePopupLocation: function(animate) {
     var player = this.get('selectedPlayer');
     if (!player) { return; }
-    
+
     var popup = d3.selectAll('.quadrant-popup');
-    
-    if (animate) { 
+
+    if (animate) {
       popup = popup.transition().duration(1000).ease('linear');
     }
-    
+
     popup.
       style({
         left: this.xscale(player.goodness) + 'px',
