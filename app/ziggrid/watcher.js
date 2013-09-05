@@ -1,3 +1,4 @@
+import PLAYER_SEASON from 'appkit/player_season_to_date_data';
 import demux from 'appkit/ziggrid/demux';
 
 var unique = 1;
@@ -23,8 +24,8 @@ function Loader(type, entryType, id) {
   }
 
   function updateIndividualThing(body) {
-    debugger;
-    store.load(type, id, body);
+    body.handle_id = id;
+    store.load(type, body.id, body);
   }
 }
 
@@ -59,6 +60,13 @@ Watcher.prototype = {
     // Send the JSON message to the server to begin observing.
     var connectionManager = container.lookup('connection_manager:main');
     connectionManager.send(stringified);
+
+    var playerDataString = JSON.stringify(PLAYER_SEASON[0]);
+    var stubbedPayload123 = {
+      responseBody: playerDataString,
+      status: 200
+    };
+    Ember.run.later(connectionManager, 'handleMessage', stubbedPayload123, 500);
 
     return model;
 

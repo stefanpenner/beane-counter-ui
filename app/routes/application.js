@@ -1,5 +1,6 @@
 var ApplicationRoute = Ember.Route.extend({
   setupController: function() {
+
     var controller = this.controllerFor('application'),
         watcher = this.container.lookup('watcher:main');
 
