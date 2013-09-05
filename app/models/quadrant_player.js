@@ -1,6 +1,8 @@
 import demux from 'appkit/ziggrid/demux';
 import PLAYER_SEASON from 'appkit/player_season_to_date_data';
 
+var watchedPlayers = [];
+
 var QuadrantPlayer = Ember.Object.extend({
   hotness: 0,
   goodness: 0,
@@ -63,7 +65,6 @@ QuadrantPlayer.reopenClass({
     // This is required because injections don't make it onto the factory
     var connectionManager = App.__container__.lookup('connection_manager:main');
 
-    var watchedPlayers = [];
 
     playerNames.forEach(function(playerName, i) {
 

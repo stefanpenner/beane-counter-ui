@@ -33,7 +33,48 @@ function Watcher(_namespace) {
   container = this.container = _namespace.__container__;
 }
 
+var gameDates = [];
+
 Watcher.prototype = {
+
+
+  watchGameDate: function() {
+
+
+    var handle = demux.lastId++;
+
+    demux[handle] = {
+      update: function(a) {
+        gameDates.pushObject(a);
+      }
+    };
+
+    var stringified = JSON.stringify({
+      watch: "GameDate",
+      unique: handle
+    });
+
+    var connectionManager = container.lookup('connection_manager:main');
+    connectionManager.send(stringified);
+
+    this.sendFakeGameDates();
+
+    return gameDates;
+  },
+
+  keepSendingGameDates: false,
+  sendFakeGameDates: function() {
+
+    if (this.keepSendingGameDates) {
+      gameDates.pushObject({
+        day: gameDates.length
+      });
+    }
+
+    Ember.run.later(this, 'sendFakeGameDates', 400);
+  },
+
+
   watch: function(typeName, entryTypeName, opts) {
     var type = this.namespace[typeName]; // ED limitation
     var handle = demux.lastId++;
@@ -48,6 +89,7 @@ Watcher.prototype = {
     }, opts);
 
     var entryType = this.namespace[entryTypeName];
+
     demux[handle] = new Loader(type, entryType, model.get('id'), opts);
 
     var stringified = JSON.stringify(hash);

@@ -6,7 +6,7 @@
     <div class="player-progress-bar-container">
       <div class="player-progress-bar" {{bind-attr style="progressBarStyle"}}></div>
 
-      {{input value=progress type="range" class="player-range-input"}}
+      {{input value=nubProgress step="0.1" type="range" class="player-range-input"}}
     </div>
     <div class="label">
       <span class="count">{{count}}</span> Documents

@@ -26,13 +26,17 @@ App.register("connection_manager:main", connectionManager, { instantiate: false}
 
 App.inject('component:bean-player', 'connectionManager', 'connection_manager:main');
 
-// TODO: Use containers for helpers once stuff is working
-Ember.Handlebars.helper('round', function(val) {
+App.register('helper:round', Ember.Handlebars.makeBoundHelper(function(val) {
   if (!isNaN(val) && !/^\d+$/.test(val)) {
     return val.toFixed(3);
   } else {
-    return val ? val : "N/A";
+    return (val || val === 0) ? val : "N/A";
   }
+}));
+
+// For our range input in bean-player
+Ember.TextField.reopen({
+  attributeBindings: ['step']
 });
 
 export default App;

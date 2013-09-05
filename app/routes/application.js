@@ -5,6 +5,7 @@ var ApplicationRoute = Ember.Route.extend({
 
     var controller = this.controllerFor('application'),
         watcher = this.container.lookup('watcher:main');
+    this.watcher = watcher;
 
     var leaderboard = watcher.watch('Leaderboard_average_groupedBy_season',
                                 'LeaderboardEntry_average_groupedBy_season',
@@ -14,7 +15,7 @@ var ApplicationRoute = Ember.Route.extend({
                                    'LeaderboardEntry_average_groupedBy_season',
                                    { "season": "2006" });
 
-    //watcher.watch('GameDate', 'GameDate');
+    var gameDates = watcher.watchGameDate();
 
     var namespace = this.container.lookup('application:main');
     controller.setProperties({
@@ -27,6 +28,8 @@ var ApplicationRoute = Ember.Route.extend({
         headers: Ember.keys(namespace[otherThing.constructor.model.table.name.capitalize()].model)
       }
     });
+
+    this.controllerFor('quadrant').set('gameDates', gameDates);
 
     this.updateQuadrantPlayers(2006);
   },
@@ -45,6 +48,12 @@ var ApplicationRoute = Ember.Route.extend({
   actions: {
     selectFilter: function(filter) {
       this.updateQuadrantPlayers(filter);
+    },
+    didBeginPlaying: function() {
+      this.watcher.keepSendingGameDates = true;
+    },
+    didEndPlaying: function() {
+      this.watcher.keepSendingGameDates = false;
     }
   }
 });
