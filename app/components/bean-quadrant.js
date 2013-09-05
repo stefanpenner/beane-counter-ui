@@ -1,17 +1,30 @@
 var w = 750,
     h = 500,
-    radius = 5,
-    get = Ember.get;
+    radius = 5;
 
-function playerKey(player) {
-  return get(player, 'name');
+function playerX(scale){
+  return function(player) {
+    return scale(Ember.get(player, 'goodness')) + 'px';
+  };
+}
+
+function playerY(scale){
+  return function(player) {
+    return scale(Ember.get(player, 'hotness')) + 'px';
+  };
+}
+
+function get(path) {
+  return function(object) {
+    return Ember.get(object, path);
+  };
 }
 
 function appendPlayers(players, component) {
   players.
     append('span').
       classed('name', true).
-      text(function(player) { return player.name; });
+      text(get('name'));
 
   players.
     append('div').
@@ -80,9 +93,7 @@ var Quadrant = Ember.Component.extend({
 
     var players = container.
       selectAll('.quadrant-player').
-      data(data, function(player, index) {
-        return player.name;
-    });
+      data(data, get('name'))
 
     players.exit().remove();
     players.enter().
@@ -91,16 +102,29 @@ var Quadrant = Ember.Component.extend({
       style({
         left: xscale(0.5) + 'px',
         top: yscale(0.5) + 'px'
-      }).
-      call(appendPlayers, component);
+      }).call(function(players){
+        players.
+          append('span').
+            classed('name', true).
+            text(get('name'));
+
+        players.
+          append('div').
+          classed('circle', true);
+
+        players.
+          on('click', function(d, i) {
+            clickPlayer.call(this, d, component);
+          });
+      });
 
     players.transition().
       duration(1000).
       ease('linear').
-      attr('data-id', function(d) { return d.name; }).
+      attr('data-id', get('name')).
       style({
-        left: function(player) { return xscale(player.goodness) + 'px'; },
-        top: function(player) { return yscale(player.hotness) + 'px'; }
+        left: playerX(xscale),
+        top:  playerY(yscale)
       });
   },
 
