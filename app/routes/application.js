@@ -1,3 +1,5 @@
+import QuadrantPlayer from 'appkit/models/quadrant_player';
+
 var ApplicationRoute = Ember.Route.extend({
   setupController: function() {
 
@@ -12,26 +14,8 @@ var ApplicationRoute = Ember.Route.extend({
                                    'LeaderboardEntry_average_groupedBy_season',
                                    { "season": "2006" });
 
+    //watcher.watch('GameDate', 'GameDate');
 
-    // TODO: grab this dynamically from leaderboard.
-    var quadrantPlayers = ["hairj002", "hattj001", "inglj001", "boona001", "willb002", "widgc001", "matsh001", "linda001", "lugoj001", "mauej001"];
-
-
-    watcher.watch('GameDate', 'GameDate');
-
-    var watchedQuadrantPlayers = quadrantPlayers.map(function(name) {
-      watcher.watch('Snapshot_clutchnessSeasonToDate',
-                           'Snapshot_clutchnessSeasonToDate',
-                           { player: name, season: "2006" });
-      return watcher.watch('Snapshot_playerSeasonToDate',
-                           'Snapshot_playerSeasonToDate',
-                           { player: name, season: "2006" });
-    });
-    //Snapshot_playerSeasonToDate
-
-    //var profile = watcher.watch('Profile', 'Profile', {player:'mccab002'});
-
-    //var model = this.container.lookup('application:main')[leaderboard.constructor.model.table.name.capitalize()].model;
     var namespace = this.container.lookup('application:main');
     controller.setProperties({
       leaderboard: {
@@ -41,8 +25,7 @@ var ApplicationRoute = Ember.Route.extend({
       otherThing: {
         table: otherThing.get('table'),
         headers: Ember.keys(namespace[otherThing.constructor.model.table.name.capitalize()].model)
-      },
-      watchedQuadrantPlayers: watchedQuadrantPlayers
+      }
     });
 
     this.updateQuadrantPlayers(2006);
@@ -53,15 +36,9 @@ var ApplicationRoute = Ember.Route.extend({
     var filterController = this.controllerFor('filter');
     filterController.set('selectedFilter', filter);
 
-    var players = [];
-    for(var i = 0, len = 10; i < len; ++i) {
-      players.push({
-        name: "PlayerName" + (i+1),
-        hotness: Math.random(),
-        goodness: Math.random()
-      });
-    }
-
+    // TODO: grab this dynamically from leaderboard.
+    var quadrantPlayers = ["hairj002", "hattj001", "inglj001", "boona001", "willb002", "widgc001", "matsh001", "linda001", "lugoj001", "mauej001"];
+    var players = QuadrantPlayer.watchPlayers(quadrantPlayers);
     this.controllerFor('quadrant').set('players', players);
   },
 

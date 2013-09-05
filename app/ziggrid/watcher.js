@@ -1,7 +1,6 @@
 import PLAYER_SEASON from 'appkit/player_season_to_date_data';
 import demux from 'appkit/ziggrid/demux';
 
-var unique = 1;
 var container;
 
 function Loader(type, entryType, id) {
@@ -37,10 +36,9 @@ function Watcher(_namespace) {
 Watcher.prototype = {
   watch: function(typeName, entryTypeName, opts) {
     var type = this.namespace[typeName]; // ED limitation
-    var handle = unique;
+    var handle = demux.lastId++;
     var store = container.lookup('store:main');
 
-    unique++;
     store.load(type, handle, {});
 
     var model = store.find(type, handle);
@@ -60,13 +58,6 @@ Watcher.prototype = {
     // Send the JSON message to the server to begin observing.
     var connectionManager = container.lookup('connection_manager:main');
     connectionManager.send(stringified);
-
-    var playerDataString = JSON.stringify(PLAYER_SEASON[0]);
-    var stubbedPayload123 = {
-      responseBody: playerDataString,
-      status: 200
-    };
-    Ember.run.later(connectionManager, 'handleMessage', stubbedPayload123, 500);
 
     return model;
 

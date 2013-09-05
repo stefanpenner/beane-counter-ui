@@ -119,12 +119,12 @@ var Quadrant = Ember.Component.extend({
       attr('data-id', function(d) { return d.name; }).
       attr('transform', function(player, index) {
         return 'translate(' + xscale(player.goodness) + ', ' + yscale(player.hotness) + ')';
-    });
+    }).ease('linear');
   },
 
   dataDidChange: function() {
     Ember.run.scheduleOnce('afterRender', this, 'renderD3');
-  }.observes('players.[]'),
+  }.observes('players.@each.hotness', 'players.@each.goodness'),
 
   teardownGraph: function() {
     // TODO: what kind of teardown does d3 need?
