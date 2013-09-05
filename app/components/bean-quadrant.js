@@ -29,7 +29,7 @@ function appendPlayers(players, component) {
 
 function clickPlayer(playerData, component) {
   // TODO: less truth in DOM...
-  // maybe use events to decouple "component" from this callback.
+  // maybe use events to decouple 'component' from this callback.
   var player = d3.select(this);
   var circle = player.select('circle');
   var text = player.select('text');
@@ -156,6 +156,7 @@ function createSVG(parentElement) {
   // gradient
   var defs = svg.append('svg:defs');
 
+
   var backgroundLinearGradient = defs.append('svg:linearGradient').
     attr('id', 'background-linear-gradient').
     attr('x1', '0%').
@@ -200,6 +201,24 @@ function createSVG(parentElement) {
       attr('height', h).
       style('fill', 'url(#background-radial-gradient)');
   // \gradient
+  //
+  svg.append('line').
+    attr('stroke-dasharray', '2 2').
+    attr('stroke-width', 0.3).
+    attr('stroke', 'rgba(255, 255, 255, 0.52)').
+    attr('x1', w/2).
+    attr('y1', 0).
+    attr('x2', w/2).
+    attr('y2', h);
+
+  svg.append('line').
+    attr('stroke-dasharray', '2 2').
+    attr('stroke-width', 0.3).
+    attr('stroke', 'rgba(255, 255, 255, 0.52)').
+    attr('y1', h/2).
+    attr('x1', 0).
+    attr('y2', h/2).
+    attr('x2', w);
 }
 
 export default Quadrant;
