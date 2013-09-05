@@ -422,6 +422,7 @@ circle.player.selected {
   font-weight: 700;
   font-size: 17px;
   text-transform: uppercase;
+  min-height: 16px;
 }
 
 .quadrant-popup li span {

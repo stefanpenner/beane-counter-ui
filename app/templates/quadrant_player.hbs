@@ -18,6 +18,10 @@
   {{/if}}
 
   <div class="footer">
-    {{name}}
+    {{#if profile}}
+      {{profile.fullname}}
+    {{else}}
+      Loading...
+    {{/if}}
   </div>
 </div>

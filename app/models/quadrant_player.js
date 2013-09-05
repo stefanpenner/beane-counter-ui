@@ -82,12 +82,20 @@ QuadrantPlayer.reopenClass({
         }
       };
 
+      var hash = {
+        watch: 'Snapshot_playerSeasonToDate',
+        unique: handle,
+        player: playerName,
+        season: "2006"
+      };
+
+      // Send the JSON message to the server to begin observing.
+      var stringified = JSON.stringify(hash);
+      connectionManager.send(stringified);
+
       handle = demux.lastId++;
       demux[handle] = {
         update: function(data) {
-
-          console.log("OMGOMGOMG");
-          debugger;
 
           var attrs = { hotness: Math.random() },
               player = watchedPlayers.findProperty('name', data.player);
@@ -100,15 +108,15 @@ QuadrantPlayer.reopenClass({
         }
       };
 
-      var hash = {
-        watch: 'Snapshot_playerSeasonToDate',
+      hash = {
+        watch: 'snapshot_clutchnessSeasonToDate',
         unique: handle,
         player: playerName,
         season: "2006"
       };
 
       // Send the JSON message to the server to begin observing.
-      var stringified = JSON.stringify(hash);
+      stringified = JSON.stringify(hash);
       connectionManager.send(stringified);
 
       function fireStubbedData(timeout) {

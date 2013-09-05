@@ -31,7 +31,7 @@ Ember.Handlebars.helper('round', function(val) {
   if (!isNaN(val) && !/^\d+$/.test(val)) {
     return val.toFixed(3);
   } else {
-    return val;
+    return val ? val : "N/A";
   }
 });
 
