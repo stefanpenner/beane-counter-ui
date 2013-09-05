@@ -468,6 +468,10 @@ circle.player.selected {
   float: left;
 }
 
+.quadrant-player .name, .quadrant-player .circle {
+  cursor: pointer;
+}
+
 .quadrant-player.selected .circle {
   width: 15px;
   height: 15px;
