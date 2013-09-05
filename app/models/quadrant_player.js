@@ -69,12 +69,12 @@ QuadrantPlayer.reopenClass({
         Ember.run.later(connectionManager, 'handleMessage', stubbedPayload, timeout);
       }
       // Uncomment these to make the graph mooooooove.
-      //fireStubbedData(500 + i*500);
-      //fireStubbedData(1500 + i*500);
-      //fireStubbedData(2500 + i*500);
-      //fireStubbedData(3500 + i*500);
-      //fireStubbedData(5500 + i*500);
-      //fireStubbedData(8500 + i*500);
+      fireStubbedData(500 + i*500);
+      fireStubbedData(1500 + i*500);
+      fireStubbedData(2500 + i*500);
+      fireStubbedData(3500 + i*500);
+      fireStubbedData(5500 + i*500);
+      fireStubbedData(8500 + i*500);
     });
 
     return watchedPlayers; // TODO: some record array.

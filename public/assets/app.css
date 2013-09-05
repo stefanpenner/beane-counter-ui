@@ -421,22 +421,28 @@ circle.player.selected {
   position: relative;
 }
 
-g.player {
-  pointer-events: all;
-  cursor: pointer;
+.quadrant-player {
+  position: absolute;
+  line-height: 0;
 }
 
-circle.player {
-  fill-opacity: 0;
-  stroke-width: 2;
-  stroke: #CDCE53;
+/* TODO: single trutch for numeric values of margins (-7 and -9.5, which equal 5px for radius plus 2px for border) */
+.quadrant-player .circle {
+  transition: width 0.05s, height 0.05s, margin 0.05s;
+  width: 10px;
+  height: 10px;
+  margin: -7px 5px 0 -7px;
+  border: 2px solid #CDCE53;
+  border-radius: 20px;
+  float: left;
 }
 
-g.player.selected circle.player {
-  fill: #00A70C;
-  fill-opacity: 1;
-  stroke-width: 3;
-  stroke: white;
+.quadrant-player.selected .circle {
+  width: 15px;
+  height: 15px;
+  margin: -9.5px 5px 0 -9.5px;
+  border-color: white;
+  background-color: #00A70C;
 }
 
 .labels label {

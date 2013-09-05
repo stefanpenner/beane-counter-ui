@@ -8,18 +8,14 @@ function playerKey(player) {
 }
 
 function appendPlayers(players, component) {
-
   players.
-    append('text').
+    append('span').
       classed('name', true).
-      attr('x', radius * 1.5 + 5).
-      attr('y', radius / 1).
       text(function(player) { return player.name; });
 
   players.
-    append('circle').
-      classed('player', true).
-      attr('r', radius);
+    append('div').
+    classed('circle', true);
 
   players.
     on('click', function(d, i) {
@@ -28,98 +24,74 @@ function appendPlayers(players, component) {
 }
 
 function clickPlayer(playerData, component) {
-  // TODO: less truth in DOM...
-  // maybe use events to decouple 'component' from this callback.
-  var player = d3.select(this);
-  var circle = player.select('circle');
-  var text = player.select('text');
-
-  if (player.classed('selected')) {
-    // Deselect
-    component.selectedSvgGroup = null;
+  d3.select('.selected').classed('selected', false);
+  var selectedPlayer = component.get('selectedPlayer');
+  
+  var selected = d3.select(this);
+  
+  if (selectedPlayer && Ember.get(selectedPlayer, 'name') === Ember.get(playerData, 'name')) {
     component.set('selectedPlayer', null);
-
-    player.classed('selected', false);
-    circle.transition().attr('r', radius);
-    text.transition().attr('x', radius * 1.5 + 5);
-  } else {
-    // Select
-    var selected = d3.selectAll('g.selected');
-
-    selected.select('circle').transition().delay(100).attr('r', radius);
-    selected.select('text').transition().attr('x', radius * 1.5 + 5);
     selected.classed('selected', false);
-
-    player.classed('selected', true);
-    circle.transition().attr('r', radius * 1.5);
-    player.select('text').transition().attr('x', radius * 1.5 + 10);
-
-    // Save reference to both currently selected player,
-    // and the svg element, so that we can have the popup
-    // track the location of the selected circle.
-    component.selectedSvgGroup = this;
+  } else {
     component.set('selectedPlayer', playerData);
-
-    component.updatePopupLocation();
-  }
+    selected.classed('selected', true);
+  }  
+  
+  component.updatePopupLocation();
 }
 
 var Quadrant = Ember.Component.extend({
-
   selectedPlayer: null,
-
   renderGraph: function() {
-
     var $container = this.$().find('.quadrant-container');
     createSVG($container.get(0));
 
     this.$popup = this.$().find('.quadrant-popup');
     this.xscale = d3.scale.linear().
       domain([0, 1]).
-      range([0, w]);
+      range([9.5, w-9.5]);
 
     this.yscale = d3.scale.linear().
       domain([0, 1]).
-      range([h, 0]);
-
-    var self = this;
-
-    function step(t) {
-      self.updatePopupLocation();
-      window.requestAnimationFrame(step);
-    }
-    window.requestAnimationFrame(step);
+      range([h-9.5, 9.5]);
 
     this.dataDidChange();
   }.on('didInsertElement'),
 
   renderD3: function() {
-    var svg = d3.select(this.$('svg')[0]);
+    var container = d3.select(this.$('.quadrant-graph')[0]);
     var data = this.get('players');
     var component = this;
 
     var xscale = this.xscale;
     var yscale = this.yscale;
 
-    var players = svg.
-      selectAll('g.player').
+    var players = container.
+      selectAll('.quadrant-player').
       data(data, function(player, index) {
         return player.name;
     });
 
     players.exit().remove();
     players.enter().
-      append('g').
-      classed('player', true).
-        attr('y', 0).
-        attr('x', 0).call(appendPlayers, component);
+      append('div').
+      classed('quadrant-player', true).
+      style({
+        left: xscale(0.5) + 'px',
+        top: yscale(0.5) + 'px'
+      }).
+      call(appendPlayers, component);
 
     players.transition().
       duration(1000).
+      ease('linear').
       attr('data-id', function(d) { return d.name; }).
-      attr('transform', function(player, index) {
-        return 'translate(' + xscale(player.goodness) + ', ' + yscale(player.hotness) + ')';
-    }).ease('linear');
+      style({
+        left: function(player) { return xscale(player.goodness) + 'px'; },
+        top: function(player) { return yscale(player.hotness) + 'px'; }
+      });
+      
+    this.updatePopupLocation(true);
   },
 
   dataDidChange: function() {
@@ -130,14 +102,21 @@ var Quadrant = Ember.Component.extend({
     // TODO: what kind of teardown does d3 need?
   }.on('willDestroyElement'),
 
-  updatePopupLocation: function() {
-    var selectedSvgGroup = this.selectedSvgGroup;
-    if (!selectedSvgGroup) { return; }
-
-    var transform = d3.select(selectedSvgGroup).attr('transform'),
-        pixeledTransform = transform.replace(',', 'px,').replace(')', 'px)');
-
-    this.$popup.css('transform', pixeledTransform);
+  updatePopupLocation: function(animate) {
+    var player = this.get('selectedPlayer');
+    if (!player) { return; }
+    
+    var popup = d3.selectAll('.quadrant-popup');
+    
+    if (animate) { 
+      popup = popup.transition().duration(1000).ease('linear');
+    }
+    
+    popup.
+      style({
+        left: this.xscale(player.goodness) + 'px',
+        top: this.yscale(player.hotness) + 'px'
+      });
   },
 
   click: function(e) {
@@ -155,7 +134,6 @@ function createSVG(parentElement) {
 
   // gradient
   var defs = svg.append('svg:defs');
-
 
   var backgroundLinearGradient = defs.append('svg:linearGradient').
     attr('id', 'background-linear-gradient').
