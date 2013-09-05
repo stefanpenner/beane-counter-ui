@@ -26,6 +26,15 @@ App.register("connection_manager:main", connectionManager, { instantiate: false}
 
 App.inject('component:bean-player', 'connectionManager', 'connection_manager:main');
 
+// TODO: Use containers for helpers once stuff is working
+Ember.Handlebars.helper('round', function(val) {
+  if (!isNaN(val) && !/^\d+$/.test(val)) {
+    return val.toFixed(3);
+  } else {
+    return val;
+  }
+});
+
 export default App;
 
 

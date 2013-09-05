@@ -409,7 +409,37 @@ circle.player.selected {
   padding: 3px 15px;
 }
 
-.quadrant-popup img {
+.quadrant-popup ul {
+  padding-top: 6px;
+}
+
+.quadrant-popup li {
+  display: block;
+  position: relative;
+  width: 152px;
+  text-align: right;
+  margin: 12px 0 12px 20px;
+  font-weight: 700;
+  font-size: 17px;
+  text-transform: uppercase;
+}
+
+.quadrant-popup li span {
+  display: block;
+  position: absolute;
+  left: 0;
+}
+
+.quadrant-popup img.loading-spinner {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -15px;
+  margin-top: -25px;
+}
+
+.quadrant-popup img.profile-pic {
   display: block;
   position: absolute;
   bottom: 20px;

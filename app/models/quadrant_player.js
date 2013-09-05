@@ -3,7 +3,52 @@ import PLAYER_SEASON from 'appkit/player_season_to_date_data';
 
 var QuadrantPlayer = Ember.Object.extend({
   hotness: 0,
-  goodness: 0
+  goodness: 0,
+
+  watching: Ember.computed.notEmpty('watchHandle'),
+
+  watchHandle: null,
+
+  profile: function() {
+    if (this.get('watching')) {
+      return this.get('_profile');
+    }
+  }.property('watching', '_profile'),
+
+  watchProfile: function() {
+    // TODO: inject
+    var connectionManager = App.__container__.lookup('connection_manager:main');
+
+    var handle = demux.lastId++;
+    this.set('watchHandle', handle);
+
+    var self = this;
+    demux[handle] = {
+      update: function(data) {
+        if (!self.get('watching')) { return; }
+        self.set('_profile', data);
+      }
+    };
+
+    var hash = {
+      watch: 'Profile',
+      unique: handle,
+      player: this.get('name')
+    };
+
+    // Send the JSON message to the server to begin observing.
+    var stringified = JSON.stringify(hash);
+    connectionManager.send(stringified);
+  },
+
+  unwatchProfile: function() {
+    // TODO: inject
+    var connectionManager = App.__container__.lookup('connection_manager:main');
+    connectionManager.send(JSON.stringify({ unwatch: this.get('watchHandle') }));
+
+    this.set('watchHandle', null);
+    this.set('_profile', null);
+  }
 });
 
 QuadrantPlayer.reopenClass({
@@ -70,11 +115,11 @@ QuadrantPlayer.reopenClass({
       }
       // Uncomment these to make the graph mooooooove.
       fireStubbedData(500 + i*500);
-      fireStubbedData(1500 + i*500);
-      fireStubbedData(2500 + i*500);
-      fireStubbedData(3500 + i*500);
-      fireStubbedData(5500 + i*500);
-      fireStubbedData(8500 + i*500);
+      //fireStubbedData(1500 + i*500);
+      //fireStubbedData(2500 + i*500);
+      //fireStubbedData(3500 + i*500);
+      //fireStubbedData(5500 + i*500);
+      //fireStubbedData(8500 + i*500);
     });
 
     return watchedPlayers; // TODO: some record array.

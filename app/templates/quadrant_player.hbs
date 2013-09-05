@@ -1,11 +1,23 @@
 <div {{bind-attr class=":quadrant-popup content:player-present"}}>
-  <h1>I am the quadrant player {{name}}!</h1>
-  <p>Hotness: {{hotness}}</p>
-  <p>Hotness: {{goodness}}</p>
 
-  <img src="/tse.png" alt="tse" />
+  {{#if profile}}
+    <ul>
+      {{#with profile}}
+        <li><span>At Bats</span>  {{round atbats}}</li>
+        <li><span>Hits</span>     {{round hits}}</li>
+        <li><span>Hotness</span>  {{round hotness}}</li>
+        <li><span>Goodness</span> {{round clutchness}}</li>
+        <li><span>Hrs</span>      {{round hrs}}</li>
+        <li><span>Walks</span>    {{round walks}}</li>
+      {{/with}}
+    </ul>
+
+    <img class="profile-pic" src="/tse.png" alt="tse" />
+  {{else}}
+    <img class="loading-spinner" src="/ajax-loader.gif" alt="Loading..." />
+  {{/if}}
 
   <div class="footer">
-    Riggs Bolshevik
+    {{name}}
   </div>
 </div>

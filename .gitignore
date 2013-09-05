@@ -18,3 +18,5 @@
 !/vendor/jquery.atmosphere.js
 !/vendor/loader.js
 !/vendor/d3.js
+
+.DS_Store
