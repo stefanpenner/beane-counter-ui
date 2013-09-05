@@ -29,15 +29,13 @@ function clickPlayer(playerData, component) {
 
   var selected = d3.select(this);
 
-  if (selectedPlayer == playerData) {
+  if (selectedPlayer === playerData) {
     component.set('selectedPlayer', null);
     selected.classed('selected', false);
   } else {
     component.set('selectedPlayer', playerData);
     selected.classed('selected', true);
   }
-
-  component.updatePopupLocation();
 }
 
 var Quadrant = Ember.Component.extend({
@@ -56,6 +54,20 @@ var Quadrant = Ember.Component.extend({
       range([h-9.5, 9.5]);
 
     this.dataDidChange();
+
+    // TODO: make sure we clean this guy up
+    (function syncPopupPosition(){
+      var selected = $('.selected');
+      var popup = $('.quadrant-popup');
+
+      popup.css({
+        left: selected.css('left'),
+        top: selected.css('top')
+      });
+
+      window.requestAnimationFrame(syncPopupPosition);
+    }());
+
   }.on('didInsertElement'),
 
   renderD3: function() {
@@ -90,8 +102,6 @@ var Quadrant = Ember.Component.extend({
         left: function(player) { return xscale(player.goodness) + 'px'; },
         top: function(player) { return yscale(player.hotness) + 'px'; }
       });
-
-    this.updatePopupLocation(true);
   },
 
   dataDidChange: function() {
@@ -102,28 +112,10 @@ var Quadrant = Ember.Component.extend({
     // TODO: what kind of teardown does d3 need?
   }.on('willDestroyElement'),
 
-  updatePopupLocation: function(animate) {
-    var player = this.get('selectedPlayer');
-    if (!player) { return; }
-
-    var popup = d3.selectAll('.quadrant-popup');
-
-    if (animate) {
-      popup = popup.transition().duration(1000).ease('linear');
-    }
-
-    popup.
-      style({
-        left: this.xscale(player.goodness) + 'px',
-        top: this.yscale(player.hotness) + 'px'
-      });
-  },
-
   click: function(e) {
-    // hacks?
-    if (e.target.tagName === 'rect') {
-      alert('deselect');
-    }
+    if (e.target.tagName !== 'rect') { return; }
+    this.set('selectedPlayer', null);
+    d3.select('.selected').classed('selected', false);
   }
 });
 
