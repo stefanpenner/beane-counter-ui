@@ -82,12 +82,15 @@ html, body {
   display: block;
   min-height: 50px;
   text-indent: 84px;
-  line-height: 73px;
+  line-height: 77px;
   font-size: 48px;
+  text-transform: uppercase;
+  font-weight: 200;
+  -webkit-font-smoothing: antialiased;
 }
 
 #logo-container h1 .ziggrid-text {
-  font-size: 38px;
+  /*font-size: 38px;*/
   color: #C96C31;
 }
 
@@ -157,6 +160,7 @@ table.metrics tbody tr td.value {
   background: #444544;
   border-top: 1px solid #5f6060;
   height: 50px;
+  z-index: 100;
 }
 
 
