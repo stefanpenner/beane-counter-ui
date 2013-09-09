@@ -27,7 +27,7 @@ App.register("connection_manager:main", connectionManager, { instantiate: false}
 App.inject('component:bean-player', 'connectionManager', 'connection_manager:main');
 
 
-Ember.registerBoundHelper('round', function(val) {
+Ember.Handlebars.registerBoundHelper('round', function(val) {
   if (!isNaN(val) && !/^\d+$/.test(val)) {
     return val.toFixed(3);
   } else {
