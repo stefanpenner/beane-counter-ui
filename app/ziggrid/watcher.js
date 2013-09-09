@@ -28,7 +28,7 @@ function Loader(type, entryType, id) {
 
   function updateIndividualThing(body) {
     body.handle_id = id;
-    store.load(type, body.id, body);
+    store.load(type, body.id || id, body);
   }
 }
 
