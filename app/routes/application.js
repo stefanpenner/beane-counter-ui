@@ -41,7 +41,7 @@ var ApplicationRoute = Ember.Route.extend({
 
     // TODO: grab this dynamically from leaderboard.
     var quadrantPlayers = ["hairj002", "hattj001", "inglj001", "boona001", "willb002", "widgc001", "matsh001", "linda001", "lugoj001", "mauej001"];
-    var players = QuadrantPlayer.watchPlayers(quadrantPlayers);
+    var players = QuadrantPlayer.watchPlayers(quadrantPlayers, 2006);
     this.controllerFor('quadrant').set('players', players);
   },
 

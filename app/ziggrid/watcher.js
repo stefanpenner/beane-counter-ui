@@ -57,7 +57,7 @@ Watcher.prototype = {
     var connectionManager = container.lookup('connection_manager:main');
     connectionManager.send(stringified);
 
-    this.sendFakeGameDates();
+    //this.sendFakeGameDates();
 
     return gameDates;
   },
@@ -103,35 +103,6 @@ Watcher.prototype = {
 
     return model;
 
-    /*
-    if (typeName !== 'Leaderboard_average_groupedBy_season') { return model; }
-    // Begin Temporary stubbed out code.
-
-    var stubbedPayload = {
-      responseBody: '{"deliveryFor":1,"payload":{"id":"leaderboard_average_groupedBy_season-874C43B53873E641E8503936AEB3F104269ED750","ziggridType":"leaderboard_average_groupedBy_season","season":"2006","table":[["1","hairj002"],["1","hattj001"],["0.75","inglj001"],["0.7142857142857143","boona001"],["0.7","willb002"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"],["0.6666666666666666","linda001"],["0.6666666666666666","lugoj001"],["0.6666666666666666","mauej001"]]}}',
-      status: 200
-    };
-
-    Ember.run.later(connectionManager, 'handleMessage', stubbedPayload, 500);
-
-    var stubbedPayload2 = {
-      responseBody: '{"deliveryFor":1,"payload":{"id":"leaderboard_average_groupedBy_season-874C43B53873E641E8503936AEB3F104269ED750","ziggridType":"leaderboard_average_groupedBy_season","season":"2006","table":[["0.9","hairj002"],["0.9","hattj001"],["0.5","inglj001"],["0.7","boona001"],["0.69","willb002"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"],["0.6666666666666666","linda001"],["0.6666666666666666","lugoj001"],["0.6666666666666666","mauej001"]]}}',
-      status: 200
-    };
-
-    Ember.run.later(connectionManager, 'handleMessage', stubbedPayload2, 1000);
-
-
-    var stubbedPayload2 = {
-      responseBody: '{"deliveryFor":2,"payload":{"id":"leaderboard_average_groupedBy_season-874C43B53873E641E8503936AEB3F104269ED750","ziggridType":"leaderboard_average_groupedBy_season","season":"2006","table":[["0.9","hairj002"],["0.9","hattj001"],["0.5","inglj001"],["0.7","boona001"],["0.69","willb002"],["0.6666666666666666","widgc001"],["0.6666666666666666","matsh001"],["0.6666666666666666","linda001"],["0.6666666666666666","lugoj001"],["0.6666666666666666","mauej001"]]}}',
-      status: 200
-    };
-
-    Ember.run.later(connectionManager, 'handleMessage', stubbedPayload2, 1500);
-
-
-    return model;
-    */
   },
 
   unwatch: function(handle) {

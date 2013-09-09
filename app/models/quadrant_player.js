@@ -7,145 +7,141 @@ var App = window.App;
 var QuadrantPlayer = Ember.Object.extend({
   hotness: 0,
   goodness: 0,
-
-  init: function() {
-    this._super();
-    if (!this.hotness)  { this.set('hotness',  Math.random()); }
-    if (!this.goodness) { this.set('goodness', Math.random()); }
-  },
-
-  watching: Ember.computed.notEmpty('watchHandle'),
-
   watchHandle: null,
-
-  profile: function() {
-    if (this.get('watching')) {
-      return this.get('_profile');
-    }
-  }.property('watching', '_profile'),
+  watching: Ember.computed.bool('watchHandle'),
 
   watchProfile: function() {
-    // TODO: inject
-    var connectionManager = App.__container__.lookup('connection_manager:main');
+    // TODO: inject ziggrid:connection-manager
+    var connectionManager = getConnectionManager();
 
     var handle = demux.lastId++;
-    this.set('watchHandle', handle);
 
-    var self = this;
+    this.set('watchHandle', handle);
+    this.set('profile', null);
+
+    var player = this;
+
     demux[handle] = {
       update: function(data) {
-        if (!self.get('watching')) { return; }
-        self.set('_profile', data);
+        player.set('profile', data);
       }
     };
 
-    var hash = {
+    var query = {
       watch: 'Profile',
       unique: handle,
       player: this.get('name')
     };
 
     // Send the JSON message to the server to begin observing.
-    var stringified = JSON.stringify(hash);
+    var stringified = JSON.stringify(query);
     connectionManager.send(stringified);
   },
 
   unwatchProfile: function() {
-    // TODO: inject
-    var connectionManager = App.__container__.lookup('connection_manager:main');
-    connectionManager.send(JSON.stringify({ unwatch: this.get('watchHandle') }));
+    // TODO: inject ziggrid:connection-manager
+    var connectionManager = getConnectionManager();
+    var watchHandle = this.get('watchHandle');
 
-    this.set('watchHandle', null);
-    this.set('_profile', null);
+    if (!watchHandle) {
+      throw new Error('No handle to unwatch');
+    }
+
+    connectionManager.send(JSON.stringify({
+      unwatch: watchHandle
+    }));
+
+    this.set('watchHandle', null); // clear handle
   }
 });
 
 QuadrantPlayer.reopenClass({
-  watchPlayers: function(playerNames) {
-
-    // This is required because injections don't make it onto the factory
-    var connectionManager = App.__container__.lookup('connection_manager:main');
-
+  watchPlayers: function(playerNames, season, dayOfYear) {
 
     playerNames.forEach(function(playerName, i) {
+      watchAttribute('Snapshot_playerSeasonToDate',
+                     playerName,
+                     season,
+                     dayOfYear);
 
-      var handle = demux.lastId++;
-      demux[handle] = {
-        update: function(data) {
-
-          var attrs = { goodness: data.average },
-              player = watchedPlayers.findProperty('name', data.player);
-          if (player) {
-            player.setProperties(attrs);
-          } else {
-            attrs.name = data.player;
-            watchedPlayers.pushObject(QuadrantPlayer.create(attrs));
-          }
-        }
-      };
-
-      var hash = {
-        watch: 'Snapshot_playerSeasonToDate',
-        unique: handle,
-        player: playerName,
-        season: "2006"
-      };
-
-      // Send the JSON message to the server to begin observing.
-      var stringified = JSON.stringify(hash);
-      connectionManager.send(stringified);
-
-      handle = demux.lastId++;
-      demux[handle] = {
-        update: function(data) {
-
-          var attrs = { hotness: Math.random() },
-              player = watchedPlayers.findProperty('name', data.player);
-          if (player) {
-            player.setProperties(attrs);
-          } else {
-            attrs.name = data.player;
-            watchedPlayers.pushObject(QuadrantPlayer.create(attrs));
-          }
-        }
-      };
-
-      hash = {
-        watch: 'snapshot_clutchnessSeasonToDate',
-        unique: handle,
-        player: playerName,
-        season: "2006"
-      };
-
-      // Send the JSON message to the server to begin observing.
-      stringified = JSON.stringify(hash);
-      connectionManager.send(stringified);
-
-      function fireStubbedData(timeout) {
-        var playerData = PLAYER_SEASON[0];
-        playerData.deliveryFor = handle;
-        playerData.payload.average = Math.random();
-        playerData.payload.player = playerName;
-
-        var playerDataString = JSON.stringify(playerData);
-        var stubbedPayload = {
-          responseBody: playerDataString,
-          status: 200
-        };
-        Ember.run.later(connectionManager, 'handleMessage', stubbedPayload, timeout);
-      }
-      // Uncomment these to make the graph mooooooove.
-      fireStubbedData(500 + i*500);
-      //fireStubbedData(1500 + i*500);
-      //fireStubbedData(2500 + i*500);
-      //fireStubbedData(3500 + i*500);
-      //fireStubbedData(5500 + i*500);
-      //fireStubbedData(8500 + i*500);
+      watchAttribute('Snapshot_clutchnessSeasonToDate',
+                     playerName,
+                     season,
+                     dayOfYear);
     });
 
     return watchedPlayers; // TODO: some record array.
   }
 });
 
-export default QuadrantPlayer;
+function updateQuadrantPlayer(data) {
+  var attrs = {};
 
+  if (data.average) {
+    attrs.goodness = data.average;
+  }
+
+  if (data.correlation) {
+    attrs.hotness = data.correlation;
+  }
+
+  var player = watchedPlayers.findProperty('name', data.player);
+
+  if (player) {
+    player.setProperties(attrs);
+  } else {
+    attrs.name = data.player;
+    watchedPlayers.pushObject(QuadrantPlayer.create(attrs));
+  }
+}
+
+function fireStubbedData(handle, playerName, timeout) {
+  var playerData = PLAYER_SEASON[0];
+
+  playerData.deliveryFor = handle;
+  playerData.payload.average = Math.random();
+  playerData.payload.player = playerName;
+
+  var playerDataString = JSON.stringify(playerData);
+  var stubbedPayload = {
+    responseBody: playerDataString,
+    status: 200
+  };
+
+  Ember.run.later(getConnectionManager(),
+                  'handleMessage',
+                  stubbedPayload,
+                  timeout);
+}
+
+function watchAttribute(type, playerName, season, dayOfYear) {
+
+  var handle = demux.lastId++;
+  demux[handle] = {
+    update: updateQuadrantPlayer
+  };
+
+  var hash = {
+    watch: type,
+    unique: handle,
+    player: playerName,
+    season: season
+  };
+
+  if (dayOfYear) {
+    hash.dayOfYear = dayOfYear;
+  }
+
+  // Send the JSON message to the server to begin observing.
+  var stringified = JSON.stringify(hash);
+  getConnectionManager().send(stringified);
+
+  // fireStubbedData(handle, playerName, 500 + i*500);
+}
+
+// TODO: inject
+function getConnectionManager() {
+  return App.__container__.lookup('connection_manager:main');
+}
+
+export default QuadrantPlayer;
