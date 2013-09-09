@@ -93,7 +93,7 @@ var Quadrant = Ember.Component.extend({
 
     var players = container.
       selectAll('.quadrant-player').
-      data(data, get('name'))
+      data(data, get('name'));
 
     players.exit().remove();
     players.enter().
