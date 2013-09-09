@@ -1,4 +1,4 @@
-<h1>Standings</h1>
+<h1>{{title}}</h1>
 <table class="metrics">
   <thead>
     <tr>
@@ -10,9 +10,14 @@
   <tbody>
     {{#each entries}}
       <tr>
-        <td>2006</td>
         <td>{{id}}</td>
-        <td class="value">{{f1}}</td>
+        <td class="value">
+          {{#if hrs}}
+            {{hrs}}
+          {{else}}
+            {{round f1}}
+          {{/if}}
+        </td>
       </tr>
     {{/each}}
   </tbody>

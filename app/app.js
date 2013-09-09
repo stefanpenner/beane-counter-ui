@@ -43,7 +43,6 @@ App.inject('component:bean-player',
            'connectionManager',
            'connection_manager:main');
 
-
 Ember.Handlebars.registerBoundHelper('round', function(val) {
   if (!isNaN(val) && !/^\d+$/.test(val)) {
     return val.toFixed(3);
@@ -58,5 +57,3 @@ Ember.TextField.reopen({
 });
 
 export default App;
-
-

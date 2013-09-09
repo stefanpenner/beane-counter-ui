@@ -13,7 +13,11 @@ function Loader(type, entryType, id) {
 
     for (var i = 0; i < body.length; i++) {
       var item = body[i];
-      store.load(entryType, item[1], {f1: item[0]});
+
+      var attrs = {};
+      attrs[Ember.keys(entryType.model)[0]] = item[0];
+
+      store.load(entryType, item[1], attrs);
       rows.push(item[1]);
     }
 
@@ -36,11 +40,7 @@ function Watcher(_namespace) {
 var gameDates = [];
 
 Watcher.prototype = {
-
-
   watchGameDate: function() {
-
-
     var handle = demux.lastId++;
 
     demux[handle] = {
@@ -49,10 +49,12 @@ Watcher.prototype = {
       }
     };
 
-    var stringified = JSON.stringify({
-      watch: "GameDate",
+    var query = {
+      watch: 'GameDate',
       unique: handle
-    });
+    };
+
+    var stringified = JSON.stringify(query);
 
     var connectionManager = container.lookup('connection_manager:main');
     connectionManager.send(stringified);
@@ -73,7 +75,6 @@ Watcher.prototype = {
 
     Ember.run.later(this, 'sendFakeGameDates', 400);
   },
-
 
   watch: function(typeName, entryTypeName, opts) {
     var type = this.namespace[typeName]; // ED limitation
@@ -96,13 +97,11 @@ Watcher.prototype = {
 
     // TODO: Change this to forward to ZiggridObserver.
 
-
     // Send the JSON message to the server to begin observing.
     var connectionManager = container.lookup('connection_manager:main');
     connectionManager.send(stringified);
 
     return model;
-
   },
 
   unwatch: function(handle) {

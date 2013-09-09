@@ -131,6 +131,10 @@ html, body {
   line-height: 1.75em;
 }
 
+table.metrics {
+  width: 100%;
+}
+
 table.metrics thead {
   border-bottom: 1px solid  #5A5A5A;
   line-height: 2em;

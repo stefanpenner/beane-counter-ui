@@ -4,8 +4,7 @@ var ApplicationController = Ember.Controller.extend({
 
   selectedYear: 2008,
 
-  // TODO: should be 0
-  currentPage: 1,
+  currentPage: 0,
 
   // TODO: move to ApplicationView when it works
   pageContainerStyle: function() {
