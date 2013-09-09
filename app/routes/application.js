@@ -1,4 +1,5 @@
 import QuadrantPlayer from 'appkit/models/quadrant_player';
+import Player from 'appkit/models/player';
 
 var ApplicationRoute = Ember.Route.extend({
   setupController: function() {
@@ -52,8 +53,9 @@ var ApplicationRoute = Ember.Route.extend({
     filterController.set('selectedFilter', filter);
 
     // TODO: grab this dynamically from leaderboard.
-    var quadrantPlayers = ["hairj002", "hattj001", "inglj001", "boona001", "willb002", "widgc001", "matsh001", "linda001", "lugoj001", "mauej001"];
-    var players = QuadrantPlayer.watchPlayers(quadrantPlayers, 2006);
+
+    var quadrantPlayerNames = Player.data.map(function(p) { return p.name; }); //.slice(0, 30);
+    var players = QuadrantPlayer.watchPlayers(quadrantPlayerNames, 2006);
     this.controllerFor('quadrant').set('players', players);
   },
 

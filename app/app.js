@@ -51,6 +51,13 @@ Ember.Handlebars.registerBoundHelper('round', function(val) {
   }
 });
 
+import Player from 'appkit/models/player';
+
+Ember.Handlebars.registerBoundHelper('nameFromCode', function(code) {
+  var player = Player.getPlayerData(code);
+  return player ? player.name : code;
+});
+
 // For our range input in bean-player
 Ember.TextField.reopen({
   attributeBindings: ['step']
