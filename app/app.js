@@ -2,6 +2,9 @@ import Resolver from 'resolver';
 import Store from 'appkit/store';
 import demux from 'appkit/ziggrid/demux';
 
+// Enable late registration helpers/components
+Ember.FEATURES['container-renderables'] = true;
+
 var App = Ember.Application.create({
   modulePrefix: 'appkit', // TODO: loaded via config
   Store: Store,
@@ -53,10 +56,10 @@ Ember.Handlebars.registerBoundHelper('round', function(val) {
 
 import Player from 'appkit/models/player';
 
-Ember.Handlebars.registerBoundHelper('nameFromCode', function(code) {
+App.register('helper:nameFromCode', Ember.Handlebars.makeBoundHelper(function(code) {
   var player = Player.getPlayerData(code);
   return player ? player.name : code;
-});
+}));
 
 // TODO: happier way to do this automatically?
 // This way is bad because the component subclasses don't

@@ -1,0 +1,18 @@
+<table class="metrics">
+  <thead>
+    <tr>
+      {{#each headers}}
+        <th>{{this}}</th>
+      {{/each}}
+    </tr>
+  </thead>
+  <tbody>
+    {{#each entries}}
+      <tr>
+        <td>{{code}}</td>
+        <td class="value">
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

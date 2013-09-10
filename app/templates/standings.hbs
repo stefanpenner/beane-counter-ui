@@ -1,0 +1,8 @@
+{{#each leagues}}
+  <div class="standings-column">
+    <h3>{{name}}</h3>
+    {{bean-standings teams=teams region="east"}}
+    {{bean-standings teams=teams region="central"}}
+    {{bean-standings teams=teams region="west"}}
+  </div>
+{{/each}}
