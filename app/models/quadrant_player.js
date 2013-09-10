@@ -1,5 +1,6 @@
 import demux from 'appkit/ziggrid/demux';
 import PLAYER_SEASON from 'appkit/player_season_to_date_data';
+import Player from 'appkit/models/player';
 
 var watchedPlayers = [];
 var App = window.App;
@@ -18,6 +19,10 @@ var QuadrantPlayer = Ember.Object.extend({
 
   }.property(),
   watching: Ember.computed.bool('watchHandle'),
+
+  data: function() {
+    return Player.getPlayerData(this.get('name'));
+  }.property('name'),
 
   watchProfile: function() {
     // TODO: inject ziggrid:connection-manager

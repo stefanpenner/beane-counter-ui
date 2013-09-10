@@ -12,7 +12,7 @@
       {{/with}}
     </ul>
 
-    <img class="profile-pic" src="/tse.png" alt="tse" />
+    <img class="profile-pic" {{bind-attr src="data.image_url"}} alt="tse" />
   {{else}}
     <img class="loading-spinner" src="/ajax-loader.gif" alt="Loading..." />
   {{/if}}

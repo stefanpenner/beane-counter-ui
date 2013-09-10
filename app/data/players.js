@@ -617,4 +617,8 @@ var players = [
   }
 ];
 
+players.forEach(function(player, i) {
+  player.image_url = "/players/image" + (i+1) + ".png";
+});
+
 export default players;
