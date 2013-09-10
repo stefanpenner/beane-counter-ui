@@ -25,8 +25,9 @@ var ApplicationRoute = Ember.Route.extend({
 
     // TODO: grab this dynamically from leaderboard.
 
-    var quadrantPlayerNames = Player.data.map(function(p) { return p.code; }); //.slice(0, 30);
-    var players = QuadrantPlayer.watchPlayers(quadrantPlayerNames, season);
+    var allStarPlayerCodes = this.container.lookupFactory('model:player').playerCodes();
+
+    var players = QuadrantPlayer.watchPlayers(allStarPlayerCodes);
     this.controllerFor('quadrant').set('players', players);
   },
 

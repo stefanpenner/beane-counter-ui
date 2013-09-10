@@ -30,6 +30,8 @@ App.register('watcher:main', watcher, { instantiate: false });
 
 App.deferReadiness(); // defering to allow sync boot with Ziggrid
 
+
+
 var url = 'http://couchconf.ziggrid.org:8088/ziggrid/';
 
 import ConnectionManager from 'appkit/ziggrid/connection_manager';
@@ -74,5 +76,54 @@ Ember.Handlebars.helper('bean-homeruns', BeanHomeruns);
 Ember.TextField.reopen({
   attributeBindings: ['step']
 });
+
+import csv from 'appkit/utils/csv';
+
+App.deferReadiness();
+
+
+function indexBy(property, collection) {
+  var index = {};
+
+  collection.forEach(function(entry) {
+    index[Ember.get(entry, property)] = entry;
+  });
+
+  return index;
+}
+
+function aggregatePlayers(players) {
+
+  var result = { };
+
+  players.forEach(function(entry) {
+    var code = entry.PlayerCode;
+    var player = result[code] = result[code] || {
+      name: entry.PlayerName,
+      code: code,
+      seasons: {}
+    };
+
+    player.seasons[entry.Year] = entry;
+  });
+
+  return result;
+}
+
+Ember.RSVP.hash({
+  allStars: csv('all-stars.csv'),
+  allTeams: csv('all-teams.csv'),
+  allPlayers: csv('all-players.csv')
+}).then(function(hash) {
+  App.advanceReadiness();
+
+  var Player = App.__container__.lookupFactory('model:player');
+
+  Player.reopenClass({
+    dataByName: indexBy('PlayerCode', hash.allPlayers),
+    allStars: aggregatePlayers(hash.allStars)
+  });
+
+}, Ember.RSVP.rethrow);
 
 export default App;

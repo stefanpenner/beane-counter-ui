@@ -1,22 +1,19 @@
-import players from 'appkit/data/players';
-import playersNames from 'appkit/data/player_names';
-
-var dict = {};
-players.forEach(function(player) {
-  dict[player.code] = player;
-});
-
 var Player = Ember.Object.extend({
 });
 
 Player.reopenClass({
   getPlayerData: function(code) {
-    return dict[code];
+    throw new Error('implement me');
   },
-  nameFromCode: function(code){
+
+  nameFromCode: function(code) {
     return playerNames[code];
   },
-  data: players
+
+  data: undefined,
+  playerCodes: function() {
+    return Ember.keys(this.allStars);
+  }
 });
 
 export default Player;

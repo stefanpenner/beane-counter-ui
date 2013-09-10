@@ -2,27 +2,28 @@ import demux from 'appkit/ziggrid/demux';
 import PLAYER_SEASON from 'appkit/player_season_to_date_data';
 import Player from 'appkit/models/player';
 
-var watchedPlayers = [];
 var App = window.App;
 
 var QuadrantPlayer = Ember.Object.extend({
   init: function(){
     this._super();
-
-    watchedPlayers.pushObject(this);
+    QuadrantPlayer.all.pushObject(this);
   },
   realized: false,
   hotness: 0,
   goodness: 0,
   watchHandle: null,
-  imageUrl: function(){
+  imageUrl: function() {
 
   }.property(),
   watching: Ember.computed.bool('watchHandle'),
 
   data: function() {
-    return Player.getPlayerData(this.get('name'));
+    var name = this.get('name');
+    return Player.allStars[name];
   }.property('name'),
+
+  humanizedName: Ember.computed.oneWay('data.name'),
 
   watchProfile: function() {
     // TODO: inject ziggrid:connection-manager
@@ -70,8 +71,9 @@ var QuadrantPlayer = Ember.Object.extend({
 });
 
 QuadrantPlayer.reopenClass({
+  all: [],
   findOrCreateByName: function(playerName) {
-    var player = watchedPlayers.findProperty('name', playerName);
+    var player = QuadrantPlayer.all.findProperty('name', playerName);
 
     if (!player) {
       player = QuadrantPlayer.create({
@@ -98,7 +100,7 @@ QuadrantPlayer.reopenClass({
       QuadrantPlayer.findOrCreateByName(playerName);
     });
 
-    return watchedPlayers; // TODO: some record array.
+    return QuadrantPlayer.all; // TODO: some record array.
   }
 });
 
@@ -116,13 +118,13 @@ function updateQuadrantPlayer(data) {
     attrs.hotness = data.correlation;
   }
 
-  var player = watchedPlayers.findProperty('name', data.player);
+  var player = QuadrantPlayer.all.findProperty('name', data.player);
 
   if (player) {
     player.setProperties(attrs);
   } else {
     attrs.name = data.player;
-    watchedPlayers.pushObject(QuadrantPlayer.create(attrs));
+    QuadrantPlayer.create(attrs);
   }
 }
 

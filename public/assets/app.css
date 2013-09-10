@@ -135,7 +135,7 @@ body {
 
 .box.grid-33 {
   /*account for padding, margin, etc.*/
-  width: 22%;
+  width: 19%;
 }
 
 .box h1 {
@@ -158,7 +158,7 @@ table.metrics thead tr th{
 }
 
 table.metrics tbody tr td.value {
-  color: #929639;
+  color: #B0B629;
 
   text-align: right;
 }
@@ -558,6 +558,20 @@ h1#quadrant-page-header {
   margin-bottom: 20px;
 }
 
+#player-profile-select {
+  -webkit-appearance: none;
+  background-color: rgb(42,43,43);
+  color: #B0B629;
+  border: 1px solid black;
+  padding: 8px;
+  display: block;
+  margin: 15px 0;
+  outline: none;
+  width: 100%;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
 .cf:before,
 .cf:after {
     content: " "; /* 1 */
@@ -566,6 +580,10 @@ h1#quadrant-page-header {
 
 .cf:after {
     clear: both;
+}
+
+.no-data-yet {
+  font-size: 12px;
 }
 
 /**

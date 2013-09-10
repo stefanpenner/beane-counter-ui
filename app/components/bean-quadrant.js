@@ -24,7 +24,7 @@ function appendPlayers(players, component) {
   players.
     append('span').
       classed('name', true).
-      text(get('name'));
+      text(get('humanizedName'));
 
   players.
     append('div').
@@ -98,15 +98,17 @@ var Quadrant = Ember.Component.extend({
     players.exit().remove();
     players.enter().
       append('div').
+      attr('data-id', get('name')).
+      attr('data-name', get('fullName')).
       classed('quadrant-player', true).
       style({
         left: xscale(0.5) + 'px',
         top: yscale(0.5) + 'px'
-      }).call(function(players){
+      }).call(function(players) {
         players.
           append('span').
             classed('name', true).
-            text(get('name'));
+            text(get('humanizedName'));
 
         players.
           append('div').
@@ -121,10 +123,9 @@ var Quadrant = Ember.Component.extend({
     players.transition().
       duration(1000).
       ease('linear').
-      attr('data-id', get('name')).
       style({
         left: playerX(xscale),
-        top:  playerY(yscale)
+        top: playerY(yscale)
       });
   },
 
