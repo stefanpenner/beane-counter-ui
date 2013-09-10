@@ -4,11 +4,13 @@ import americanLeagueTeams from 'appkit/data/american_league';
 
 var americanLeague = {
   name: "American League",
+  teams: americanLeagueTeams,
   standings: []
 };
 
 var nationalLeague = {
   name: "National League",
+  teams: nationalLeagueTeams,
   standings: []
 };
 
@@ -32,7 +34,7 @@ var StandingsController = Ember.Controller.extend({
     var winLoss = watcher.watch('WinLoss', 'WinLoss', {}, function(data) {
 
       // TODO: more efficient to use computed dictionary here.
-      var league = americanLeagueTeams.findProperty('code', data.team) ?
+      var league = americanLeague.teams.findProperty('code', data.team) ?
                    americanLeague : nationalLeague;
 
       var standing = league.standings.findProperty('team', data.team);
@@ -42,9 +44,6 @@ var StandingsController = Ember.Controller.extend({
         league.standings.pushObject(data);
       }
     });
-
-    //debugger;
-    //this.set('content', winLoss
 
     // this is kinda hacky/brittle; this is updated in watcher.watch()
     this.set('handle', demux.lastId);
