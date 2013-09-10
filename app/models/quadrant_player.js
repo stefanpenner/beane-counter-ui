@@ -14,7 +14,7 @@ var QuadrantPlayer = Ember.Object.extend({
     // TODO: inject ziggrid:connection-manager
     var connectionManager = getConnectionManager();
 
-    var handle = demux.lastId++;
+    var handle = ++demux.lastId;
 
     this.set('watchHandle', handle);
     this.set('profile', null);
@@ -116,7 +116,7 @@ function fireStubbedData(handle, playerName, timeout) {
 
 function watchAttribute(type, playerName, season, dayOfYear) {
 
-  var handle = demux.lastId++;
+  var handle = ++demux.lastId;
   demux[handle] = {
     update: updateQuadrantPlayer
   };

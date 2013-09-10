@@ -41,7 +41,7 @@ var gameDates = [];
 
 Watcher.prototype = {
   watchGameDate: function() {
-    var handle = demux.lastId++;
+    var handle = ++demux.lastId;
 
     demux[handle] = {
       update: function(a) {
@@ -78,7 +78,7 @@ Watcher.prototype = {
 
   watch: function(typeName, entryTypeName, opts) {
     var type = this.namespace[typeName]; // ED limitation
-    var handle = demux.lastId++;
+    var handle = ++demux.lastId;
     var store = container.lookup('store:main');
 
     store.load(type, handle, {});
@@ -105,9 +105,8 @@ Watcher.prototype = {
   },
 
   unwatch: function(handle) {
-    // TODO
-    //if (handle)
-      //send(JSON.stringify({'unwatch': handle}));
+    var connectionManager = container.lookup('connection_manager:main');
+    connectionManager.send(JSON.stringify({ unwatch: handle }));
   }
 };
 

@@ -129,6 +129,11 @@ html, body {
   line-height: 1.51em;
 }
 
+.box.grid-33 {
+  /*account for padding, margin, etc.*/
+  width: 22%;
+}
+
 .box h1 {
   font-size: 18px;
   line-height: 1.75em;
@@ -150,6 +155,8 @@ table.metrics thead tr th{
 
 table.metrics tbody tr td.value {
   color: #929639;
+
+  text-align: right;
 }
 
 .player {

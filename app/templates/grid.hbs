@@ -1,15 +1,16 @@
 <div class="page" id="grid-page">
   <div class="grid">
     <div class="box grid-33">
-      {{bean-table title="Standings" headers=leaderboard.headers entries=leaderboard.table}}
     </div>
     <div class="box grid-33">
-      {{bean-table title="Production" headers=production.headers entries=production.table}}
+      {{bean-leaderboard season=season}}
+      {{bean-production  season=season}}
+      {{bean-homeruns    season=season}}
     </div>
     <div class="box grid-33">
-      {{bean-table title="Home Runs" headers=homeruns.headers entries=homeruns.table}}
     </div>
   </div>
+
   {{bean-player}}
 </div>
 

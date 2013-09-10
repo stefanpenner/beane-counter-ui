@@ -58,6 +58,16 @@ Ember.Handlebars.registerBoundHelper('nameFromCode', function(code) {
   return player ? player.name : code;
 });
 
+// TODO: happier way to do this automatically?
+// This way is bad because the component subclasses don't
+// get their injections...
+import BeanProduct from 'appkit/components/bean-production';
+import BeanLeaderboard from 'appkit/components/bean-leaderboard';
+import BeanHomeruns from 'appkit/components/bean-homeruns';
+Ember.Handlebars.helper('bean-production', BeanProduct);
+Ember.Handlebars.helper('bean-leaderboard', BeanLeaderboard);
+Ember.Handlebars.helper('bean-homeruns', BeanHomeruns);
+
 // For our range input in bean-player
 Ember.TextField.reopen({
   attributeBindings: ['step']

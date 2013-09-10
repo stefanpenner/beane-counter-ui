@@ -129,7 +129,7 @@ var Quadrant = Ember.Component.extend({
   },
 
   dataDidChange: function() {
-    Ember.run.scheduleOnce('afterRender', this, 'renderD3');
+    Ember.run.throttle(this, 'renderD3', 100);
   }.observes('players.@each.hotness', 'players.@each.goodness'),
 
   teardownGraph: function() {
