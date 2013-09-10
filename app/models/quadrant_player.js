@@ -5,6 +5,11 @@ var watchedPlayers = [];
 var App = window.App;
 
 var QuadrantPlayer = Ember.Object.extend({
+  init: function(){
+    this._super();
+
+    watchedPlayers.pushObject(this);
+  },
   hotness: 0,
   goodness: 0,
   watchHandle: null,
@@ -56,6 +61,17 @@ var QuadrantPlayer = Ember.Object.extend({
 });
 
 QuadrantPlayer.reopenClass({
+  findOrCreateByName: function(playerName) {
+    var player = watchedPlayers.findProperty('name', playerName);
+
+    if (!player) {
+      player = QuadrantPlayer.create({
+        name: playerName
+      });
+    }
+
+    return player;
+  },
   watchPlayers: function(playerNames, season, dayOfYear) {
 
     playerNames.forEach(function(playerName, i) {
@@ -68,6 +84,9 @@ QuadrantPlayer.reopenClass({
                      playerName,
                      season,
                      dayOfYear);
+
+
+      QuadrantPlayer.findOrCreateByName(playerName);
     });
 
     return watchedPlayers; // TODO: some record array.
@@ -75,6 +94,7 @@ QuadrantPlayer.reopenClass({
 });
 
 function updateQuadrantPlayer(data) {
+  console.log('updateQuadrantPlayer', data);
   var attrs = {};
 
   if (data.average) {
