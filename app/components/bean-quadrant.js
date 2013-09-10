@@ -84,8 +84,13 @@ var Quadrant = Ember.Component.extend({
   }.on('didInsertElement'),
 
   renderD3: function() {
+    var season = this.get('season');
+
     var container = d3.select(this.$('.quadrant-graph')[0]);
-    var data = this.get('players');
+    var data = this.get('players').filter(function(player) {
+      return player.hasSeason(season);
+    }).filterBy('realized');
+
     var component = this;
 
     var xscale = this.xscale;
@@ -95,15 +100,21 @@ var Quadrant = Ember.Component.extend({
       selectAll('.quadrant-player').
       data(data, get('name'));
 
-    players.exit().remove();
+    players.exit().transition().
+            duration(300).
+            style({
+              opacity: 0
+            }).remove();
+
     players.enter().
       append('div').
       attr('data-id', get('name')).
       attr('data-name', get('fullName')).
       classed('quadrant-player', true).
       style({
-        left: xscale(0.5) + 'px',
-        top: yscale(0.5) + 'px'
+        opacity: 0,
+        left: playerX(xscale),
+        top: playerY(yscale)
       }).call(function(players) {
         players.
           append('span').
@@ -124,6 +135,7 @@ var Quadrant = Ember.Component.extend({
       duration(1000).
       ease('linear').
       style({
+        opacity: 1,
         left: playerX(xscale),
         top: playerY(yscale)
       });
@@ -131,7 +143,7 @@ var Quadrant = Ember.Component.extend({
 
   dataDidChange: function() {
     Ember.run.throttle(this, 'renderD3', 100);
-  }.observes('players.@each.hotness', 'players.@each.goodness'),
+  }.observes('players.@each.hotness', 'players.@each.goodness', 'season'),
 
   teardownGraph: function() {
     // TODO: what kind of teardown does d3 need?

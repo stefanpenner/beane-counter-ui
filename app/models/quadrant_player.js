@@ -18,10 +18,19 @@ var QuadrantPlayer = Ember.Object.extend({
   }.property(),
   watching: Ember.computed.bool('watchHandle'),
 
+  // the actual player data resides on the Player mode,
+  // this merely decorates. It is possible for us to have
+  // inconsitent data, has this extra abstractoin
   data: function() {
     var name = this.get('name');
     return Player.allStars[name];
   }.property('name'),
+
+  hasSeason: function(season) {
+    var seasons = this.get('data.seasons');
+
+    return !!(seasons && seasons[season]);
+  },
 
   humanizedName: Ember.computed.oneWay('data.name'),
 
