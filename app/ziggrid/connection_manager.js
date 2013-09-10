@@ -22,6 +22,8 @@ var ConnectionManager = Ember.Object.extend({
     this.initNeeded = 1;
     this.initCompleted = 0;
 
+    var messages = [];
+
     var conn = this.conn = jQuery.atmosphere.subscribe({
       url: this.url + "updates",
       transport: 'websocket',
@@ -34,10 +36,22 @@ var ConnectionManager = Ember.Object.extend({
 
       // and then handle each incoming message
       onMessage: function(msg) {
-        self.handleMessage(msg);
+        // Have to clone because jQuery atmosphere reuses response objects.
+        messages.push({
+          status: msg.status,
+          responseBody: msg.responseBody
+        });
+        Ember.run.throttle(self, 'flushMessages', messages, 150);
       }
     });
   }.on('init'),
+
+  flushMessages: function(messages) {
+    while (messages.length) {
+      var message = messages.pop();
+      this.handleMessage(message);
+    }
+  },
 
   handleMessage: function(msg) {
     if (msg.status === 200) {
