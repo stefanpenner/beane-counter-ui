@@ -48,7 +48,7 @@ var ConnectionManager = Ember.Object.extend({
 
   flushMessages: function(messages) {
     while (messages.length) {
-      var message = messages.pop();
+      var message = messages.shift();
       this.handleMessage(message);
     }
   },
