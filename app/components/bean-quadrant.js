@@ -43,12 +43,16 @@ function clickPlayer(playerData, component) {
   var selected = d3.select(this);
 
   if (selectedPlayer === playerData) {
-    component.set('selectedPlayer', null);
-    selected.classed('selected', false);
+    deselect(component);
   } else {
     component.set('selectedPlayer', playerData);
     selected.classed('selected', true);
   }
+}
+
+function deselect(component) {
+  component.set('selectedPlayer', null);
+  d3.select('.selected').classed('selected', false);
 }
 
 var Quadrant = Ember.Component.extend({
@@ -100,7 +104,11 @@ var Quadrant = Ember.Component.extend({
       selectAll('.quadrant-player').
       data(data, get('name'));
 
-    players.exit().transition().
+    players.exit().each(function() {
+              if (d3.select(this).classed('selected')) {
+                deselect(component);
+              }
+            }).transition().
             duration(300).
             style({
               opacity: 0
@@ -151,8 +159,7 @@ var Quadrant = Ember.Component.extend({
 
   click: function(e) {
     if (e.target.tagName !== 'rect') { return; }
-    this.set('selectedPlayer', null);
-    d3.select('.selected').classed('selected', false);
+    deselect(this);
   }
 });
 
