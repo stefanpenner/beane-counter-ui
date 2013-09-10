@@ -76,7 +76,7 @@ Watcher.prototype = {
     Ember.run.later(this, 'sendFakeGameDates', 400);
   },
 
-  watch: function(typeName, entryTypeName, opts) {
+  watch: function(typeName, entryTypeName, opts, updateHandler) {
     var type = this.namespace[typeName]; // ED limitation
     var handle = ++demux.lastId;
     var store = container.lookup('store:main');
@@ -91,7 +91,8 @@ Watcher.prototype = {
 
     var entryType = this.namespace[entryTypeName];
 
-    demux[handle] = new Loader(type, entryType, model.get('id'), opts);
+    demux[handle] = updateHandler ? { update: updateHandler } :
+                    new Loader(type, entryType, model.get('id'), opts);
 
     var stringified = JSON.stringify(hash);
 

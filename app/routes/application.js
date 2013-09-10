@@ -9,9 +9,6 @@ var ApplicationRoute = Ember.Route.extend({
     var watcher = this.container.lookup('watcher:main');
     this.watcher = watcher;
 
-    //var winLoss = watcher.watch('WinLoss', 'WinLoss',{"team":"ATL"}); // team ignored?
-    var winLoss = watcher.watch('WinLoss', 'WinLoss'); // team ignored?
-
     var gameDates = watcher.watchGameDate();
 
     controller.set('season', season);

@@ -9,8 +9,9 @@ var Table = Ember.Component.extend({
     return [this.get('title'), 'W', 'L'];
   }.property(),
 
-  entries: Ember.computed.filter('teams', function(team) {
-    return get(team, 'region') === get(this, 'region');
+  entries: Ember.computed.filter('standings', function(team) {
+    // TODO: filter this by region
+    return true;
   })
 });
 

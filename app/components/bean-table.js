@@ -41,7 +41,7 @@ var Table = Ember.Component.extend({
 
     // this is kinda hacky/brittle; this is updated in watcher.watch()
     this.set('handle', demux.lastId);
-  }.observes('season').on('didInsertElement')
+  }.observes('season').on('init')
 });
 
 export default Table;
