@@ -13,9 +13,9 @@ var QuadrantPlayer = Ember.Object.extend({
   hotness: 0,
   goodness: 0,
   watchHandle: null,
-  imageUrl: function() {
-
-  }.property(),
+  imageUrl: function(){
+    return '/players/' + this.get('data.code') + '.png';
+  }.property('data.name').readOnly(),
   watching: Ember.computed.bool('watchHandle'),
 
   // the actual player data resides on the Player mode,

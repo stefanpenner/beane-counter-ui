@@ -7,7 +7,9 @@ Player.reopenClass({
   },
 
   nameFromCode: function(code) {
-    return playerNames[code];
+    var player = this.allStars[code];
+
+    return player && player.name;
   },
 
   data: undefined,
