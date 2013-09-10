@@ -55,7 +55,7 @@ var teams = [
     "name": "Miami Marlins"
   },
   {
-    "code": "NYM",
+    "code": "NYN",
     "region": "east",
     "name": "New York Mets"
   },
@@ -80,7 +80,7 @@ var teams = [
     "name": "San Francisco Giants"
   },
   {
-    "code": "STL",
+    "code": "SLN",
     "region": "central",
     "name": "Saint Louis Cardinals"
   }
