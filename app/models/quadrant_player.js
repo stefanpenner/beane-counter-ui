@@ -10,9 +10,13 @@ var QuadrantPlayer = Ember.Object.extend({
 
     watchedPlayers.pushObject(this);
   },
+  realized: false,
   hotness: 0,
   goodness: 0,
   watchHandle: null,
+  imageUrl: function(){
+
+  }.property(),
   watching: Ember.computed.bool('watchHandle'),
 
   watchProfile: function() {
@@ -95,7 +99,9 @@ QuadrantPlayer.reopenClass({
 
 function updateQuadrantPlayer(data) {
   console.log('updateQuadrantPlayer', data);
-  var attrs = {};
+  var attrs = {
+    realized: true
+  };
 
   if (data.average) {
     attrs.goodness = data.average;
@@ -144,8 +150,8 @@ function watchAttribute(type, playerName, season, dayOfYear) {
   var hash = {
     watch: type,
     unique: handle,
-    player: playerName,
-    season: season
+    player: playerName//,
+    //season: season
   };
 
   if (dayOfYear) {

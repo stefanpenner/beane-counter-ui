@@ -1,8 +1,8 @@
 import players from 'appkit/data/players';
 
 var dict = {};
-players.forEach(function(p) {
-  dict[p.code] = p;
+players.forEach(function(player) {
+  dict[player.code] = player;
 });
 
 var Player = Ember.Object.extend({
