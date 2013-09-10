@@ -57,8 +57,7 @@ Ember.Handlebars.registerBoundHelper('round', function(val) {
 import Player from 'appkit/models/player';
 
 App.register('helper:nameFromCode', Ember.Handlebars.makeBoundHelper(function(code) {
-  var player = Player.getPlayerData(code);
-  return player ? player.name : code;
+  return Player.nameFromCode(code) || code;
 }));
 
 // TODO: happier way to do this automatically?
