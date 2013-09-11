@@ -100,7 +100,7 @@ var PlayerProfile = Ember.Component.extend({
 
 // TODO: inject
 function getConnectionManager() {
-  return App.__container__.lookup('connection_manager:main');
+  return window.App.__container__.lookup('connection_manager:main');
 }
 
 export default PlayerProfile;

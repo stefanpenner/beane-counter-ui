@@ -23,7 +23,7 @@ var StandingsController = Ember.Controller.extend({
   handle: null,
 
   startWatching: function() {
-    var watcher = App.__container__.lookup('watcher:main'),
+    var watcher = window.App.__container__.lookup('watcher:main'),
         handle = this.get('handle');
 
     if (handle) {
