@@ -21,3 +21,5 @@
 !/vendor/ember/index.js
 
 .DS_Store
+
+chef-test.pem
