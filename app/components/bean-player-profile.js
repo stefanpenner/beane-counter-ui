@@ -1,7 +1,6 @@
 import demux from 'appkit/ziggrid/demux';
 
 var PlayerProfile = Ember.Component.extend({
-
   player: null,
 
   players: function() {

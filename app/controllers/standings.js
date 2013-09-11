@@ -1,19 +1,4 @@
 import demux from 'appkit/ziggrid/demux';
-import nationalLeagueTeams from 'appkit/data/national_league';
-import americanLeagueTeams from 'appkit/data/american_league';
-
-var americanLeague = {
-  name: "American League",
-  teams: americanLeagueTeams,
-  standings: []
-};
-
-var nationalLeague = {
-  name: "National League",
-  teams: nationalLeagueTeams,
-  standings: []
-};
-
 import groupBy from 'appkit/utils/group_by';
 
 function Region(name, teams) {

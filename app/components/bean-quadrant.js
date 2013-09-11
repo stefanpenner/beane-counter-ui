@@ -20,6 +20,12 @@ function get(path) {
   };
 }
 
+function fadeOutPlayer(){
+  if (d3.select(this).classed('selected')) {
+    deselect(component);
+  }
+}
+
 function appendPlayers(players, component) {
   players.
     append('span').
@@ -106,15 +112,12 @@ var Quadrant = Ember.Component.extend({
       selectAll('.quadrant-player').
       data(data, get('name'));
 
-    players.exit().each(function() {
-              if (d3.select(this).classed('selected')) {
-                deselect(component);
-              }
-            }).transition().
-            duration(300).
-            style({
-              opacity: 0
-            }).remove();
+    players.exit().each(fadeOutPlayer).
+      transition().
+      duration(300).
+      style({
+        opacity: 0
+      }).remove();
 
     players.enter().
       append('div').

@@ -3,10 +3,12 @@ import groupBy from 'appkit/utils/group_by';
 import aggregatePlayers from 'appkit/utils/aggregate_players';
 import csv from 'appkit/utils/csv';
 
+// Load all the csv data
 var initializer = {
   name: 'load-csv',
   initialize: function(container, application) {
     application.deferReadiness();
+
     Ember.RSVP.hash({
       allStars: csv('all-stars.csv'),
       allTeams: csv('all-teams.csv'),
@@ -17,6 +19,7 @@ var initializer = {
       var Player = container.lookupFactory('model:player');
       var TeamListing = container.lookupFactory('model:team_listing');
 
+      // TODO: store object would be better
       Player.reopenClass({
         dataByName: indexBy('PlayerCode', hash.allPlayers),
         allStars: aggregatePlayers(hash.allStars)

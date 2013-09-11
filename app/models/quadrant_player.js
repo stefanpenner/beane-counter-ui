@@ -1,5 +1,4 @@
 import demux from 'appkit/ziggrid/demux';
-import PLAYER_SEASON from 'appkit/player_season_to_date_data';
 import Player from 'appkit/models/player';
 import flags from 'appkit/flags';
 
@@ -159,25 +158,6 @@ function normalizedQuadrantValue(player, key, value) {
 
 function isValidQuadrantValue(value) {
   return value && value >= 0 && value <= 1;
-}
-
-function fireStubbedData(handle, playerName, timeout) {
-  var playerData = PLAYER_SEASON[0];
-
-  playerData.deliveryFor = handle;
-  playerData.payload.average = Math.random();
-  playerData.payload.player = playerName;
-
-  var playerDataString = JSON.stringify(playerData);
-  var stubbedPayload = {
-    responseBody: playerDataString,
-    status: 200
-  };
-
-  Ember.run.later(getConnectionManager(),
-                  'handleMessage',
-                  stubbedPayload,
-                  timeout);
 }
 
 function watchAttribute(type, playerName, season, dayOfYear) {

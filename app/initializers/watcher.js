@@ -1,4 +1,3 @@
-// TODO: move this elsewhere, at least up to ApplicationRoute
 import Watcher from 'appkit/ziggrid/watcher';
 
 var initializer = {

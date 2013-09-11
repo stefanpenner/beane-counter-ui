@@ -1,4 +1,3 @@
-import PLAYER_SEASON from 'appkit/player_season_to_date_data';
 import demux from 'appkit/ziggrid/demux';
 
 var container;

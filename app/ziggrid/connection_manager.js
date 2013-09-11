@@ -17,9 +17,7 @@ var ConnectionManager = Ember.Object.extend({
 
     var self = this;
 
-    // this.container = container;
     this.observers = {};
-    //this.models = {};
     this.initNeeded = 1;
     this.initCompleted = 0;
 
@@ -105,7 +103,6 @@ var ConnectionManager = Ember.Object.extend({
   },
 
   registerModel: function(name, model) {
-
     var attrs = {};
     for (var p in model) {
       if (!model.hasOwnProperty(p)) { continue; }
@@ -144,6 +141,7 @@ var ConnectionManager = Ember.Object.extend({
       }
     }
   },
+
   initDone: function() {
     if (++this.initCompleted === this.initNeeded) {
       window.App.advanceReadiness();
@@ -165,6 +163,4 @@ var ConnectionManager = Ember.Object.extend({
   }
 });
 
-
 export default ConnectionManager;
-
