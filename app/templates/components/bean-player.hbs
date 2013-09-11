@@ -5,7 +5,7 @@
 
     <div class="player-progress-bar-container">
       <div class="player-progress-bar" {{bind-attr style="progressBarStyle"}}>
-        <div class="player-date-display">{{progressText}}</div>
+        <div class="player-progress-text-display" {{bind-attr style="progressTextStyle"}}>{{progressText}}</div>
       </div>
 
       {{input value=nubProgress step="0.1" type="range" class="player-range-input"}}

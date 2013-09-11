@@ -194,7 +194,7 @@ table.metrics tbody tr td.value {
   height: 20px;
 }
 
-.player-date-display {
+.player-progress-text-display {
   position: absolute;
   width: 150px;
   background: #2C2D2D;
@@ -209,30 +209,26 @@ table.metrics tbody tr td.value {
   text-align: center;
 }
 
-.player-date-display::before {
+.player-progress-text-display::before, .player-progress-text-display::after {
   position: absolute;
   display: block;
   content: ' ';
+  left: 50%;
+}
 
+.player-progress-text-display::before {
   border-top: 10px solid #2C2D2D;
   border-right: 10px solid transparent;
   border-left: 10px solid transparent;
-  left: 50%;
   margin-left: -10px;
   bottom: -10px;
-
   z-index: 2;
 }
 
-.player-date-display::after {
-  position: absolute;
-  display: block;
-  content: ' ';
-
+.player-progress-text-display::after {
   border-top: 11px solid #525353;
   border-right: 11px solid transparent;
   border-left: 11px solid transparent;
-  left: 50%;
   margin-left: -11px;
   bottom: -11px;
   z-index: 1;

@@ -1,12 +1,19 @@
 var Player = Ember.Component.extend({
 
   progress: 0,
+  progressText: null,
 
   generator: Ember.computed.alias('connectionManager.generator'),
 
   isPlaying: false,
 
   nubProgressIsSynced: true,
+
+  progressTextStyle: function() {
+    var nubProgress = this.get('nubProgress') || 0;
+    console.log(nubProgress);
+    return "left: " + nubProgress + "px;";
+  }.property('nubProgress'),
 
   _nubProgress: 0,
   nubProgress: function(key, val) {
