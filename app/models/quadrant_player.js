@@ -8,13 +8,17 @@ var QuadrantPlayer = Ember.Object.extend({
   init: function(){
     this._super();
     QuadrantPlayer.all.pushObject(this);
+    QuadrantPlayer.allByCode[this.get('code')] = this;
   },
+
+  code: Ember.computed.alias('data.code'),
+
   realized: false,
   hotness: 0,
   goodness: 0,
   watchHandle: null,
   imageUrl: function(){
-    return '/players/' + this.get('data.code') + '.png';
+    return '/players/' + this.get('code') + '.png';
   }.property('data.name').readOnly(),
   watching: Ember.computed.bool('watchHandle'),
 
@@ -81,6 +85,7 @@ var QuadrantPlayer = Ember.Object.extend({
 
 QuadrantPlayer.reopenClass({
   all: [],
+  allByCode: {},
   findOrCreateByName: function(playerName) {
     var player = QuadrantPlayer.all.findProperty('name', playerName);
 
@@ -114,7 +119,7 @@ QuadrantPlayer.reopenClass({
 });
 
 function updateQuadrantPlayer(data) {
-  console.log('updateQuadrantPlayer', data);
+  //console.log('updateQuadrantPlayer', data);
   var attrs = {
     realized: true
   };
@@ -127,7 +132,7 @@ function updateQuadrantPlayer(data) {
     attrs.hotness = data.correlation;
   }
 
-  var player = QuadrantPlayer.all.findProperty('name', data.player);
+  var player = QuadrantPlayer.allByCode[data.player];
 
   if (player) {
     player.setProperties(attrs);
