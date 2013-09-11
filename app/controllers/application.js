@@ -1,6 +1,6 @@
 var ApplicationController = Ember.Controller.extend({
 
-  years: [2006, 2007, 2008, 2009, 2010, 2011, 2012],
+  years: [2007, 2008, 2009, 2010, 2011, 2012],
 
   season: null,
 
