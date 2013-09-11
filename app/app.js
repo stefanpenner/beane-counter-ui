@@ -5,7 +5,7 @@ import demux from 'appkit/ziggrid/demux';
 // Enable late registration helpers/components
 Ember.FEATURES['container-renderables'] = true;
 
-var App = Ember.Application.create({
+var App = Ember.Application.extend({
   modulePrefix: 'appkit', // TODO: loaded via config
   Store: Store,
   Resolver: Resolver,
@@ -20,17 +20,17 @@ var App = Ember.Application.create({
   }
 });
 
+import watcherInitializer from 'appkit/initializers/watcher';
+App.initializer(watcherInitializer);
+
+import csvInitializer from 'appkit/initializers/csv';
+App.initializer(csvInitializer);
+
 import routes from 'appkit/routes';
+
+App = App.create();
 App.Router.map(routes); // TODO: just resolve the router
-
-// TODO: move this elsewhere, at least up to ApplicationRoute
-import Watcher from 'appkit/ziggrid/watcher';
-var watcher = new Watcher(App);
-App.register('watcher:main', watcher, { instantiate: false });
-
 App.deferReadiness(); // defering to allow sync boot with Ziggrid
-
-
 
 var url = 'http://couchconf.ziggrid.org:8088/ziggrid/';
 
@@ -68,6 +68,7 @@ App.register('helper:nameFromCode', Ember.Handlebars.makeBoundHelper(function(co
 import BeanProduct from 'appkit/components/bean-production';
 import BeanLeaderboard from 'appkit/components/bean-leaderboard';
 import BeanHomeruns from 'appkit/components/bean-homeruns';
+
 Ember.Handlebars.helper('bean-production', BeanProduct);
 Ember.Handlebars.helper('bean-leaderboard', BeanLeaderboard);
 Ember.Handlebars.helper('bean-homeruns', BeanHomeruns);
@@ -76,54 +77,5 @@ Ember.Handlebars.helper('bean-homeruns', BeanHomeruns);
 Ember.TextField.reopen({
   attributeBindings: ['step']
 });
-
-import csv from 'appkit/utils/csv';
-
-App.deferReadiness();
-
-
-function indexBy(property, collection) {
-  var index = {};
-
-  collection.forEach(function(entry) {
-    index[Ember.get(entry, property)] = entry;
-  });
-
-  return index;
-}
-
-function aggregatePlayers(players) {
-
-  var result = { };
-
-  players.forEach(function(entry) {
-    var code = entry.PlayerCode;
-    var player = result[code] = result[code] || {
-      name: entry.PlayerName,
-      code: code,
-      seasons: {}
-    };
-
-    player.seasons[entry.Year] = entry;
-  });
-
-  return result;
-}
-
-Ember.RSVP.hash({
-  allStars: csv('all-stars.csv'),
-  allTeams: csv('all-teams.csv'),
-  allPlayers: csv('all-players.csv')
-}).then(function(hash) {
-  App.advanceReadiness();
-
-  var Player = App.__container__.lookupFactory('model:player');
-
-  Player.reopenClass({
-    dataByName: indexBy('PlayerCode', hash.allPlayers),
-    allStars: aggregatePlayers(hash.allStars)
-  });
-
-}, Ember.RSVP.rethrow);
 
 export default App;
