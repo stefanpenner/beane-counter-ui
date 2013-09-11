@@ -183,7 +183,7 @@ table.metrics tbody tr td.value {
   position: absolute;
   display: block;
   left: 120px;
-  right: 160px;
+  right: 80px;
   top: 15px;
 }
 
@@ -192,6 +192,50 @@ table.metrics tbody tr td.value {
   position: absolute;
   left: 0;
   height: 20px;
+}
+
+.player-date-display {
+  position: absolute;
+  width: 150px;
+  background: #2C2D2D;
+  border: 1px solid #525353;
+  top: -68px;
+  height: 19px;
+  margin-left: -79px;
+  border-radius: 7px;
+  color: #ABABAB;
+  padding: 8px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.player-date-display::before {
+  position: absolute;
+  display: block;
+  content: ' ';
+
+  border-top: 10px solid #2C2D2D;
+  border-right: 10px solid transparent;
+  border-left: 10px solid transparent;
+  left: 50%;
+  margin-left: -10px;
+  bottom: -10px;
+
+  z-index: 2;
+}
+
+.player-date-display::after {
+  position: absolute;
+  display: block;
+  content: ' ';
+
+  border-top: 11px solid #525353;
+  border-right: 11px solid transparent;
+  border-left: 11px solid transparent;
+  left: 50%;
+  margin-left: -11px;
+  bottom: -11px;
+  z-index: 1;
 }
 
 .player-range-input {
@@ -263,7 +307,7 @@ input[type='range']::-webkit-slider-thumb {
 
 .player .label {
   position: absolute;
-  right: 12px;
+  right: 20px;
   display: block;
   top: 15px;
   color: #aaaaaa;

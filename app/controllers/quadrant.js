@@ -1,12 +1,20 @@
+import { percentageOfData } from 'appkit/utils/percentage_of_data';
+
 var QuadrantController = Ember.Controller.extend({
   needs: ['filter'],
   filter: Ember.computed.alias('controllers.filter.selectedFilter'),
 
   progress: function() {
-    var NUM_GAME_DAYS = 180;
-    var day = this.get('gameDates.lastObject.day') || 0;
-    return Math.min(100, day / NUM_GAME_DAYS * 100);
-  }.property('gameDates.[]')
+    var gameDate = this.get('gameDates.lastObject');
+
+    if (!gameDate) {
+      return 0;
+    }
+
+    return percentageOfData(gameDate.day, gameDate.season);
+  }.property('gameDates.[]'),
+
+  currentDateText: "September 12, 2012"
 });
 
 export default QuadrantController;

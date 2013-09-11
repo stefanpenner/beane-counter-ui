@@ -6,13 +6,6 @@ var Player = Ember.Component.extend({
 
   isPlaying: false,
 
-  progressChanged: function() {
-
-    var oldProgress = this.get('progress');
-
-    // TODO: things
-  }.observes('progress'),
-
   nubProgressIsSynced: true,
 
   _nubProgress: 0,
@@ -35,10 +28,12 @@ var Player = Ember.Component.extend({
     }
   }.property('progress', 'nubProgressIsSynced'),
 
-  count: 12345,
+  progressPercentage: function() {
+    return this.get('progress') * 100;
+  }.property('progress'),
 
   progressBarStyle: function() {
-    return "width: " + this.get('progress') + "%;";
+    return "width: " + this.get('progressPercentage') + "%;";
   }.property('progress'),
 
   actions: {
