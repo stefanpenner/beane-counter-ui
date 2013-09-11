@@ -1,14 +1,12 @@
 <div {{bind-attr class=":quadrant-popup content:player-present"}}>
   {{#if profile}}
     <ul>
-      {{#with profile}}
-        <li><span>At Bats</span>  {{round atbats}}</li>
-        <li><span>Hits</span>     {{round hits}}</li>
-        <li><span>Hotness</span>  {{quadrant-value hotness}}</li>
-        <li><span>Goodness</span> {{quadrant-value clutchness}}</li>
-        <li><span>Hrs</span>      {{round hrs}}</li>
-        <li><span>Walks</span>    {{round walks}}</li>
-      {{/with}}
+      <li><span>At Bats</span>  {{round profile.atbats}}</li>
+      <li><span>Hits</span>     {{round profile.hits}}</li>
+      <li><span>Hotness</span>  {{quadrant-value hotness}}</li>
+      <li><span>Goodness</span> {{quadrant-value goodness}}</li>
+      <li><span>Hrs</span>      {{round profile.hrs}}</li>
+      <li><span>Walks</span>    {{round profile.walks}}</li>
     </ul>
 
     <div class="profile-pic-container">

@@ -51,7 +51,7 @@ App.register('helper:name-from-code', Ember.Handlebars.makeBoundHelper(function(
 }));
 
 App.register('helper:quadrant-value', Ember.Handlebars.makeBoundHelper(function(value) {
-  value = (value && value > 0 && value < 3) ? value : Math.random() * 0.3 + 0.3;
+  value = (value && value > 0 && value < 3) ? value : -1; //Math.random() * 0.3 + 0.3;
   return round(value);
 }));
 
