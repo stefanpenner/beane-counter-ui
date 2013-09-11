@@ -394,12 +394,11 @@ circle.player.selected {
   color: black;
   display: none;
   margin-left: 38px;
-  margin-top: -40px;
+  margin-top: -169px;
   top: 0;
   left: 0;
   min-height: 190px;
   padding-bottom: 30px;
-  overflow: hidden;
 }
 
 .quadrant-popup.player-present {
@@ -410,7 +409,7 @@ circle.player.selected {
   /*this is the triangle*/
   content: ' ';
   position: absolute;
-  top: 25px;
+  top: 155px;
 
   /*intentionally imperfect to handle 3d artifact line*/
   left: -13px; 
@@ -462,6 +461,15 @@ circle.player.selected {
   left: 50%;
   margin-left: -15px;
   margin-top: -25px;
+}
+
+.quadrant-popup .profile-pic-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
 }
 
 .quadrant-popup img.profile-pic {

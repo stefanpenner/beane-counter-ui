@@ -1,5 +1,4 @@
 <div {{bind-attr class=":quadrant-popup content:player-present"}}>
-
   {{#if profile}}
     <ul>
       {{#with profile}}
@@ -12,7 +11,9 @@
       {{/with}}
     </ul>
 
-    <img class="profile-pic" {{bind-attr src=imageUrl}} alt="tse" />
+    <div class="profile-pic-container">
+      <img class="profile-pic" {{bind-attr src=imageUrl}} />
+    </div>
   {{else}}
     <img class="loading-spinner" src="/ajax-loader.gif" alt="Loading..." />
   {{/if}}
