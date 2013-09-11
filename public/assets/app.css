@@ -606,9 +606,11 @@ h1.stats-header {
 
 #profile-image-container {
   position: absolute;
-  bottom: 15px;
-  left: 0;
-  right: 0;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  height: 300px;
+  overflow: hidden;
 }
 
 #profile-image-container img {
