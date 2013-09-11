@@ -1,6 +1,3 @@
-import nationalLeagueTeams from 'appkit/data/national_league';
-import americanLeagueTeams from 'appkit/data/american_league';
-
 var get = Ember.get;
 
 var Table = Ember.Component.extend({

@@ -1,31 +1,1 @@
-City,Nickname,Team Code
-Los Angeles,Angels,LAA
-Houston,Astros,HOU
-Oakland,Athletics,OAK
-Toronto,Blue Jays,TOR
-Atlanta,Braves,ATL
-Milwaukee,Brewers,MIL
-St. Louis,Cardinals,STL
-Chicago,Cubs,CHC
-Arizona,Diamondbacks,ARI
-Los Angeles,Dodgers,LAD
-San Francisco,Giants,SF
-Cleveland,Indians,CLE
-Seattle,Mariners,SEA
-Miami,Marlins,MIA
-New York,Mets,NYM
-Washington,Nationals,WAS
-Baltimore,Orioles,BAL
-San Diego,Padres,SD
-Philadelphia,Phillies,PHI
-Pittsburgh,Pirates,PIT
-Texas,Rangers,TEX
-Tampa Bay,Rays,TAM
-Boston,Red Sox,BOS
-Cincinnati,Reds,CIN
-Colorado,Rockies,COL
-Kansas City,Royals,KC
-Detroit,Tigers,DET
-Minnesota,Twins,MIN
-Chicago,White Sox,CHW
-New York,Yankees,NYY
+City,Nickname,code,League,Division,watchCodeLos Angeles,Angels,LAA,AL,West,ANAHouston,Astros,HOU,NL,West,HOUOakland,Athletics,OAK,AL,West,OAKToronto,Blue Jays,TOR,AL,East,TORAtlanta,Braves,ATL,NL,East,ATLMilwaukee,Brewers,MIL,NL,Central,MILSt. Louis,Cardinals,STL,NL,Central,SLNChicago,Cubs,CHC,NL,Central,CHNArizona,Diamondbacks,ARI,NL,West,ARILos Angeles,Dodgers,LAD,NL,West,LANSan Francisco,Giants,SF,NL,West,SFNCleveland,Indians,CLE,AL,Central,CLESeattle,Mariners,SEA,AL,West,SEAMiami,Marlins,MIA,NL,East,FLONew York,Mets,NYM,NL,East,NYNWashington,Nationals,WAS,NL,East,WASBaltimore,Orioles,BAL,AL,East,BALSan Diego,Padres,SD,NL,West,SDNPhiladelphia,Phillies,PHI,NL,East,PHIPittsburgh,Pirates,PIT,NL,Central,PITTexas,Rangers,TEX,AL,West,TEXTampa Bay,Rays,TAM,AL,East,TBABoston,Red Sox,BOS,AL,East,BOSCincinnati,Reds,CIN,NL,Central,CINColorado,Rockies,COL,NL,West,COLKansas City,Royals,KC,AL,Central,KCADetroit,Tigers,DET,AL,Central,DETMinnesota,Twins,MIN,AL,Central,MINChicago,White Sox,CHW,AL,Central,CHANew York,Yankees,NYY,AL,East,NYA

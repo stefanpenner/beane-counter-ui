@@ -22,23 +22,28 @@ function Region(name, teams) {
 }
 
 function League(name, teams) {
-  var byRegion = groupBy('region', teams);
+  var grouped = groupBy('Division', teams);
   this.regions = [
-    new Region('East', byRegion.east),
-    new Region('Central', byRegion.central),
-    new Region('West', byRegion.west)
+    new Region('East',    grouped.East),
+    new Region('Central', grouped.Central),
+    new Region('West',    grouped.West)
   ];
+
   this.name = name;
 }
 
 var StandingsController = Ember.Controller.extend({
   needs: ['application'],
   season: Ember.computed.alias('controllers.application.season'),
-  leagues: [
-    new League('American League', americanLeagueTeams),
-    new League('National League', nationalLeagueTeams)
-  ],
+  leagues: Ember.computed(function(){
+    var TeamListing = this.container.lookupFactory('model:team_listing');
+    var byLeague = TeamListing.allTeamsByLeague;
 
+    return [
+      new League('American League', byLeague.AL),
+      new League('National League', byLeague.NL)
+    ];
+  }),
   // unique ID assigned by Watcher
   handle: null,
 

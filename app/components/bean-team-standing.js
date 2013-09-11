@@ -14,7 +14,7 @@ var TeamStanding = Ember.Component.extend({
 
   winLoss: function() {
     var watcher = this.get('watcher');
-    var code = this.get('team.code');
+    var code = this.get('team.watchCode');
     var season = this.get('season');
 
     var handle = this.get('handle');
