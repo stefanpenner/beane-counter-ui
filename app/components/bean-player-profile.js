@@ -73,8 +73,14 @@ var PlayerProfile = Ember.Component.extend({
     }));
 
     this.set('watchHandle', null); // clear handle
-  }
+  },
 
+  // TODO: combine the various player car
+  imageUrl: function() {
+    var code = this.get('player.code');
+    if (!code) { return; }
+    return '/players/' + code + '.png';
+  }.property('player.code').readOnly()
 });
 
 // TODO: inject

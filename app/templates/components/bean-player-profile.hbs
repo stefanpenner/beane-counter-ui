@@ -37,5 +37,9 @@
   <p class="no-data-yet">No profile data received yet...</p>
 {{/if}}
 
-
+{{#if imageUrl}}
+  <div id="profile-image-container">
+    <img {{bind-attr src="imageUrl"}} />
+  </div>
+{{/if}}
 

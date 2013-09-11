@@ -132,6 +132,7 @@ body {
   font-size: 16px;
   line-height: 1.51em;
   height: 490px;
+  position: relative;
 }
 
 .box.grid-33 {
@@ -602,3 +603,23 @@ h1.stats-header {
 .cf {
     *zoom: 1;
 }
+
+#profile-image-container {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+}
+
+#profile-image-container img {
+  display: block;
+  position: absolute;
+  left: 50%;
+  margin-left: -120px;
+  width: 240px;
+  bottom: 0;
+}
+
+
+
+
