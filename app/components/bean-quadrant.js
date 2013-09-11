@@ -24,7 +24,7 @@ function appendPlayers(players, component) {
   players.
     append('span').
       classed('name', true).
-      text(get('humanizedName'));
+      text(get('PlayerName'));
 
   players.
     append('div').
