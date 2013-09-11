@@ -40,7 +40,7 @@ Generator.prototype = {
   start: function() {
     if (!this.hasSetDelay) {
       // Don't overload the generator; give it a moderate delay the first time.
-      this.setDelay(25);
+      this.setDelay(20);
       this.hasSetDelay = true;
     }
 
