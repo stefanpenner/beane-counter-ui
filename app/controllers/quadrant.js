@@ -11,8 +11,8 @@ var QuadrantController = Ember.Controller.extend({
       return 0;
     }
 
-    return percentageOfData(gameDate.day, gameDate.season);
-  }.property('gameDates.[]'),
+    return percentageOfData(gameDate.day, parseInt(gameDate.season, 10));
+  }.property('gameDates.lastObject'),
 
   currentDateText: "September 12, 2012"
 });

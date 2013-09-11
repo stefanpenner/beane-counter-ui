@@ -24,10 +24,14 @@ var TeamStanding = Ember.Component.extend({
       watcher.unwatch(handle);
     }
 
-    var model = watcher.watch('WinLoss', 'WinLoss', {
+    var subscription = {
       team: code,
-      season: season
-    });
+      season: '' + season
+    };
+
+    console.log('watching', subscription);
+
+    var model = watcher.watch('WinLoss', 'WinLoss', subscription);
 
     this.set('handle', demux.lastId);
 
