@@ -1,6 +1,7 @@
 {
   "predef": [
     "d3",
+    "moment",
     "jQuery",
     "document",
     "window",
