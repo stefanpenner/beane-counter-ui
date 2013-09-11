@@ -28,7 +28,10 @@ var QuadrantPlayer = Ember.Object.extend({
   // inconsitent data, has this extra abstractoin
   data: function() {
     var name = this.get('name');
-    return Player.allStars[name];
+    var data = Player.allStars[name] || {};
+    var playerData = Player.dataByName[name] || {};
+    Ember.merge(data, playerData);
+    return data;
   }.property('name'),
 
   hasSeason: function(season) {
@@ -37,7 +40,7 @@ var QuadrantPlayer = Ember.Object.extend({
     return !!(seasons && seasons[season]);
   },
 
-  humanizedName: Ember.computed.oneWay('data.name'),
+  humanizedName: Ember.computed.oneWay('data.PlayerName'),
 
   watchProfile: function() {
     // TODO: inject ziggrid:connection-manager

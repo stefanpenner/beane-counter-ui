@@ -117,7 +117,7 @@ var Quadrant = Ember.Component.extend({
     players.enter().
       append('div').
       attr('data-id', get('name')).
-      attr('data-name', get('fullName')).
+      attr('data-name', get('humanizedName')).
       classed('quadrant-player', true).
       style({
         opacity: 0,
@@ -127,7 +127,7 @@ var Quadrant = Ember.Component.extend({
         players.
           append('span').
             classed('name', true).
-            text(get('PlayerName'));
+            text(get('humanizedName'));
 
         players.
           append('div').
