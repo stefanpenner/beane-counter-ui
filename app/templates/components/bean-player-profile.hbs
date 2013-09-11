@@ -1,9 +1,8 @@
 {{view Ember.Select id="player-profile-select"
                     contentBinding="players" 
                     optionValueBinding="content" 
-                    optionLabelPath="content.name"
+                    optionLabelPath="content.PlayerName"
                     valueBinding="player"}}
-
 {{#if profile}}
   {{#with profile}}
     <table class="metrics">

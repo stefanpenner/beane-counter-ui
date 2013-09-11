@@ -6,13 +6,13 @@ var PlayerProfile = Ember.Component.extend({
 
   players: function() {
     var Player = this.container.lookupFactory('model:player');
-    var allPlayers = Ember.get(Player, 'allStars');
+    var allStars = Ember.get(Player, 'allStars');
 
     // just build for real Players the first time
     // this list doesn't change so we don't care
     // also the CP caches.
-    return Ember.keys(allPlayers).map(function(entry) {
-      return allPlayers[entry];
+    return Ember.keys(allStars).map(function(entry) {
+      return allStars[entry];
     }).map(function(entry) {
       return Player.create(entry);
     });

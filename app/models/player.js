@@ -1,4 +1,15 @@
 var Player = Ember.Object.extend({
+  PlayerName: function(){
+    var code = this.get('code');
+    var playerData = Player.dataByName[code];
+    var name;
+
+    if (playerData) {
+      name = playerData.PlayerName;
+    }
+
+    return name || this.get('name') || code;
+  }.property('code')
 });
 
 Player.reopenClass({
@@ -7,9 +18,9 @@ Player.reopenClass({
   },
 
   nameFromCode: function(code) {
-    var player = this.allStars[code];
+    var player = this.dataByName[code];
 
-    return player && player.name;
+    return player && player.PlayerName;
   },
 
   data: undefined,
