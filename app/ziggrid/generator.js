@@ -1,3 +1,5 @@
+import flags from 'appkit/flags';
+
 function Generator(url, callback) {
   var open = {
     url: url + "generator",
@@ -5,13 +7,17 @@ function Generator(url, callback) {
     fallbackTransport: 'long-polling',
 
     onOpen: function(response) {
-      console.log("opened generator connection with response", response);
+      if (flags.LOG_WEBSOCKETS) {
+        console.log("opened generator connection with response", response);
+      }
     },
 
     // and then handle each incoming message
     onMessage: function(msg) {
       if (msg.status === 200) {
-        console.log(msg.responseBody);
+        if (flags.LOG_WEBSOCKETS) {
+          console.log(msg.responseBody);
+        }
         var body = JSON.parse(msg.responseBody);
       } else {
         console.log("Generator HTTP Error:", msg.status);

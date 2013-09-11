@@ -1,6 +1,7 @@
 import Generator from 'appkit/ziggrid/generator';
 import Observer from 'appkit/ziggrid/observer';
 import demux from 'appkit/ziggrid/demux';
+import flags from 'appkit/flags';
 
 var ConnectionManager = Ember.Object.extend({
 
@@ -55,7 +56,11 @@ var ConnectionManager = Ember.Object.extend({
 
   handleMessage: function(msg) {
     if (msg.status === 200) {
-      console.log("Received message " + msg.responseBody);
+
+      if (flags.LOG_WEBSOCKETS) {
+        console.log("Received message " + msg.responseBody);
+      }
+
       var body = JSON.parse(msg.responseBody);
 
       if (body["deliveryFor"]) {
@@ -71,8 +76,6 @@ var ConnectionManager = Ember.Object.extend({
         }
       } else if (body["error"]) {
         console.error(body['error']);
-        //if (callback && callback.error)
-        //callback.error(body["error"]);
       } else if (body["modelName"]) {
         this.registerModel(body.modelName, body.model);
       } else if (body["server"]) {
@@ -80,7 +83,9 @@ var ConnectionManager = Ember.Object.extend({
         addr = "http://" + endpoint + "/ziggrid/",
         server = body.server;
 
-        console.log("Have new " + server + " server at " + endpoint);
+        if (flags.LOG_WEBSOCKETS) {
+          console.log("Have new " + server + " server at " + endpoint);
+        }
         this.registerServer(server, addr);
 
       } else if (body["status"]) {
@@ -147,7 +152,11 @@ var ConnectionManager = Ember.Object.extend({
 
   send: function(msg) {
     var observers = this.observers;
-    console.log("sending ", msg, "to", observers);
+
+    if (flags.LOG_WEBSOCKETS) {
+      console.log("sending ", msg, "to", observers);
+    }
+
     for (var u in observers) {
       if (observers.hasOwnProperty(u)) {
         observers[u].push(msg);

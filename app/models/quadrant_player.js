@@ -1,6 +1,7 @@
 import demux from 'appkit/ziggrid/demux';
 import PLAYER_SEASON from 'appkit/player_season_to_date_data';
 import Player from 'appkit/models/player';
+import flags from 'appkit/flags';
 
 var App = window.App;
 
@@ -119,7 +120,10 @@ QuadrantPlayer.reopenClass({
 });
 
 function updateQuadrantPlayer(data) {
-  //console.log('updateQuadrantPlayer', data);
+  if (flags.LOG_WEBSOCKETS) {
+    console.log('updateQuadrantPlayer', data);
+  }
+
   var attrs = {
     realized: true
   };

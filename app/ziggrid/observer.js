@@ -1,9 +1,13 @@
 import demux from 'appkit/ziggrid/demux';
+import flags from 'appkit/flags';
 
 function Observer(url, callback) {
 
   url = url + 'updates';
-  console.log("Observer connecting at " + url);
+
+  if (flags.LOG_WEBSOCKETS) {
+    console.log("Observer connecting at " + url);
+  }
 
   var conn = jQuery.atmosphere.subscribe({
     url: url,
@@ -18,7 +22,9 @@ function Observer(url, callback) {
     onMessage: function(msg) {
       if (msg.status === 200) {
         // TODO: why are we still getting deliveryFor messages in connectionManager?
-        console.log("Received message " + msg.responseBody);
+        if (flags.LOG_WEBSOCKETS) {
+          console.log("Received message " + msg.responseBody);
+        }
         var body = JSON.parse(msg.responseBody);
         if (body["deliveryFor"]) {
           var h = demux[body["deliveryFor"]];
