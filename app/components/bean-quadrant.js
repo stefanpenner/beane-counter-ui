@@ -64,11 +64,13 @@ var Quadrant = Ember.Component.extend({
     this.$popup = this.$().find('.quadrant-popup');
     this.xscale = d3.scale.linear().
       domain([0, 1]).
-      range([9.5, w-9.5]);
+      range([9.5, w-9.5]).
+      clamp(true);
 
     this.yscale = d3.scale.linear().
       domain([0, 1]).
-      range([h-9.5, 9.5]);
+      range([h-9.5, 9.5]).
+      clamp(true);
 
     this.dataDidChange();
 
