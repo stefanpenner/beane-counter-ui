@@ -26,27 +26,14 @@ App.initializer(watcherInitializer);
 import csvInitializer from 'appkit/initializers/csv';
 App.initializer(csvInitializer);
 
+import  connectionManagerInitializer from 'appkit/initializers/connection_manager';
+App.initializer(connectionManagerInitializer);
+
 import routes from 'appkit/routes';
 
 App = App.create();
 App.Router.map(routes); // TODO: just resolve the router
 App.deferReadiness(); // defering to allow sync boot with Ziggrid
-
-var url = 'http://couchconf.ziggrid.org:8088/ziggrid/';
-
-import ConnectionManager from 'appkit/ziggrid/connection_manager';
-var connectionManager = ConnectionManager.create({
-  url: url,
-  namespace: App
-});
-
-App.register('connection_manager:main', connectionManager, {
-  instantiate: false
-});
-
-App.inject('component:bean-player',
-           'connectionManager',
-           'connection_manager:main');
 
 Ember.Handlebars.registerBoundHelper('round', function(val) {
   if (!isNaN(val) && !/^\d+$/.test(val)) {
