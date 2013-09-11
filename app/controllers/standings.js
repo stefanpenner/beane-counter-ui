@@ -30,7 +30,8 @@ var StandingsController = Ember.Controller.extend({
       watcher.unwatch(handle);
     }
 
-    //var winLoss = watcher.watch('WinLoss', 'WinLoss',{"team":"ATL"}); // team ignored?
+// you want to do this for all 30 teams for the current season ...
+    //var winLoss = watcher.watch('WinLoss', 'WinLoss',{"team":"ATL", "season":"2006"}); // team ignored?
     var winLoss = watcher.watch('WinLoss', 'WinLoss', {}, function(data) {
 
       // TODO: more efficient to use computed dictionary here.
