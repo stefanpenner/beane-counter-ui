@@ -23,6 +23,7 @@ var Table = Ember.Component.extend({
     // TODO: filter this by region
     var leagueTeams = this.get('league.teams'),
         leagueTeam = leagueTeams.findProperty('code', standing.team);
+
     return leagueTeam && leagueTeam.region === this.get('region');
   })
 });
