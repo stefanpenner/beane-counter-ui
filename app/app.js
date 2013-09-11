@@ -64,7 +64,7 @@ Ember.Handlebars.helper('bean-homeruns', BeanHomeruns);
 
 // For our range input in bean-player
 Ember.TextField.reopen({
-  attributeBindings: ['step']
+  attributeBindings: ['step', 'min', 'max']
 });
 
 export default App;

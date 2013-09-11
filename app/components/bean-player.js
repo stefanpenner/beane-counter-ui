@@ -11,8 +11,7 @@ var Player = Ember.Component.extend({
 
   progressTextStyle: function() {
     var nubProgress = this.get('nubProgress') || 0;
-    console.log(nubProgress);
-    return "left: " + nubProgress + "px;";
+    return "left: " + (nubProgress * 99 + 0) + "%;";
   }.property('nubProgress'),
 
   _nubProgress: 0,
