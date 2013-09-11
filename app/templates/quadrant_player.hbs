@@ -5,8 +5,8 @@
       {{#with profile}}
         <li><span>At Bats</span>  {{round atbats}}</li>
         <li><span>Hits</span>     {{round hits}}</li>
-        <li><span>Hotness</span>  {{round hotness}}</li>
-        <li><span>Goodness</span> {{round clutchness}}</li>
+        <li><span>Hotness</span>  {{quadrant-value hotness}}</li>
+        <li><span>Goodness</span> {{quadrant-value clutchness}}</li>
         <li><span>Hrs</span>      {{round hrs}}</li>
         <li><span>Walks</span>    {{round walks}}</li>
       {{/with}}

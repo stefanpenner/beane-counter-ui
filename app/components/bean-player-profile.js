@@ -30,6 +30,7 @@ var PlayerProfile = Ember.Component.extend({
     if (newPlayer) {
       this.watchProfile();
     }
+    this.set('imageFailedToLoad', false);
   }.observes('player').on('init'),
 
   watchHandle: null,
@@ -76,11 +77,25 @@ var PlayerProfile = Ember.Component.extend({
   },
 
   // TODO: combine the various player car
+  imageFailedToLoad: false,
   imageUrl: function() {
+
+    if (this.get('imageFailedToLoad')) {
+      return '/players/404.png';
+    }
+
     var code = this.get('player.code');
     if (!code) { return; }
     return '/players/' + code + '.png';
-  }.property('player.code').readOnly()
+  }.property('player.code', 'imageFailedToLoad').readOnly(),
+
+  listenForImageLoadingErrors: function() {
+    var component = this;
+
+    this.$('img').error(function() {
+      Ember.run(component, 'set', 'imageFailedToLoad', true);
+    });
+  }.on('didInsertElement')
 });
 
 // TODO: inject

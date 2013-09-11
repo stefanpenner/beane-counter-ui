@@ -8,7 +8,7 @@
     <table class="metrics">
       <tr>
         <td>Clutchness</td>
-        <td class="value">{{round clutchness}}</td>
+        <td class="value">{{quadrant-value clutchness}}</td>
       </tr>
       <tr>
         <td>At Bats</td>
@@ -28,7 +28,7 @@
       </tr>
       <tr>
         <td>Hotness</td>
-        <td class="value">{{round hotness}}</td>
+        <td class="value">{{quadrant-value hotness}}</td>
       </tr>
     </table>
   {{/with}}
@@ -36,9 +36,7 @@
   <p class="no-data-yet">No profile data received yet...</p>
 {{/if}}
 
-{{#if imageUrl}}
-  <div id="profile-image-container">
-    <img {{bind-attr src="imageUrl"}} />
-  </div>
-{{/if}}
+<div id="profile-image-container">
+  <img {{bind-attr src="imageUrl"}} />
+</div>
 

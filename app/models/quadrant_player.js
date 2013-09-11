@@ -128,11 +128,11 @@ function updateQuadrantPlayer(data) {
     realized: true
   };
 
-  if (data.average) {
+  if (isValidQuadrantValue(data.average)) {
     attrs.goodness = data.average;
   }
 
-  if (data.correlation) {
+  if (isValidQuadrantValue(data.correlation)) {
     attrs.hotness = data.correlation;
   }
 
@@ -144,6 +144,10 @@ function updateQuadrantPlayer(data) {
     attrs.name = data.player;
     QuadrantPlayer.create(attrs);
   }
+}
+
+function isValidQuadrantValue(value) {
+  return value && value >= 0 && value < 3;
 }
 
 function fireStubbedData(handle, playerName, timeout) {
