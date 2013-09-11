@@ -1,16 +1,30 @@
 <div class="page" id="grid-page">
   <div class="grid">
-    <div id="standings-box" class="box cf">
-      {{render standings}}
+
+    <div id="standings-container">
+
+      <h1 class="stats-header">Standings</h1>
+
+      <div class="box cf">
+        {{render standings}}
+      </div>
     </div>
-    <div class="box grid-33">
-      <h1>Statistics</h1>
-      {{bean-leaderboard season=season}}
-      {{bean-production  season=season}}
-      {{bean-homeruns    season=season}}
+
+    <div class="grid-33">
+      <h1 class="stats-header">Statistics</h1>
+      <div class="box">
+        <h1>Statistics</h1>
+        {{bean-leaderboard season=season}}
+        {{bean-production  season=season}}
+        {{bean-homeruns    season=season}}
+      </div>
     </div>
-    <div class="box grid-33">
-      {{bean-player-profile}}
+
+    <div class="grid-33">
+      <h1 class="stats-header">Player Profile</h1>
+      <div class="box">
+        {{bean-player-profile}}
+      </div>
     </div>
   </div>
 

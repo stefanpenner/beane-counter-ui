@@ -113,7 +113,8 @@ body {
 
 .grid-33 {
   float: left;
-  width: 32%;
+  width: 25%;
+  margin-left: 1.15em;
 }
 
 .box:first-child {
@@ -128,9 +129,9 @@ body {
   background: #161616;
   border: 1px solid #434444;
   padding: 1em 1.5em;
-  margin: 0.75em;
   font-size: 16px;
   line-height: 1.51em;
+  height: 490px;
 }
 
 .box.grid-33 {
@@ -539,9 +540,12 @@ circle.player.selected {
   width: 750px;
 }
 
-#standings-box {
+#standings-container {
   float: left;
-  width: 37%;
+  width: 40%;
+}
+
+#standings-container .box {
   padding-right: 0;
 }
 
@@ -551,11 +555,16 @@ circle.player.selected {
   margin-right: 1.5em;
 }
 
-h1#quadrant-page-header {
+.standings-column > .ember-view {
+  min-height: 149px;
+}
+
+h1.stats-header {
   font-size: 32px;
   line-height: 1.3em;
   color: white;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+  -webkit-font-smoothing: antialiased;
 }
 
 #player-profile-select {
