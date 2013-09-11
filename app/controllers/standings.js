@@ -14,40 +14,35 @@ var nationalLeague = {
   standings: []
 };
 
+import groupBy from 'appkit/utils/group_by';
+
+function Region(name, teams) {
+  this.name = name;
+  this.teams = teams;
+}
+
+function League(name, teams) {
+  var byRegion = groupBy('region', teams);
+  this.regions = [
+    new Region('East', byRegion.east),
+    new Region('Central', byRegion.central),
+    new Region('West', byRegion.west)
+  ];
+  this.name = name;
+}
+
 var StandingsController = Ember.Controller.extend({
   needs: ['application'],
   season: Ember.computed.alias('controllers.application.season'),
-  leagues: [ americanLeague, nationalLeague ],
+  leagues: [
+    new League('American League', americanLeagueTeams),
+    new League('National League', nationalLeagueTeams)
+  ],
 
   // unique ID assigned by Watcher
   handle: null,
 
   startWatching: function() {
-    var watcher = window.App.__container__.lookup('watcher:main'),
-        handle = this.get('handle');
-
-    if (handle) {
-      watcher.unwatch(handle);
-    }
-
-// you want to do this for all 30 teams for the current season ...
-    //var winLoss = watcher.watch('WinLoss', 'WinLoss',{"team":"ATL", "season":"2006"}); // team ignored?
-    var winLoss = watcher.watch('WinLoss', 'WinLoss', {}, function(data) {
-
-      // TODO: more efficient to use computed dictionary here.
-      var league = americanLeague.teams.findProperty('code', data.team) ?
-                   americanLeague : nationalLeague;
-
-      var standing = league.standings.findProperty('team', data.team);
-      if (standing) {
-        Ember.setProperties(standing, data);
-      } else {
-        league.standings.pushObject(data);
-      }
-    });
-
-    // this is kinda hacky/brittle; this is updated in watcher.watch()
-    this.set('handle', demux.lastId);
   }.observes('season').on('init')
 });
 

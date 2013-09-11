@@ -7,16 +7,8 @@
     </tr>
   </thead>
   <tbody>
-    {{#each entries}}
-      <tr>
-        <td>{{team}}</td>
-        <td class="value">
-          {{wins}}
-        </td>
-        <td class="value">
-          {{losses}}
-        </td>
-      </tr>
+    {{#each region.teams}}
+      {{bean-team-standing team=this}}
     {{/each}}
   </tbody>
 </table>

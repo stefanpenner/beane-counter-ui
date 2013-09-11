@@ -9,23 +9,11 @@ var Table = Ember.Component.extend({
   league: null,
   region: null,
 
-  title: function() {
-    return this.get('region').capitalize();
-  }.property('region'),
+  title: Ember.computed.alias('region.name'),
 
   headers: function() {
     return [this.get('title'), 'W', 'L'];
-  }.property(),
-
-  standings: Ember.computed.alias('league.standings'),
-
-  entries: Ember.computed.filter('standings', function(standing) {
-    // TODO: filter this by region
-    var leagueTeams = this.get('league.teams'),
-        leagueTeam = leagueTeams.findProperty('code', standing.team);
-
-    return leagueTeam && leagueTeam.region === this.get('region');
-  })
+  }.property()
 });
 
 export default Table;
