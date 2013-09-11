@@ -131,15 +131,15 @@ function updateQuadrantPlayer(data) {
     realized: true
   };
 
-  if (isValidQuadrantValue(data.average)) {
-    attrs.goodness = data.average;
-  }
-
-  if (isValidQuadrantValue(data.correlation)) {
-    attrs.hotness = data.correlation;
-  }
-
   var player = QuadrantPlayer.allByCode[data.player];
+
+  if (data.average) {
+    attrs.goodness = normalizedQuadrantValue(player, 'goodness', data.average);
+  }
+
+  if (data.correlation) {
+    attrs.hotness = normalizedQuadrantValue(player, 'hotness', data.correlation);
+  }
 
   if (player) {
     player.setProperties(attrs);
@@ -149,8 +149,16 @@ function updateQuadrantPlayer(data) {
   }
 }
 
+function normalizedQuadrantValue(player, key, value) {
+  if (isValidQuadrantValue(value)) {
+    return value;
+  } else {
+    return (player && Ember.get(player, key)) || Math.random();
+  }
+}
+
 function isValidQuadrantValue(value) {
-  return value && value >= 0 && value < 3;
+  return value && value >= 0 && value <= 1;
 }
 
 function fireStubbedData(handle, playerName, timeout) {

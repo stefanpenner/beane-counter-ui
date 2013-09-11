@@ -2,13 +2,13 @@ var w = 750,
     h = 500,
     radius = 5;
 
-function playerY(scale){
+function playerX(scale){
   return function(player) {
     return scale(Ember.get(player, 'goodness')) + 'px';
   };
 }
 
-function playerX(scale){
+function playerY(scale){
   return function(player) {
     return scale(Ember.get(player, 'hotness')) + 'px';
   };
