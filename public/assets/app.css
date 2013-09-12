@@ -155,6 +155,14 @@ table.metrics thead {
   font-size: 14px;
 }
 
+table.metrics thead th:first-of-type {
+  text-align: left;
+}
+
+table.metrics tbody tr td:first-of-type {
+  text-align: left;
+}
+
 table.metrics thead tr th{
   color: #5A5A5A;
 }
@@ -164,8 +172,12 @@ table.metrics tbody tr td.value {
   text-align: right;
 }
 
-.standings-column table.metrics tbody tr td.value {
+.standings-column table.metrics tbody tr td {
   text-align: center;
+}
+
+.standings-column table.metrics tbody tr td:first-of-type {
+  text-align: left;
 }
 
 .player {
