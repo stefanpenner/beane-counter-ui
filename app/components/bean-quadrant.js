@@ -20,12 +20,6 @@ function get(path) {
   };
 }
 
-function fadeOutPlayer(){
-  if (d3.select(this).classed('selected')) {
-    deselect(component);
-  }
-}
-
 function appendPlayers(players, component) {
   players.
     append('span').
@@ -152,6 +146,12 @@ var Quadrant = Ember.Component.extend({
         left: playerX(xscale),
         top: playerY(yscale)
       });
+
+    function fadeOutPlayer() {
+      if (d3.select(this).classed('selected')) {
+        deselect(component);
+      }
+    }
   },
 
   dataDidChange: function() {
