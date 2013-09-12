@@ -2,13 +2,13 @@ import flags from 'appkit/flags';
 
 function Generator(url, callback) {
   var open = {
-    url: url + "generator",
+    url: url + 'generator',
     transport: 'websocket',
     fallbackTransport: 'long-polling',
 
     onOpen: function(response) {
       if (flags.LOG_WEBSOCKETS) {
-        console.log("opened generator connection with response", response);
+        console.log('opened generator connection with response', response);
       }
     },
 
@@ -20,7 +20,7 @@ function Generator(url, callback) {
         }
         var body = JSON.parse(msg.responseBody);
       } else {
-        console.log("Generator HTTP Error:", msg.status);
+        console.log('Generator HTTP Error:', msg.status);
       }
     }
   };
@@ -33,7 +33,7 @@ Generator.prototype = {
   hasSetDelay: false,
 
   send: function(msg) {
-    console.log("Sending generator message", msg);
+    console.log('Sending generator message', msg);
     this.conn.push(msg);
   },
 
@@ -44,15 +44,15 @@ Generator.prototype = {
       this.hasSetDelay = true;
     }
 
-    this.send(JSON.stringify({"action":"start"}));
+    this.send(JSON.stringify({'action':'start'}));
   },
 
   stop: function() {
-    this.send(JSON.stringify({"action":"stop"}));
+    this.send(JSON.stringify({'action':'stop'}));
   },
 
   setDelay: function(ms) {
-    this.send(JSON.stringify({"action":"delay","size":ms}));
+    this.send(JSON.stringify({'action':'delay','size':ms}));
   }
 };
 

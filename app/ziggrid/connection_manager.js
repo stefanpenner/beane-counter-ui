@@ -24,13 +24,13 @@ var ConnectionManager = Ember.Object.extend({
     var messages = [];
 
     var conn = this.conn = jQuery.atmosphere.subscribe({
-      url: this.url + "updates",
+      url: this.url + 'updates',
       transport: 'websocket',
       fallbackTransport: 'long-polling',
 
-      // handle the "open" message
+      // handle the 'open' message
       onOpen: function(response) {
-        conn.push(JSON.stringify({ action: "init" }));
+        conn.push(JSON.stringify({ action: 'init' }));
       },
 
       // and then handle each incoming message
@@ -56,14 +56,14 @@ var ConnectionManager = Ember.Object.extend({
     if (msg.status === 200) {
 
       if (flags.LOG_WEBSOCKETS) {
-        console.log("Received message " + msg.responseBody);
+        console.log('Received message ' + msg.responseBody);
       }
 
       var body = JSON.parse(msg.responseBody);
 
-      if (body["deliveryFor"]) {
+      if (body['deliveryFor']) {
         // TODO: shouldn't this be in observer.js?
-        var h = demux[body["deliveryFor"]];
+        var h = demux[body['deliveryFor']];
         if (h && h.update) {
           if (body.payload.table) {
             // Assume tabular data
@@ -72,33 +72,33 @@ var ConnectionManager = Ember.Object.extend({
             h.update(body.payload);
           }
         }
-      } else if (body["error"]) {
+      } else if (body['error']) {
         console.error(body['error']);
-      } else if (body["modelName"]) {
+      } else if (body['modelName']) {
         this.registerModel(body.modelName, body.model);
-      } else if (body["server"]) {
+      } else if (body['server']) {
         var endpoint = body.endpoint,
-        addr = "http://" + endpoint + "/ziggrid/",
+        addr = 'http://' + endpoint + '/ziggrid/',
         server = body.server;
 
         if (flags.LOG_WEBSOCKETS) {
-          console.log("Have new " + server + " server at " + endpoint);
+          console.log('Have new ' + server + ' server at ' + endpoint);
         }
         this.registerServer(server, addr);
 
-      } else if (body["status"]) {
-        var stat = body["status"];
-        if (stat === "initdone") {
+      } else if (body['status']) {
+        var stat = body['status'];
+        if (stat === 'initdone') {
           this.initDone();
         } else {
-          console.log("Do not recognize " + stat);
+          console.log('Do not recognize ' + stat);
         }
       } else
-        console.log("could not understand " + msg.responseBody);
+        console.log('could not understand ' + msg.responseBody);
     } else {
-      console.log("HTTP Error:", msg.status);
+      console.log('HTTP Error:', msg.status);
       //if (callback && callback.error)
-      //callback.error("HTTP Error: " + msg.status);
+      //callback.error('HTTP Error: ' + msg.status);
     }
   },
 
@@ -108,12 +108,12 @@ var ConnectionManager = Ember.Object.extend({
       if (!model.hasOwnProperty(p)) { continue; }
 
       var type = model[p];
-      if (type.rel === "attr") {
+      if (type.rel === 'attr') {
         attrs[p] = DS.attr(type.name);
-      } else if (type.rel === "hasMany") {
-        attrs[p] = DS.hasMany("App." + type.name.capitalize());
+      } else if (type.rel === 'hasMany') {
+        attrs[p] = DS.hasMany('App.' + type.name.capitalize());
       } else {
-        console.log("Unknown type:", type);
+        console.log('Unknown type:', type);
       }
     }
 
@@ -127,9 +127,9 @@ var ConnectionManager = Ember.Object.extend({
 
   registerServer: function(server, addr) {
     var self = this;
-    if (server === "generator") {
+    if (server === 'generator') {
       this.set('generator', Generator.create(addr));
-    } else if (server === "ziggrid") {
+    } else if (server === 'ziggrid') {
       //return;
       if (!this.observers[addr]) {
         this.initNeeded++;
@@ -152,7 +152,7 @@ var ConnectionManager = Ember.Object.extend({
     var observers = this.observers;
 
     if (flags.LOG_WEBSOCKETS) {
-      console.log("sending ", msg, "to", observers);
+      console.log('sending ', msg, 'to', observers);
     }
 
     for (var u in observers) {

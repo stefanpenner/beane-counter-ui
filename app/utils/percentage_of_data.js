@@ -1,10 +1,10 @@
 var ranges = {
-  2007: [91, 274],
-  2008: [85, 274],
-  2009: [95, 279],
-  2010: [94, 276],
-  2011: [90, 271],
-  2012: [88, 277]
+  2007: [ 91, 274 ],
+  2008: [ 85, 274 ],
+  2009: [ 95, 279 ],
+  2010: [ 94, 276 ],
+  2011: [ 90, 271 ],
+  2012: [ 88, 277 ]
 };
 
 var seasons = Object.keys(ranges).map(Number);
@@ -16,7 +16,7 @@ function precision(n, p) {
 function normalizeDay(dayOfYear, season) {
   var range = ranges[season];
 
-  if (!range) { throw new Error("Unknown Season: " + season); }
+  if (!range) { throw new Error('Unknown Season: ' + season); }
 
   var start = range[0];
   var end = range[1];
@@ -30,7 +30,7 @@ function normalizeDay(dayOfYear, season) {
 function percentageOfSeason(dayOfYear, season) {
   var range = ranges[season];
 
-  if (!range) { throw new Error("Unknown Season: " + season); }
+  if (!range) { throw new Error('Unknown Season: ' + season); }
 
   var start = range[0];
   var end = range[1];
@@ -43,7 +43,7 @@ function percentageOfSeason(dayOfYear, season) {
 
 function percentageOfData(dayOfYear, season) {
   var range = ranges[season];
-  if (!range) { throw new Error("Unknown Season: " + season); }
+  if (!range) { throw new Error('Unknown Season: ' + season); }
 
   var index = seasons.indexOf(season);
   var normalizedGameDay = normalizeDay(dayOfYear, season);

@@ -1,42 +1,42 @@
-{{view Ember.Select id="player-profile-select"
-                    contentBinding="players" 
-                    optionValueBinding="content" 
-                    optionLabelPath="content.PlayerName"
-                    valueBinding="player"}}
+{{view Ember.Select id='player-profile-select'
+                    contentBinding='players' 
+                    optionValueBinding='content' 
+                    optionLabelPath='content.PlayerName'
+                    valueBinding='player'}}
 {{#if profile}}
   {{#with profile}}
-    <table class="metrics">
+    <table class='metrics'>
       <tr>
         <td>Clutchness</td>
-        <td class="value">{{quadrant-value clutchness}}</td>
+        <td class='value'>{{quadrant-value clutchness}}</td>
       </tr>
       <tr>
         <td>At Bats</td>
-        <td class="value">{{atbats}}</td>
+        <td class='value'>{{atbats}}</td>
       </tr>
       <tr>
         <td>Hits</td>
-        <td class="value">{{hits}}</td>
+        <td class='value'>{{hits}}</td>
       </tr>
       <tr>
         <td>Walks</td>
-        <td class="value">{{walks}}</td>
+        <td class='value'>{{walks}}</td>
       </tr>
       <tr>
         <td>Homeruns</td>
-        <td class="value">{{hrs}}</td>
+        <td class='value'>{{hrs}}</td>
       </tr>
       <tr>
         <td>Hotness</td>
-        <td class="value">{{quadrant-value hotness}}</td>
+        <td class='value'>{{quadrant-value hotness}}</td>
       </tr>
     </table>
   {{/with}}
 {{else}}
-  <p class="no-data-yet">No profile data received yet...</p>
+  <p class='no-data-yet'>No profile data received yet...</p>
 {{/if}}
 
-<div id="profile-image-container">
-  <img {{bind-attr src="imageUrl"}} />
+<div id='profile-image-container'>
+  <img {{bind-attr src='imageUrl'}} />
 </div>
 

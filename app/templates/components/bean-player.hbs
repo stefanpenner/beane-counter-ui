@@ -1,20 +1,20 @@
-<div class="player">
+<div class='player'>
   {{#if generator}}
     <button {{bind-attr class=':play-button isPlaying:inactive'}} {{action 'play'}}>&#9658;</button>
     <button {{bind-attr class=':pause-button isPlaying::inactive'}} {{action 'pause'}}>&#10074;&#10074;</button>
 
-    <div class="player-progress-bar-container">
+    <div class='player-progress-bar-container'>
 
       {{#if progressText}}
-        <div class="player-progress-text-display" {{bind-attr style="progressTextStyle"}}>{{progressText}}</div>
+        <div class='player-progress-text-display' {{bind-attr style='progressTextStyle'}}>{{progressText}}</div>
       {{/if}}
 
-      <div class="player-progress-bar" {{bind-attr style="progressBarStyle"}}></div>
+      <div class='player-progress-bar' {{bind-attr style='progressBarStyle'}}></div>
 
-      {{input value=nubProgress step="0.01" min="0" max="1" type="range" class="player-range-input"}}
+      {{input value=nubProgress step='0.01' min='0' max='1' type='range' class='player-range-input'}}
     </div>
-    <div class="label">
-      <span class="count">{{precision progressPercentage 100}}</span>%
+    <div class='label'>
+      <span class='count'>{{precision progressPercentage 100}}</span>%
     </div>
   {{else}}
     <p>Waiting for generator...</p>

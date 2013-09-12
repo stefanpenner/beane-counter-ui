@@ -1,20 +1,17 @@
 var Player = Ember.Component.extend({
-
   progress: 0,
+  isPlaying: false,
   progressText: null,
+  _nubProgress: 0,
+  nubProgressIsSynced: true,
 
   generator: Ember.computed.alias('connectionManager.generator'),
 
-  isPlaying: false,
-
-  nubProgressIsSynced: true,
-
   progressTextStyle: function() {
     var nubProgress = this.get('nubProgress') || 0;
-    return "left: " + (nubProgress * 99 + 0) + "%;";
+    return 'left: ' + (nubProgress * 99 + 0) + '%;';
   }.property('nubProgress'),
 
-  _nubProgress: 0,
   nubProgress: function(key, val) {
     if (arguments.length === 2) {
       // Setter. Gets called when user grabs the nub.
@@ -39,7 +36,7 @@ var Player = Ember.Component.extend({
   }.property('progress'),
 
   progressBarStyle: function() {
-    return "width: " + this.get('progressPercentage') + "%;";
+    return 'width: ' + this.get('progressPercentage') + '%;';
   }.property('progress'),
 
   actions: {

@@ -1,23 +1,23 @@
-<div class="container">
-  <div id="logo-container">
+<div class='container'>
+  <div id='logo-container'>
     <h1>
-      <span class="ziggrid-text">Ziggrid</span>
-      <span class="bean-counter-text">- Beane Counter</span>
+      <span class='ziggrid-text'>Ziggrid</span>
+      <span class='bean-counter-text'>- Beane Counter</span>
     </h1>
 
-    {{view Ember.Select id="year-select" contentBinding="years" valueBinding="season"}}
+    {{view Ember.Select id='year-select' contentBinding='years' valueBinding='season'}}
   </div>
 
-  <div id="page-container" {{bind-attr style="pageContainerStyle"}}>
+  <div id='page-container' {{bind-attr style='pageContainerStyle'}}>
     {{partial 'grid'}}
     {{render 'quadrant'}}
   </div>
 </div>
 
 {{#unless currentPage}}
-  <div class="nav-button right" {{action 'togglePage'}}>&#9658;</div>
+  <div class='nav-button right' {{action 'togglePage'}}>&#9658;</div>
 {{/unless}}
 
 {{#if currentPage}}
-  <div class="nav-button left" {{action 'togglePage'}}>&#9664;</div>
+  <div class='nav-button left' {{action 'togglePage'}}>&#9664;</div>
 {{/if}}

@@ -2,8 +2,8 @@
 <h3>All Star Class</h3>
 
 <ul>
-  {{#each years itemController="filter_item"}}
-    <li {{bind-attr class="isSelected"}} {{action 'selectFilter' content}}>{{content}}</li>
+  {{#each years itemController='filter_item'}}
+    <li {{bind-attr class='isSelected'}} {{action 'selectFilter' content}}>{{content}}</li>
   {{/each}}
 </ul>
 

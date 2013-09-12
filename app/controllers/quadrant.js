@@ -17,12 +17,14 @@ var QuadrantController = Ember.Controller.extend({
   }.property('currentDate'),
 
   currentDate: Ember.computed.alias('gameDates.lastObject'),
-  //currentDate: { season: "2009", day: "180" },
+  //currentDate: { season: '2009', day: '180' },
 
   currentDateText: function() {
     var date = this.get('currentDate');
     if (!date) { return; }
-    return moment("" + get(date, 'season')).day(parseInt(get(date, 'day'), 10) + 1).format("MMMM D, YYYY");
+
+    var season = get(date, 'season') 
+    return moment('' + season).day(parseInt(get(date, 'day'), 10) + 1).format('MMMM D, YYYY');
   }.property('currentDate')
 });
 
