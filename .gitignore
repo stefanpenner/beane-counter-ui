@@ -19,7 +19,7 @@
 !/vendor/loader.js
 !/vendor/d3.js
 !/vendor/ember/index.js
-!/vendor/moment.min.js
+!/vendor/moment.js
 
 .DS_Store
 
