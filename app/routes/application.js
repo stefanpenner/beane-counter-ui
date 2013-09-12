@@ -1,7 +1,7 @@
 import Player from 'appkit/models/player';
 import QuadrantPlayer from 'appkit/models/quadrant_player';
 
-var season = 2009;
+var season = 2007;
 
 var ApplicationRoute = Ember.Route.extend({
   setupController: function(controller) {
