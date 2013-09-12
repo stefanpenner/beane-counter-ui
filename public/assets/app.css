@@ -161,8 +161,11 @@ table.metrics thead tr th{
 
 table.metrics tbody tr td.value {
   color: #B0B629;
-
   text-align: right;
+}
+
+.standings-column table.metrics tbody tr td.value {
+  text-align: center;
 }
 
 .player {
