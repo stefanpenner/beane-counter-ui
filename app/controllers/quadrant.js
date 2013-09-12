@@ -3,8 +3,9 @@ import { percentageOfData } from 'appkit/utils/percentage_of_data';
 var get = Ember.get;
 
 var QuadrantController = Ember.Controller.extend({
-  needs: ['filter'],
+  needs: ['filter', 'application'],
   filter: Ember.computed.alias('controllers.filter.selectedFilter'),
+  showing: Ember.computed.bool('controllers.application.currentPage'),
 
   progress: function() {
     var gameDate = this.get('currentDate');

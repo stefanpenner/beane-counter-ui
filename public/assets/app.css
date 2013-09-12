@@ -325,6 +325,12 @@ input[type='range']::-webkit-slider-thumb {
 .page {
   width: 960px;
   float: left;
+  opacity: 0;
+  -webkit-transition: opacity 0.5s;
+}
+
+.page.showing {
+  opacity: 1;
 }
 
 .nav-button {
@@ -342,6 +348,7 @@ input[type='range']::-webkit-slider-thumb {
   cursor: pointer;
   font-size: 26px;
   z-index: 105;
+  -webkit-user-select: none;
 }
 
 .nav-button.left {
@@ -594,7 +601,7 @@ circle.player.selected {
 
 #standings-container {
   float: left;
-  width: 40%;
+  width: 44%;
 }
 
 #standings-container .box {

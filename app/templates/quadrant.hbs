@@ -1,4 +1,4 @@
-<div class="page" id="quadrant-page">
+<div {{bind-attr class=":page showing"}} id="quadrant-page">
   <div class="page-content">
     <h1 class="stats-header">Magic Quadrant Analysis</h1>
 
@@ -6,6 +6,6 @@
 
     {{bean-quadrant season=filter players=players watchedPlayers=watchedQuadrantPlayers}}
   </div>
-
-  {{bean-player progressText=currentDateText progress=progress didBeginPlaying='didBeginPlaying' didEndPlaying='didEndPlaying'}}
 </div>
+
+{{bean-player progressText=currentDateText progress=progress didBeginPlaying='didBeginPlaying' didEndPlaying='didEndPlaying'}}
