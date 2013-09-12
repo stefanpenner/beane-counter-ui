@@ -377,6 +377,10 @@ input[type='range']::-webkit-slider-thumb {
   position: relative;
 }
 
+#quadrant-page .page-content {
+  padding-left: 70px;
+}
+
 #filter-view {
   position: absolute;
   right: 0;
@@ -596,7 +600,7 @@ circle.player.selected {
 }
 
 .x-labels {
-  width: 750px;
+  width: 690px;
 }
 
 #standings-container {
