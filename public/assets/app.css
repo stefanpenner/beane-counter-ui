@@ -161,6 +161,7 @@ table.metrics thead th:first-of-type {
 
 table.metrics tbody tr td:first-of-type {
   text-align: left;
+  width: 100px;
 }
 
 table.metrics thead tr th{
@@ -178,6 +179,10 @@ table.metrics tbody tr td.value {
 
 .standings-column table.metrics tbody tr td:first-of-type {
   text-align: left;
+}
+
+.statistics-table table.metrics tbody tr td:last-of-type {
+  text-align: center;
 }
 
 .player {
