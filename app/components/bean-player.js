@@ -2,6 +2,7 @@ var Player = Ember.Component.extend({
   progress: 0,
   isPlaying: false,
   progressText: null,
+  showNub: true,
   _nubProgress: 0,
   nubProgressIsSynced: true,
 
