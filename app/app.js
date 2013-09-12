@@ -50,10 +50,17 @@ App.register('helper:name-from-code', Ember.Handlebars.makeBoundHelper(function(
   return Player.nameFromCode(code) || code;
 }));
 
+import { precision } from 'appkit/utils/percentage_of_data';
+App.register('helper:precision', Ember.Handlebars.makeBoundHelper(function(value, p) {
+  return precision(value, p);
+}));
+
 App.register('helper:quadrant-value', Ember.Handlebars.makeBoundHelper(function(value) {
   //value = (value && value > 0 && value < 3) ? value : -1; //Math.random() * 0.3 + 0.3;
   return round(value);
 }));
+
+
 
 // TODO: happier way to do this automatically?
 // This way is bad because the component subclasses don't

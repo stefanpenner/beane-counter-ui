@@ -14,7 +14,7 @@
       {{input value=nubProgress step="0.01" min="0" max="1" type="range" class="player-range-input"}}
     </div>
     <div class="label">
-      <span class="count">{{progressPercentage}}</span>%
+      <span class="count">{{precision progressPercentage 100}}</span>%
     </div>
   {{else}}
     <p>Waiting for generator...</p>
