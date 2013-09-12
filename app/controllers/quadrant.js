@@ -23,7 +23,7 @@ var QuadrantController = Ember.Controller.extend({
     var date = this.get('currentDate');
     if (!date) { return; }
 
-    var season = get(date, 'season') 
+    var season = get(date, 'season');
     return moment('' + season).day(parseInt(get(date, 'day'), 10) + 1).format('MMMM D, YYYY');
   }.property('currentDate')
 });
