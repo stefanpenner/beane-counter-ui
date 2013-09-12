@@ -35,7 +35,7 @@ var Table = Ember.Component.extend({
 
     var model = watcher.watch(this.get('type'),
                               this.get('entryType'),
-                              { season: this.get('season') });
+                              { season: '' + this.get('season') });
 
     this.set('content', model.get('table'));
 
