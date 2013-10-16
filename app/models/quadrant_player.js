@@ -133,11 +133,11 @@ function updateQuadrantPlayer(data) {
   var player = QuadrantPlayer.allByCode[data.player];
 
   if (data.average) {
-    attrs.goodness = normalizedQuadrantValue(player, 'goodness', data.average);
+    attrs.goodness = normalizedQuadrantValue(player, 'hotness', data.average);
   }
 
   if (data.correlation) {
-    attrs.hotness = normalizedQuadrantValue(player, 'hotness', data.correlation);
+    attrs.hotness = normalizedQuadrantValue(player, 'goodness', data.correlation);
   }
 
   if (player) {
