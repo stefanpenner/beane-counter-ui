@@ -5,7 +5,6 @@ import Player from 'appkit/models/player';
 import watcherInitializer from 'appkit/initializers/watcher';
 import csvInitializer from 'appkit/initializers/csv';
 import connectionManagerInitializer from 'appkit/initializers/connection_manager';
-import routes from 'appkit/routes';
 import BeanProduct from 'appkit/components/bean-production';
 import BeanLeaderboard from 'appkit/components/bean-leaderboard';
 import BeanHomeruns from 'appkit/components/bean-homeruns';
@@ -33,7 +32,6 @@ App.initializer(csvInitializer);
 App.initializer(connectionManagerInitializer);
 
 App = App.create();
-App.Router.map(routes); // TODO: just resolve the router
 App.deferReadiness(); // defering to allow sync boot with Ziggrid
 
 function round(val) {
