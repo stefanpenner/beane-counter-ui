@@ -16,7 +16,7 @@ var Player = Ember.Component.extend({
   nubProgress: function(key, val) {
     if (arguments.length === 2) {
       // Setter. Gets called when user grabs the nub.
-      if (this.get('progress') - val < 0.03) {
+      if (this.get('progress') - val < 0.01) {
         this.set('nubProgressIsSynced', true);
         Ember.run.next(this, 'notifyPropertyChange', 'nubProgress');
       } else {
