@@ -2,7 +2,10 @@ import demux from 'appkit/ziggrid/demux';
 
 var PlayerProfile = Ember.Component.extend({
   player: null,
-
+  init: function () {
+    this.connectionManager = this.container.lookup('connection_manager:main'); // inject
+    this._super();
+  },
   players: function() {
     var Player = this.container.lookupFactory('model:player');
     var allStars = Ember.get(Player, 'allStars');
@@ -36,7 +39,6 @@ var PlayerProfile = Ember.Component.extend({
   profile: null,
 
   watchProfile: function() {
-
     var handle = ++demux.lastId;
 
     this.set('watchHandle', handle);
@@ -57,18 +59,17 @@ var PlayerProfile = Ember.Component.extend({
 
     // Send the JSON message to the server to begin observing.
     var stringified = JSON.stringify(query);
-    getConnectionManager().send(stringified);
+    this.connectionManager.send(stringified);
   },
 
   unwatchProfile: function() {
-
     var watchHandle = this.get('watchHandle');
 
     if (!watchHandle) {
       throw new Error('No handle to unwatch');
     }
 
-    getConnectionManager().send(JSON.stringify({
+    this.connectionManager.send(JSON.stringify({
       unwatch: watchHandle
     }));
 
@@ -96,10 +97,5 @@ var PlayerProfile = Ember.Component.extend({
     });
   }.on('didInsertElement')
 });
-
-// TODO: inject
-function getConnectionManager() {
-  return window.App.__container__.lookup('connection_manager:main');
-}
 
 export default PlayerProfile;
